@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TestActor.generated.h"
+#include "DefaultAbilitie.generated.h"
 
 UCLASS()
-class PLATFORMFIGHTERSTARTERKIT_API ATestActor : public AActor
+class PLATFORMFIGHTERSTARTERKIT_API ADefaultAbilitie : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATestActor();
+	ADefaultAbilitie();
 
 protected:
 	// Called when the game starts or when spawned
