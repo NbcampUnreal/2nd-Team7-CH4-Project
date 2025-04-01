@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "DefaultCharacter.generated.h"
+#include "GameFramework/Pawn.h"
+#include "DefaultAI.generated.h"
 
 UCLASS()
-class PLATFORMFIGHTERSTARTERKIT_API ADefaultCharacter : public ACharacter
+class UMUSMASH_API ADefaultAI : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	ADefaultCharacter();
+	// Sets default values for this pawn's properties
+	ADefaultAI();
 
 protected:
 	// Called when the game starts or when spawned

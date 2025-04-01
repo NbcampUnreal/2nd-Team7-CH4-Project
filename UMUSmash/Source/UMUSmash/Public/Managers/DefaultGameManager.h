@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class PLATFORMFIGHTERSTARTERKIT_API ADefaultGameManager : public AGameModeBase
+class UMUSMASH_API ADefaultGameManager : public AGameModeBase
 {
 	GENERATED_BODY()
 	

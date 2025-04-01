@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class PlatformFighterStarterKit : ModuleRules
+public class UMUSmash : ModuleRules
 {
-	public PlatformFighterStarterKit(ReadOnlyTargetRules Target) : base(Target)
+	public UMUSmash(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	

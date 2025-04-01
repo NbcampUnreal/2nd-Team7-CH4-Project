@@ -7,7 +7,7 @@
 #include "DefaultAbilitie.generated.h"
 
 UCLASS()
-class PLATFORMFIGHTERSTARTERKIT_API ADefaultAbilitie : public AActor
+class UMUSMASH_API ADefaultAbilitie : public AActor
 {
 	GENERATED_BODY()
 	
