@@ -76,7 +76,7 @@ public:
 	MAKE_GETTERSETTER_REF(TArray<ECharacter>, PlayerCharacters)
 	MAKE_GETTERSETTER(int32, PlayerNumber)
 	MAKE_GETTERSETTER(int32, NumberOfPlayers)
-	MAKE_GETTERSETTER_REF(TArray<APlayerController*>, PlayerControllers)
+	MAKE_GETTERSETTER_REF(TArray<AController*>, PlayerControllers)
 	MAKE_GETTERSETTER_REF(TArray<int32>, PlayerNumberIDs)
 	MAKE_GETTERSETTER_REF(TArray<int32>, Elims)
 	MAKE_GETTERSETTER_REF(TArray<int32>, SelfElim)
@@ -133,7 +133,7 @@ private:
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 NumberOfPlayers;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<APlayerController*> PlayerControllers;
+	TArray<AController*> PlayerControllers;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> PlayerNumberIDs;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
