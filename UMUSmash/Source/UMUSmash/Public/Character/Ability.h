@@ -18,12 +18,29 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable)
 	void MainTick();
+	UFUNCTION(BlueprintCallable)
+	void SwitchOnAbilityType();
+	UFUNCTION(BlueprintCallable)
+	void BasicAttack();
+	UFUNCTION(BlueprintCallable)
+	void SpecialAttack();
+	UFUNCTION(BlueprintCallable)
+	void AirAttack();
+	UFUNCTION(BlueprintCallable)
+	void SmashAttack();
+	UFUNCTION(BlueprintCallable)
+	void Dodge();
+	UFUNCTION(BlueprintCallable)
+	void Taunt();
+	UFUNCTION(BlueprintCallable)
+	void Throw();
+	UFUNCTION(BlueprintCallable)
+	void Prone();
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSoftClassPtr<ABaseCharacter> Parent = nullptr;
-
+	TObjectPtr<ABaseCharacter> Parent = nullptr;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

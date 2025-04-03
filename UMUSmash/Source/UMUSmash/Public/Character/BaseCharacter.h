@@ -89,6 +89,24 @@ enum class EAttackType : uint8
 	Super
 };
 
+UENUM(BlueprintType)
+enum class EAbilityType : uint8
+{
+	None,
+	Basic,
+	Special,
+	Air,
+	Smash,
+	Super,
+	Dodge,
+	Taunt,
+	Ledge,
+	Throw,
+	Prone,
+	Grab,
+	Other
+};
+
 UCLASS()
 class UMUSMASH_API ABaseCharacter : public ACharacter
 {
@@ -133,10 +151,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "Movement")
 	FVector LocationFeet = FVector(0, 0, 0);
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
 	EPlayerStateType CharState = EPlayerStateType::Idle;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
-	EAttackType AttackState = EAttackType::None;
+	EAttackType AttackType = EAttackType::None;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
+	EAbilityType AbilityType = EAbilityType::None;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
+	EInputDirection DirectionType = EInputDirection::None;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
