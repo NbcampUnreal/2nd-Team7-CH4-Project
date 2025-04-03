@@ -36,7 +36,7 @@ void UAbility::MainTick()
 
 void UAbility::SwitchOnAbilityType()
 {
-	switch (Parent->AbilityType)
+	switch (Parent->AbilityType_)
 	{
 	case EAbilityType::None:
 		break;

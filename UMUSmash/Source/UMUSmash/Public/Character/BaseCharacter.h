@@ -157,7 +157,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
 	EAttackType AttackType = EAttackType::None;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
-	EAbilityType AbilityType = EAbilityType::None;
+	EAbilityType AbilityType_ = EAbilityType::None;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
 	EInputDirection DirectionType = EInputDirection::None;
 public:	
