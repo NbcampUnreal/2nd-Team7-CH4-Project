@@ -2,7 +2,7 @@
 
 
 #include "Character/Ability.h"
-
+#include "Character\BaseCharacter.h"
 // Sets default values for this component's properties
 UAbility::UAbility()
 {
@@ -18,9 +18,15 @@ UAbility::UAbility()
 void UAbility::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Parent = Cast<ABaseCharacter>(GetOwner());
+	check(Parent != nullptr);
 	// ...
 	
+}
+
+void UAbility::MainTick()
+{
+
 }
 
 
