@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "DefaultGameManager.generated.h"
+#include "UMUGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UMUSMASH_API ADefaultGameManager : public AGameModeBase
+class UMUSMASH_API AUMUGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
