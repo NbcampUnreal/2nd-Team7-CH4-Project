@@ -1,10 +1,9 @@
 #pragma once
 
-#include "UMUTypes.h"
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "UMUTypes.h"
 #include "UMUGameInstance.generated.h"
-
 
 UCLASS()
 class UMUSMASH_API UUMUGameInstance : public UGameInstance
@@ -12,6 +11,9 @@ class UMUSMASH_API UUMUGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
+	void ServerTravel(const FString& MapName) const;
+	
+	
 	// Getter & Setter Macro
 	#define MAKE_GETTERSETTER(Type, Name) \
 	UFUNCTION(BlueprintGetter) Type Get##Name() const { return Name; } \
@@ -21,6 +23,11 @@ public:
 	UFUNCTION(BlueprintGetter) const Type& Get##Name() const { return Name; } \
 	UFUNCTION(BlueprintSetter) void Set##Name(const Type& NewValue) { Name = NewValue; }
 
+	#define MAKE_BOOL_GETTERSETTER(FunctionName, Name) \
+	UFUNCTION(BlueprintGetter) bool FunctionName() const { return Name; } \
+	UFUNCTION(BlueprintSetter) void Set##FunctionName(bool NewValue) { Name = NewValue; }
+
+
 	// --- Color ---
 	MAKE_GETTERSETTER(FSlateColor, P1_Col)
 	MAKE_GETTERSETTER(FSlateColor, P2_Col)
@@ -28,14 +35,14 @@ public:
 	MAKE_GETTERSETTER(FSlateColor, P4_Col)
 	
 	// --- Online ---
-	MAKE_GETTERSETTER(bool, bIsOnline)
-	MAKE_GETTERSETTER(bool, bIsHost)
-	MAKE_GETTERSETTER(bool, bIsReady)
+	MAKE_BOOL_GETTERSETTER(IsOnline, bIsOnline)
+	MAKE_BOOL_GETTERSETTER(IsHost, bIsHost)
+	MAKE_BOOL_GETTERSETTER(IsReady, bIsReady)
 	MAKE_GETTERSETTER_REF(TArray<bool>, ReadyArray)
 
 	// --- Players ---
 	MAKE_GETTERSETTER(TSubclassOf<ACharacter>, Fighters)
-	// MAKE_GETTERSETTER_REF(TArray<ECharacter>, PlayerCharacters)
+	MAKE_GETTERSETTER_REF(TArray<ECharacter>, PlayerCharacters)
 	MAKE_GETTERSETTER(int32, PlayerNumber)
 	MAKE_GETTERSETTER(int32, NumberOfPlayers)
 	MAKE_GETTERSETTER_REF(TArray<AController*>, PlayerControllers)
@@ -54,25 +61,25 @@ public:
 	// --- Game Loop ---
 	MAKE_GETTERSETTER(int32, StockCount)
 	MAKE_GETTERSETTER(int32, Minutes)
-	MAKE_GETTERSETTER(bool, bIsLoopEnabled)
-	// MAKE_GETTERSETTER(EGameModes, MainGameMode)
-	// MAKE_GETTERSETTER(EInGameModes, SubGameMode)
-	MAKE_GETTERSETTER(bool, bIsGameOver)
+	MAKE_BOOL_GETTERSETTER(IsLoopEnabled, bIsLoopEnabled)
+	MAKE_GETTERSETTER(EGameModes, MainGameMode)
+	MAKE_GETTERSETTER(EInGameModes, SubGameMode)
+	MAKE_BOOL_GETTERSETTER(IsGameOver, bIsGameOver)
 	MAKE_GETTERSETTER(int32, NumPlayersAlive)
 	MAKE_GETTERSETTER(int32, WinnerPlayerID)
 
 	// --- Menu ---
 	MAKE_GETTERSETTER_REF(TArray<bool>, ActiveControllers)
-	// MAKE_GETTERSETTER(EMenus, Menus)
+	MAKE_GETTERSETTER(EMenus, Menus)
 
 	// --- Debug ---
-	MAKE_GETTERSETTER(bool, bIsDebugMode)
-	MAKE_GETTERSETTER(bool, bShowDamageBoxes)
-	MAKE_GETTERSETTER(bool, bShowStates)
+	MAKE_BOOL_GETTERSETTER(IsDebugMode, bIsDebugMode)
+	MAKE_BOOL_GETTERSETTER(ShowDamageBoxes, bShowDamageBoxes)
+	MAKE_BOOL_GETTERSETTER(ShowStates, bShowStates)
 
 	// --- Team ---
-	MAKE_GETTERSETTER(bool, bIsTeamMode)
-	MAKE_GETTERSETTER(bool, bCanTeamAttack)
+	MAKE_BOOL_GETTERSETTER(IsTeamMode, bIsTeamMode)
+	MAKE_BOOL_GETTERSETTER(CanTeamAttack, bCanTeamAttack)
 
 private:
 	// --- Game.Color ---
@@ -98,8 +105,8 @@ private:
 	// --- Game.Players ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TSubclassOf<ACharacter> Fighters;
-	// UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	// TArray<ECharacter> PlayerCharacters;
+	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
+	TArray<ECharacter> PlayerCharacters;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 PlayerNumber;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
@@ -136,10 +143,10 @@ private:
 	int32 Minutes;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	bool bIsLoopEnabled;
-	// UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
-	// EGameModes MainGameMode;
-	// UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
-	// EInGameModes SubGameMode;
+	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
+	EGameModes MainGameMode;
+	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
+	EInGameModes SubGameMode;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	bool bIsGameOver;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
@@ -150,8 +157,8 @@ private:
 	// --- Game.Menu ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Menu", meta=(AllowPrivateAccess="true"))
 	TArray<bool> ActiveControllers;
-	// UPROPERTY(BlueprintReadWrite, Category="Game.Menu", meta=(AllowPrivateAccess="true"))
-	// EMenus Menus;
+	UPROPERTY(BlueprintReadWrite, Category="Game.Menu", meta=(AllowPrivateAccess="true"))
+	EMenus Menus;
 
 	// --- Developer.Debug ---
 	UPROPERTY(BlueprintReadWrite, Category="Developer.Debug", meta=(AllowPrivateAccess="true"))
