@@ -1,5 +1,6 @@
 #pragma once
 
+#include "UMUTypes.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Ability.generated.h"
@@ -41,6 +42,9 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<ABaseCharacter> Parent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EInputDirection DirectionType = EInputDirection::None;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
