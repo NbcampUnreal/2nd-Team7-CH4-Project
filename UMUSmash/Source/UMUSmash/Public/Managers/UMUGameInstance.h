@@ -1,52 +1,10 @@
 #pragma once
 
+#include "UMUTypes.h"
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "UMUGameInstance.generated.h"
 
-UENUM(BlueprintType)
-enum class ECharacter : uint8
-{
-	None		UMETA(DisplayName="None"),
-	Fighter		UMETA(DisplayName="Fighter"),
-	SwordMan	UMETA(DisplayName="SwordMan"),
-	Gunner		UMETA(DisplayName="Gunner"),
-	Hats		UMETA(DisplayName="Hats"),
-	Mage		UMETA(DisplayName="Mage"),
-	Unknown		UMETA(DisplayName="Unknown"),
-	Bob			UMETA(DisplayName="Bob"),
-	Random		UMETA(DisplayName="Random")
-};
-
-UENUM(BlueprintType)
-enum class EGameModes : uint8
-{
-	VS		UMETA(DisplayName="VS"),
-	Online	UMETA(DisplayName="Online"),
-	Arcade	UMETA(DisplayName="Arcade")
-};
-
-UENUM(BlueprintType)
-enum class EInGameModes : uint8
-{
-	Stock		UMETA(DisplayName="Stock"),
-	Time		UMETA(DisplayName="Time"),
-	MiniGame	UMETA(DisplayName="MiniGame"),
-	BossFight	UMETA(DisplayName="Boss Fight")
-};
-
-UENUM(BlueprintType)
-enum class EMenus : uint8
-{
-	Main			UMETA(DisplayName="Main"),
-	CharacterSelect	UMETA(DisplayName="CharacterSelect"),
-	MapSelect		UMETA(DisplayName="MapSelect"),
-	Online			UMETA(DisplayName="Online"),
-	Host			UMETA(DisplayName="Host"),
-	Join			UMETA(DisplayName="Join"),
-	Lobby			UMETA(DisplayName="Lobby"),
-	Title			UMETA(DisplayName="Title")
-};
 
 UCLASS()
 class UMUSMASH_API UUMUGameInstance : public UGameInstance
