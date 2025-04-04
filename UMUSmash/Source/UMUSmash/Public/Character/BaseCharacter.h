@@ -2,92 +2,13 @@
 
 #pragma once
 
+#include "UMUTypes.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
 struct FInputActionValue;
 
-UENUM(BlueprintType)
-enum class EFaceDirection : uint8
-{
-	Left,
-	Right,
-};
-
-UENUM(BlueprintType)
-enum class EInputDirection : uint8
-{
-	Up,
-	Down,
-	Back,
-	Forward,
-	None
-};
-
-UENUM(BlueprintType)
-enum class EPlayerStateType : uint8
-{
-	Idle,
-	Move,
-	Crouch,
-	Sprint,
-	Jump,
-	Fall,
-	Hit,
-	Launch,
-	Ledge,
-	Dead,
-	Shield,
-	Tumble,
-	ShieldTumble,
-	Prone,
-	Stun,
-	Dizzy,
-	Ability,
-	Dodge,
-	FreeFall,
-	Held,
-	Hold
-};
-
-UENUM(BlueprintType)
-enum class EAttackType : uint8
-{
-	None,
-	TiltUp,
-	TiltDown,
-	TiltForward,
-	TiltBack,
-	TiltNuetral,
-	AirUp,
-	AirDown,
-	AirForward,
-	AirBack,
-	AirNuetral,
-	SmashUp,
-	SmashDown,
-	SmashForward,
-	SmashBack,
-	SpecialUp,
-	SpecialDown,
-	SpecialForward,
-	SpecialBack,
-	SpecialNuetral,
-	Grab,
-	ThorwUp,
-	ThorwDown,
-	ThorwForward,
-	ThorwBack,
-	Pumble,
-	LedgeAttack,
-	ProneAttack,
-	DodgeSpot,
-	DodgeAir,
-	DodgeBack,
-	DodgeForard,
-	Super
-};
 
 UCLASS()
 class UMUSMASH_API ABaseCharacter : public ACharacter
@@ -97,7 +18,6 @@ class UMUSMASH_API ABaseCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -133,10 +53,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "Movement")
 	FVector LocationFeet = FVector(0, 0, 0);
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
 	EPlayerStateType CharState = EPlayerStateType::Idle;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
-	EAttackType AttackState = EAttackType::None;
+	EAttackType AttackType = EAttackType::None;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
+	EAbilityType AbilityType_ = EAbilityType::None;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "States")
+	EInputDirection DirectionType = EInputDirection::None;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

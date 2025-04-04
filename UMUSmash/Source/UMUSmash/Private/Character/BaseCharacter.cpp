@@ -51,7 +51,9 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, Location);
 	DOREPLIFETIME(ABaseCharacter, LocationFeet);
 	DOREPLIFETIME(ABaseCharacter, CharState);
-	DOREPLIFETIME(ABaseCharacter, AttackState);
+	DOREPLIFETIME(ABaseCharacter, AttackType);
+	DOREPLIFETIME(ABaseCharacter, AbilityType_);
+	DOREPLIFETIME(ABaseCharacter, DirectionType);
 	
 }
 
