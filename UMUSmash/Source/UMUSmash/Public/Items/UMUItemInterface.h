@@ -24,11 +24,13 @@ class UMUSMASH_API IUMUItemInterface
 public:
 	UFUNCTION()
 	virtual void OnItemOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) = 0;
+
 	UFUNCTION()
 	virtual void OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) = 0;
+
 	UFUNCTION()
 	virtual void ActivateItem(AActor* Activator) = 0;
-	UFUNCTION()
-	virtual FName GetItemType() const = 0;
+
+
 
 };

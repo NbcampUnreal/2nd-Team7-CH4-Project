@@ -2,7 +2,7 @@
 
 
 #include "Items\DefaultItem.h"
-#include"Components/SphereComponent.h"
+#include"Components/BoxComponent.h"
 
 // Sets default values
 ADefaultItem::ADefaultItem()
@@ -13,7 +13,7 @@ ADefaultItem::ADefaultItem()
 	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
 	SetRootComponent(Scene);
 
-	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
+	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 	Collision->SetupAttachment(Scene);
 	Collision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
@@ -48,7 +48,12 @@ void ADefaultItem::ActivateItem(AActor* Activator)
 
 FName ADefaultItem::GetItemType() const
 {
-	return FName();
+	return ItemType;
+}
+
+FName ADefaultItem::GetItemName() const
+{
+	return ItemName;
 }
 
 // Called when the game starts or when spawned
