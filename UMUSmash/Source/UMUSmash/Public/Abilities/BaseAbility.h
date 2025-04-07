@@ -26,7 +26,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	UPROPERTY(EditAnywhere, Replicated)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
 	bool bIsActive = false;
 
 };
