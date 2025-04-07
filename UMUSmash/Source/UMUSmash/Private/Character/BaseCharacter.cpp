@@ -1,7 +1,6 @@
 #include "Character/BaseCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "Character\UMUPlayerController.h"
-#include <Net\UnrealNetwork.h>
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -18,6 +17,24 @@ void ABaseCharacter::BeginPlay()
 	
 }
 
+void ABaseCharacter::Move(const FInputActionValue& value)
+{
+	FVector2D Direction = value.Get<FVector2D>();
+	//AddMovementInput(Direction);
+}
+
+void ABaseCharacter::Attack()
+{
+}
+
+void ABaseCharacter::Smash()
+{
+}
+
+void ABaseCharacter::Shield()
+{
+}
+
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {
@@ -30,30 +47,17 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	
-}
-
-void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ABaseCharacter, PlayerAcceleration);
-	DOREPLIFETIME(ABaseCharacter, JumpCount);
-	DOREPLIFETIME(ABaseCharacter, bCanMove);
-	DOREPLIFETIME(ABaseCharacter, FaceDirection);
-	DOREPLIFETIME(ABaseCharacter, bCanFlip);
-	DOREPLIFETIME(ABaseCharacter, LeftRight);
-	DOREPLIFETIME(ABaseCharacter, UpDown);
-	DOREPLIFETIME(ABaseCharacter, Direction);
-	DOREPLIFETIME(ABaseCharacter, ZPos);
-	DOREPLIFETIME(ABaseCharacter, YPos);
-	DOREPLIFETIME(ABaseCharacter, FootZPos);
-	DOREPLIFETIME(ABaseCharacter, Location);
-	DOREPLIFETIME(ABaseCharacter, LocationFeet);
-	DOREPLIFETIME(ABaseCharacter, CharState);
-	DOREPLIFETIME(ABaseCharacter, AttackType);
-	DOREPLIFETIME(ABaseCharacter, AbilityType_);
-	DOREPLIFETIME(ABaseCharacter, DirectionType);
-	
+	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		if (AUMUPlayerController* PlayerController = Cast<AUMUPlayerController>(GetController()))
+		{
+			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Jump);
+			EnhancedInput->BindAction(PlayerController->MoveAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Move);
+			//EnhancedInput->BindAction(PlayerController->CrouchAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Crouch);
+			EnhancedInput->BindAction(PlayerController->AttackAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Attack);
+			EnhancedInput->BindAction(PlayerController->SmashAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Smash);
+			EnhancedInput->BindAction(PlayerController->ShieldAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Shield);
+		}
+	}
 }
 
