@@ -30,10 +30,11 @@ public:
 	FVector FootLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep")
-	USoundBase* FootPrintSounds;
+	TArray<USoundBase*> FootPrintSounds;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep")
-	USoundBase* FootPrintFX;
+	TArray<UForceFeedbackEffect*> FootPrintFX;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep")
 	float Volume;
