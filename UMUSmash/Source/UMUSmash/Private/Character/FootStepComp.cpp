@@ -32,3 +32,46 @@ void UFootStepComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
+
+
+
+//void UFootStepComp::ProcessDetectFeet(float AxisValue)
+//{
+//	Volume = FMath::Clamp(FMath::Abs(AxisValue), 0.0f, 1.0f);
+//
+//	static bool bCanTrigger = true;
+//
+//	if (bCanTrigger)
+//	{
+//		FootLocation = GetOwner()->GetActorLocation();
+//
+//		SurfaceType = SurfaceType_Default;
+//
+//
+//		TriggerFootStep();
+//
+//
+//		bCanTrigger = false;
+//	}
+//	else
+//	{
+//
+//	}
+//}
+
+//void UFootStepComp::TriggerFootStep()
+//{
+//	if (FootPrintSounds.Num() > 0 && FootPrintSounds[0])
+//	{
+//		UGameplayStatics::PlaySoundAtLocation(GetWorld(), FootPrintSounds[0], FootLocation, Volume);
+//	}
+//
+//	if (FootPrintFX.Num() > 0)
+//	{
+//		UParticleSystem* Particle = Cast<UParticleSystem>(FootPrintFX[0]);
+//		if (Particle)
+//		{
+//			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, FootLocation);
+//		}
+//	}
+//}

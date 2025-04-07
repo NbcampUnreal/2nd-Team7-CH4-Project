@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PhysicalMaterials/PhysicalMaterial.h"
+#include "PhysicalMaterials/PhysicalMaterial.h" // EPhysicalSurface 사용을 위한 헤더
 #include "Sound/SoundBase.h"
 #include "FootStepComp.generated.h"
 
@@ -45,13 +45,3 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep")
 	int32 SurfaceNo;
 };
-
-
-
-
-
-//UFUNCTION(BlueprintCallable, Category = "FootStep")
-//void ProcessDetectFeet(float AxisValue);
-//
-//UFUNCTION(BlueprintCallable, Category = "FootStep")
-//void TriggerFootStep();
