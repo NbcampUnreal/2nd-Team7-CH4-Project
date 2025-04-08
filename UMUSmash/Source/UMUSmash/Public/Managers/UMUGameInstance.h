@@ -18,7 +18,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Game")
 	void ServerTravel(const FString& MapName) const;
 	
-	// Getter & Setter Macro
+#pragma region Getter & Setter Macro
 	#define MAKE_GETTERSETTER(Type, Name) \
 	UFUNCTION(BlueprintGetter) Type Get##Name() const { return Name; } \
 	UFUNCTION(BlueprintSetter) void Set##Name(Type NewValue) { Name = NewValue; }
@@ -84,97 +84,138 @@ public:
 	// --- Team ---
 	MAKE_BOOL_GETTERSETTER(IsTeamMode, bIsTeamMode)
 	MAKE_BOOL_GETTERSETTER(CanTeamAttack, bCanTeamAttack)
-
+#pragma endregion
+	
 private:
-	// --- Game.Color ---
+#pragma region --- Game.Color ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Color", meta=(AllowPrivateAccess="true"))
 	FSlateColor P1_Col;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Color", meta=(AllowPrivateAccess="true"))
 	FSlateColor P2_Col;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Color", meta=(AllowPrivateAccess="true"))
 	FSlateColor P3_Col;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Color", meta=(AllowPrivateAccess="true"))
 	FSlateColor P4_Col;
+#pragma endregion
+
 	
-	// --- Game.Online ---
+#pragma region --- Game.Online ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Online", meta=(AllowPrivateAccess="true"))
 	bool bIsOnline;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Online", meta=(AllowPrivateAccess="true"))
 	bool bIsHost;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Online", meta=(AllowPrivateAccess="true"))
 	TArray<bool> ReadyArray;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Online", meta=(AllowPrivateAccess="true"))
 	bool bIsReady;
-
-	// --- Game.Players ---
+#pragma endregion
+	
+#pragma region --- Game.Players ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TSubclassOf<ACharacter> Fighters;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<ECharacter> PlayerCharacters;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 PlayerNumber;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 NumberOfPlayers;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<AController*> PlayerControllers;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> PlayerNumberIDs;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> Elims;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> SelfElim;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> Falls;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> DamageDone;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> DamageTaken;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> PlayerPositions;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> Score;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<bool> AliveArray;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<bool> CPU;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> PlayerTeam;
-
-	// --- Game.Loop ---
+#pragma endregion
+	
+#pragma region --- Game.Loop ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	int32 StockCount;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	int32 Min;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	bool bIsLoopEnabled;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	EGameModes MainGameMode;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	EInGameModes SubGameMode;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	bool bIsGameOver;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	int32 NumPlayersAlive;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	int32 WinnerPlayerID;
-
-	// --- Game.Menu ---
+#pragma endregion
+	
+#pragma region --- Game.Menu ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Menu", meta=(AllowPrivateAccess="true"))
 	TArray<bool> ActiveControllers;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Menu", meta=(AllowPrivateAccess="true"))
 	EMenus Menus;
-
-	// --- Developer.Debug ---
+#pragma endregion
+	
+#pragma region --- Developer.Debug ---
 	UPROPERTY(BlueprintReadWrite, Category="Developer.Debug", meta=(AllowPrivateAccess="true"))
 	bool bIsDebugMode;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Developer.Debug", meta=(AllowPrivateAccess="true"))
 	bool bShowDamageBoxes;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Developer.Debug", meta=(AllowPrivateAccess="true"))
 	bool bShowStates;
-
-	// --- Game.Team ---
+#pragma endregion
+	
+#pragma region --- Game.Team ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Team", meta=(AllowPrivateAccess="true"))
 	bool bIsTeamMode;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Team", meta=(AllowPrivateAccess="true"))
 	bool bCanTeamAttack;
+#pragma endregion
 };

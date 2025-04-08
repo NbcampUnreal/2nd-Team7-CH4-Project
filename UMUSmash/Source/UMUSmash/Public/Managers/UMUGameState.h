@@ -15,6 +15,11 @@ class UMUSMASH_API AUMUGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastRPCSlowMotionEffect();
+
+	
 
 private:
 	UPROPERTY(BlueprintReadWrite, Category="Game.Mode", meta=(AllowPrivateAccess="true"))

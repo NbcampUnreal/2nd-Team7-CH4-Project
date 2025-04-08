@@ -14,6 +14,26 @@ class UMUSMASH_API AUMUFightGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+	
+public:
+	AUMUFightGameMode();
+	
+	// --- Main game flow
+    void HandleInitGame();
+    void SetPlayerStocks();
+    void HandleGameOver() const;
+	void CheckGameOverConditions();
+    
+    // --- Helper functions
+    void CreatePlayers();
+    bool OnlineLoaded();
+    void MatchStats();
+    
+    void FinalizeGameStats() const;
+    void TravelToVictoryScreen() const;
+    	
+
+	virtual void BeginPlay() override;
 
 
 private:
@@ -37,6 +57,8 @@ private:
 	int32 NumberOfPlayers;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 NumPlayersAlive;
+	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
+	TArray<int32> Stocks;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> Elims;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
