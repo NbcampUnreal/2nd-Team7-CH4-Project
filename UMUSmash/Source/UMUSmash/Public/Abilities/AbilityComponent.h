@@ -16,7 +16,7 @@ struct FAbility
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<ABaseAbility> AbilityRef;
+	TSubclassOf<ABaseAbility> AbilityClass;
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<ABaseAbility> Ability;
 };
@@ -37,14 +37,19 @@ protected:
 public:	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 UsedMoveCount = 0;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+
+	UPROPERTY(BlueprintReadOnly)
 	TArray<float> DamageScale = { 1.f, 0.9f, 0.8f, 0.7f, 0.6f };
+
 	UFUNCTION(BlueprintCallable, Category = "AbilityComponent")
 	void MainTick();
+
 	UFUNCTION(BlueprintCallable, Category = "AbilityComponent")
 	void BufferCall(EBufferType BufferType);
-private:
 
+	//public -> protected -> private || 함수 -> 변수
+private:
+	UPROPERTY()
 	TArray<TObjectPtr<ABaseAbility>> Abilities;
 	FTimerHandle ResetMoveCountTimer;
 	void ResetMoveCount();
@@ -79,18 +84,26 @@ private:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:
+
+	// TMap Key: Name, Value: Ability
 	UPROPERTY(BlueprintReadWrite, Replicated)
-	TObjectPtr<ABaseCharacter> Parent;
+	TObjectPtr<ABaseCharacter> Parent = nullptr;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialNeutral;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialUp;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialDown;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialForward;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SuperAbility;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilt")
 	FAbility TiltNeutral;
@@ -119,6 +132,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash")
 	FAbility SmashDown;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Taunt")
 	FAbility TauntUp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Taunt")
 	FAbility TauntDown;
