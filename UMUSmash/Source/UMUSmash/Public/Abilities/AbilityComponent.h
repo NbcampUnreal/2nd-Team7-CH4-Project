@@ -35,10 +35,18 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 UsedMoveCount = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<float> DamageScale = { 1.f, 0.9f, 0.8f, 0.7f, 0.6f };
 	UFUNCTION(BlueprintCallable, Category = "AbilityComponent")
 	void MainTick();
+	UFUNCTION(BlueprintCallable, Category = "AbilityComponent")
 	void BufferCall(EBufferType BufferType);
 private:
+	TArray<TObjectPtr<ABaseAbility>> Abilities;
+	FTimerHandle ResetMoveCountTimer;
+	void ResetMoveCount();
 	UFUNCTION(NetMulticast, Reliable)
 	void WitchAbility();
 	UFUNCTION(NetMulticast, Reliable)
@@ -65,108 +73,113 @@ private:
 	UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
 	void Respawning();
 
+	UFUNCTION(BlueprintCallable)
+	void EndAllNonChargedAbilities(FAbility& Ability);
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-private:
+public:
 	TObjectPtr<ABaseCharacter> Parent;
-	UPROPERTY(EditAnywhere, Category = "Special")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialNeutral;
-	UPROPERTY(EditAnywhere, Category = "Special")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialUp;
-	UPROPERTY(EditAnywhere, Category = "Special")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialDown;
-	UPROPERTY(EditAnywhere, Category = "Special")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialForward;
-	UPROPERTY(EditAnywhere, Category = "Special")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SuperAbility;
 
-	UPROPERTY(EditAnywhere, Category = "Tilt")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilt")
 	FAbility TiltNeutral;
-	UPROPERTY(EditAnywhere, Category = "Tilt")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilt")
 	FAbility TiltUp;
-	UPROPERTY(EditAnywhere, Category = "Tilt")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilt")
 	FAbility TiltSide;
-	UPROPERTY(EditAnywhere, Category = "Tilt")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilt")
 	FAbility TiltDown;
 
-	UPROPERTY(EditAnywhere, Category = "Air")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Air")
 	FAbility AirUp;
-	UPROPERTY(EditAnywhere, Category = "Air")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Air")
 	FAbility AirDown;
-	UPROPERTY(EditAnywhere, Category = "Air")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Air")
 	FAbility AirForward;
-	UPROPERTY(EditAnywhere, Category = "Air")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Air")
 	FAbility AirBack;
-	UPROPERTY(EditAnywhere, Category = "Air")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Air")
 	FAbility AirNeutral;
 
-	UPROPERTY(EditAnywhere, Category = "Smash")
-	FAbility SmashUp;
-	UPROPERTY(EditAnywhere, Category = "Smash")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash")
+	FAbility SmashUp; 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash")
 	FAbility SmashForward;
-	UPROPERTY(EditAnywhere, Category = "Smash")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash")
 	FAbility SmashDown;
 
 	FAbility TauntUp;
-	UPROPERTY(EditAnywhere, Category = "Taunt")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Taunt")
 	FAbility TauntDown;
-	UPROPERTY(EditAnywhere, Category = "Taunt")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Taunt")
 	FAbility TauntLeft;
-	UPROPERTY(EditAnywhere, Category = "Taunt")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Taunt")
 	FAbility TauntRight;
 
 
-	UPROPERTY(EditAnywhere, Category = "Dodge")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dodge")
 	FAbility DodgeAir;
-	UPROPERTY(EditAnywhere, Category = "Dodge")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dodge")
 	FAbility DodgeSpot;
-	UPROPERTY(EditAnywhere, Category = "Dodge")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dodge")
 	FAbility DodgeBack;
-	UPROPERTY(EditAnywhere, Category = "Dodge")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dodge")
 	FAbility DodgeForward;
 
-	UPROPERTY(EditAnywhere, Category = "Throw")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Throw")
 	FAbility ThrowUp;
-	UPROPERTY(EditAnywhere, Category = "Throw")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Throw")
 	FAbility ThrowDown;
-	UPROPERTY(EditAnywhere, Category = "Throw")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Throw")
 	FAbility ThrowBack;
-	UPROPERTY(EditAnywhere, Category = "Throw")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Throw")
 	FAbility ThrowForward;
-	UPROPERTY(EditAnywhere, Category = "Throw")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Throw")
 	FAbility Pummel;
-	UPROPERTY(EditAnywhere, Category = "Throw")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Throw")
 	FAbility Grab;
 
-	UPROPERTY(EditAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	FAbility UseItem;
-	UPROPERTY(EditAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	FAbility ThrowItem;
 
-	UPROPERTY(EditAnywhere, Category = "Extra")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extra")
 	FAbility ExtraAbility1;
-	UPROPERTY(EditAnywhere, Category = "Extra")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extra")
 	FAbility ExtraAbility2;
-	UPROPERTY(EditAnywhere, Category = "Extra")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extra")
 	FAbility ExtraAbility3;
-	UPROPERTY(EditAnywhere, Category = "Extra")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extra")
 	FAbility ExtraAbility4;
 
-	UPROPERTY(EditAnywhere, Category = "Ledge")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ledge")
 	FAbility LedgeAttack;
-	UPROPERTY(EditAnywhere, Category = "Ledge")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ledge")
 	FAbility Ledge;
 
-	UPROPERTY(EditAnywhere, Category = "Prone")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Prone")
 	FAbility ProneStand;
-	UPROPERTY(EditAnywhere, Category = "Prone")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Prone")
 	FAbility ProneAttack;
 
-	UPROPERTY(EditAnywhere, Category = "Other")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Other")
 	FAbility DashAttack;
-	UPROPERTY(EditAnywhere, Category = "Other")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Other")
 	FAbility LadderAttack;
-	UPROPERTY(EditAnywhere, Category = "Other")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Other")
 	FAbility SwimAttack;
-	UPROPERTY(EditAnywhere, Category = "Other")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Other")
 	FAbility Respawn;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Other")
+	FAbility LevelIntro;
 };

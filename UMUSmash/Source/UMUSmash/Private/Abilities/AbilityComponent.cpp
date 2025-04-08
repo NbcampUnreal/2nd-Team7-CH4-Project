@@ -54,6 +54,11 @@ void UAbilityComponent::BufferCall(EBufferType BufferType)
 	}
 }
 
+void UAbilityComponent::ResetMoveCount()
+{
+	UsedMoveCount = 0;	
+}
+
 void UAbilityComponent::WitchAbility_Implementation()
 {
 	switch (Parent->AbilityType)
@@ -330,13 +335,17 @@ void UAbilityComponent::SpawnAbility(FAbility Ability)
 		SpawnParams.Instigator = Parent->GetInstigator();
 		Ability.Ability = GetWorld()->SpawnActor<ABaseAbility>(Ability.AbilityRef, SpawnLocation, SpawnRotation, SpawnParams);
 		Ability.Ability->AttachToActor(Parent, FAttachmentTransformRules::KeepRelativeTransform);
-		check(!Ability.Ability);
+		Abilities.Add(Ability.Ability);
+		//check(!Ability.Ability);
 	}
 }
 void UAbilityComponent::ActivateAbility(TObjectPtr<ABaseAbility> Ability)
 {
 	Ability->bIsActive = true;
 	Parent->ClearBuffer();
+	UsedMoveCount++;
+	UsedMoveCount = FMath::Clamp(UsedMoveCount, 0, DamageScale.Num() - 1);
+	GetWorld()->GetTimerManager().SetTimer(ResetMoveCountTimer, this, &UAbilityComponent::ResetMoveCount, 1.f, false);
 }
 void UAbilityComponent::Respawning_Implementation()
 {
@@ -402,10 +411,21 @@ void UAbilityComponent::AttachAbility()
 	SpawnAbility(Respawn);
 
 	//Extra
-	SpawnAbility(ExtraAbility1);
-	SpawnAbility(ExtraAbility2);
-	SpawnAbility(ExtraAbility3);
-	SpawnAbility(ExtraAbility4);
+	//SpawnAbility(ExtraAbility1);
+	//SpawnAbility(ExtraAbility2);
+	//SpawnAbility(ExtraAbility3);
+	//SpawnAbility(ExtraAbility4);
+}
+
+void UAbilityComponent::EndAllNonChargedAbilities(FAbility& Ability)
+{
+	for (TObjectPtr<ABaseAbility> ForAbility : Abilities)
+	{
+		if (ForAbility->ChargeLevel == 0.f && Ability.Ability != ForAbility)
+		{
+			ForAbility->CallEndAbility();
+		}
+	}
 }
 
 void UAbilityComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

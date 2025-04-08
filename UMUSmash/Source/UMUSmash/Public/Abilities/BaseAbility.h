@@ -25,8 +25,11 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void CallEndAbility();
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
 	bool bIsActive = false;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ChargeLevel = 0.f;
 };
