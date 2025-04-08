@@ -2,6 +2,8 @@
 
 #include "EngineUtils.h"
 #include "CoreMinimal.h"
+#include "Sound/SoundMix.h"
+#include "Sound/SoundClass.h"
 #include "Blueprint/UserWidget.h"
 #include "HUD_Options.generated.h"
 
@@ -41,6 +43,24 @@ public:
 
     UPROPERTY(meta = (BindWidget))
     UButton* ApplyButton;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+    USoundMix* GameSoundMix;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+    USoundClass* MasterSoundClass;
+    UPROPERTY(meta = (BindWidget))
+    UButton* BackButton;
+
+    UFUNCTION()
+    void OnBackClicked();
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+    TSubclassOf<UUserWidget> HUD_MainMenuClass;
+
+    UFUNCTION()
+    void UpdateOptionUI();
+
+
 
 private:
     float BrightnessValue = 1.0f;

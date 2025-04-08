@@ -29,14 +29,21 @@ void UHUD_Options::NativeConstruct()
         GraphicsComboBox->AddOption("Low");
         GraphicsComboBox->AddOption("Medium");
         GraphicsComboBox->AddOption("High");
-        GraphicsComboBox->SetSelectedOption("High");
     }
 
     if (ApplyButton)
     {
         ApplyButton->OnClicked.AddDynamic(this, &UHUD_Options::OnApplyClicked);
     }
+
+    if (BackButton)
+    {
+        BackButton->OnClicked.AddDynamic(this, &UHUD_Options::OnBackClicked);
+    }
+
+    UpdateOptionUI();
 }
+
 
 void UHUD_Options::OnBrightnessChanged(float Value)
 {
@@ -47,14 +54,26 @@ void UHUD_Options::OnSoundChanged(float Value)
 {
     SoundValue = Value;
 
-    // 예: 마스터 볼륨 조절
-    UGameplayStatics::SetSoundMixClassOverride(GetWorld(), nullptr, nullptr, Value, 1.0f, 0.0f);
-    UGameplayStatics::PushSoundMixModifier(GetWorld(), nullptr);
+    if (GameSoundMix && MasterSoundClass)
+    {
+        UGameplayStatics::SetSoundMixClassOverride(
+            GetWorld(),
+            GameSoundMix,
+            MasterSoundClass,
+            Value,   // Volume (0.0 ~ 1.0)
+            1.0f,    // Pitch
+            0.0f     // FadeInTime
+        );
+
+        UGameplayStatics::PushSoundMixModifier(GetWorld(), GameSoundMix);
+    }
 }
+
 
 void UHUD_Options::OnGraphicsChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
 {
     GraphicsSetting = SelectedItem;
+    UE_LOG(LogTemp, Warning, TEXT("Graphics Selected: %s"), *GraphicsSetting);
 }
 
 void UHUD_Options::OnApplyClicked()
@@ -74,26 +93,79 @@ void UHUD_Options::OnApplyClicked()
     }
 
     // 그래픽 품질 설정
-    FString Command;
-    if (GraphicsSetting == "Low")
+    APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+    if (PC)
     {
-        Command = "sg.ViewDistance 1; sg.AntiAliasing 1; sg.ShadowQuality 1; sg.TextureQuality 1;";
-    }
-    else if (GraphicsSetting == "Medium")
-    {
-        Command = "sg.ViewDistance 2; sg.AntiAliasing 2; sg.ShadowQuality 2; sg.TextureQuality 2;";
-    }
-    else if (GraphicsSetting == "High")
-    {
-        Command = "sg.ViewDistance 3; sg.AntiAliasing 3; sg.ShadowQuality 3; sg.TextureQuality 3;";
-    }
+        FString Command;
 
-    if (!Command.IsEmpty())
-    {
-        APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
-        if (PC)
+        if (GraphicsSetting == "Low")
+        {
+            Command = "sg.ViewDistanceQuality 1; sg.AntiAliasingQuality 1; sg.ShadowQuality 1; sg.TextureQuality 1;";
+        }
+        else if (GraphicsSetting == "Medium")
+        {
+            Command = "sg.ViewDistanceQuality 2; sg.AntiAliasingQuality 2; sg.ShadowQuality 2; sg.TextureQuality 2;";
+        }
+        else if (GraphicsSetting == "High")
+        {
+            Command = "sg.ViewDistanceQuality 3; sg.AntiAliasingQuality 3; sg.ShadowQuality 3; sg.TextureQuality 3;";
+        }
+
+        if (!Command.IsEmpty())
         {
             PC->ConsoleCommand(Command, true);
         }
+    }
+}
+
+void UHUD_Options::OnBackClicked()
+{
+    // 현재 위젯 제거
+    RemoveFromParent();
+
+    // MainMenu 위젯 클래스를 불러와 생성
+    if (UWorld* World = GetWorld())
+    {
+        APlayerController* PC = UGameplayStatics::GetPlayerController(World, 0);
+        if (PC && HUD_MainMenuClass)
+        {
+            UUserWidget* MainMenu = CreateWidget<UUserWidget>(PC, HUD_MainMenuClass);
+            if (MainMenu)
+            {
+                MainMenu->AddToViewport();
+                PC->SetInputMode(FInputModeUIOnly());
+                PC->bShowMouseCursor = true;
+            }
+        }
+    }
+}
+
+void UHUD_Options::UpdateOptionUI()
+{
+
+    for (TActorIterator<APostProcessVolume> It(GetWorld()); It; ++It)
+    {
+        APostProcessVolume* PPV = *It;
+        if (PPV && PPV->bUnbound)
+        {
+            BrightnessValue = PPV->Settings.AutoExposureMinBrightness;
+            if (BrightnessSlider)
+            {
+                BrightnessSlider->SetValue(BrightnessValue);
+            }
+            break;
+        }
+    }
+
+
+    if (SoundSlider)
+    {
+        SoundSlider->SetValue(SoundValue);
+    }
+
+
+    if (GraphicsComboBox)
+    {
+        GraphicsComboBox->SetSelectedOption(GraphicsSetting);
     }
 }
