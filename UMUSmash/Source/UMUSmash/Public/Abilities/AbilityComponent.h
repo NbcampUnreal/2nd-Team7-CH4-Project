@@ -17,7 +17,7 @@ struct FAbility
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<ABaseAbility> AbilityRef;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<ABaseAbility> Ability;
 };
 
@@ -44,6 +44,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AbilityComponent")
 	void BufferCall(EBufferType BufferType);
 private:
+
 	TArray<TObjectPtr<ABaseAbility>> Abilities;
 	FTimerHandle ResetMoveCountTimer;
 	void ResetMoveCount();
@@ -68,16 +69,17 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void AttachAbility();
 	UFUNCTION(BlueprintCallable)
-	void SpawnAbility(FAbility Ability);
+	void SpawnAbility(FAbility& Ability);
 	void ActivateAbility(TObjectPtr<ABaseAbility> Ability);
 	UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
 	void Respawning();
 
 	UFUNCTION(BlueprintCallable)
-	void EndAllNonChargedAbilities(FAbility& Ability);
+	void EndAllNonChargedAbilities(const ABaseAbility* Ability);
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:
+	UPROPERTY(BlueprintReadWrite, Replicated)
 	TObjectPtr<ABaseCharacter> Parent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Special")
 	FAbility SpecialNeutral;

@@ -19,13 +19,21 @@ void UAbilityComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Parent = Cast<ABaseCharacter>(GetOwner());
-	check(!Parent);
+	//check(!Parent);
 	// ...
 	
 }
 
 void UAbilityComponent::MainTick()
 {
+	if (Parent == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Parent is null"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Parent is not null"));
+	}
 	if (Parent->PlayerStateType == EPlayerStateType::ability &&
 		Parent->AttackType == EAttackType::None)
 	{
@@ -324,7 +332,7 @@ void UAbilityComponent::Prone_Implementation()
 	}
 }
 
-void UAbilityComponent::SpawnAbility(FAbility Ability)
+void UAbilityComponent::SpawnAbility(FAbility& Ability)
 {
 	if (Ability.AbilityRef)
 	{
@@ -335,6 +343,7 @@ void UAbilityComponent::SpawnAbility(FAbility Ability)
 		SpawnParams.Instigator = Parent->GetInstigator();
 		Ability.Ability = GetWorld()->SpawnActor<ABaseAbility>(Ability.AbilityRef, SpawnLocation, SpawnRotation, SpawnParams);
 		Ability.Ability->AttachToActor(Parent, FAttachmentTransformRules::KeepRelativeTransform);
+		Ability.Ability->Parent = Parent;
 		Abilities.Add(Ability.Ability);
 		//check(!Ability.Ability);
 	}
@@ -417,11 +426,11 @@ void UAbilityComponent::AttachAbility()
 	//SpawnAbility(ExtraAbility4);
 }
 
-void UAbilityComponent::EndAllNonChargedAbilities(FAbility& Ability)
+void UAbilityComponent::EndAllNonChargedAbilities(const ABaseAbility* Ability)
 {
-	for (TObjectPtr<ABaseAbility> ForAbility : Abilities)
+	for (ABaseAbility* ForAbility : Abilities)
 	{
-		if (ForAbility->ChargeLevel == 0.f && Ability.Ability != ForAbility)
+		if (ForAbility->ChargeLevel == 0.f && Ability != ForAbility)
 		{
 			ForAbility->CallEndAbility();
 		}
@@ -432,4 +441,5 @@ void UAbilityComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(UAbilityComponent, Parent);
 }
