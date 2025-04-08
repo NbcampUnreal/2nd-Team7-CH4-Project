@@ -15,6 +15,8 @@ class UMUSMASH_API UUMUGameInstance : public UPlatformGameInstance
 
 
 public:
+	UFUNCTION(BlueprintCallable, Category="Game")
+	void ServerTravel(const FString& MapName) const;
 	
 	// Getter & Setter Macro
 	#define MAKE_GETTERSETTER(Type, Name) \
