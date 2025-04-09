@@ -47,7 +47,10 @@ public:
 	int JumpNumber = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
-	bool bIsBounce = false;
+	bool Bounce = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool WallDetection = false;
 #pragma region Component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAbilityComponent> AbilityComponent = nullptr;	

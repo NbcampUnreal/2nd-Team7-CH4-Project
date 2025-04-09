@@ -27,5 +27,9 @@ void UWallBounceComponent::BeginPlay()
 void UWallBounceComponent::WallBounce()
 {
 	Parent->SetActorRotation(FRotator(0, 0, 90), ETeleportType::TeleportPhysics);
-
+	Parent->Bounce = true;
+	Parent->WallDetection = false;
+	UCharacterMovementComponent* CharacterMovement = Parent->GetCharacterMovement();
+	CharacterMovement->GravityScale = 0.f;
+	Parent->LaunchCharacter(FVector(0, 1, 1), true, true);
 }

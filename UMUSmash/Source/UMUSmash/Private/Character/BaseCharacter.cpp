@@ -32,6 +32,7 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ABaseCharacter, JumpNumber);
+	DOREPLIFETIME(ABaseCharacter, Bounce);
 }
 
 // Called to bind functionality to input
