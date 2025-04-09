@@ -1,7 +1,5 @@
-
-
-
 #include "Abilities/BaseAbility.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ABaseAbility::ABaseAbility()
@@ -22,6 +20,14 @@ void ABaseAbility::BeginPlay()
 void ABaseAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+void ABaseAbility::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ABaseAbility, bIsActive);
 
 }
 

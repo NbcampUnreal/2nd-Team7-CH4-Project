@@ -1,14 +1,24 @@
 #include "Character/BaseCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "Character\UMUPlayerController.h"
+#include "Abilities\AbilityComponent.h"
+#include "Character\LedgeComponent.h"
 #include <Net\UnrealNetwork.h>
-
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
+	LedgeComponent = CreateDefaultSubobject<ULedgeComponent>(TEXT("LedgeComponent"));
+}
 
+void ABaseCharacter::ClearBuffer()
+{
+	BufferMove = EBufferType::None;
+	BufferDirection = EInputDirection::None;
+	bBufferdInput = false;
+	bBufferdDirection = false;
 }
 
 // Called when the game starts or when spawned
@@ -18,11 +28,11 @@ void ABaseCharacter::BeginPlay()
 	
 }
 
-// Called every frame
-void ABaseCharacter::Tick(float DeltaTime)
+void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::Tick(DeltaTime);
-
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABaseCharacter, JumpNumber);
+	DOREPLIFETIME(ABaseCharacter, Bounce);
 }
 
 // Called to bind functionality to input
@@ -30,30 +40,13 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	
-}
+	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		if (AUMUPlayerController* PlayerController = Cast<AUMUPlayerController>(GetController()))
+		{
 
-void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABaseCharacter, PlayerAcceleration);
-	DOREPLIFETIME(ABaseCharacter, JumpCount);
-	DOREPLIFETIME(ABaseCharacter, bCanMove);
-	DOREPLIFETIME(ABaseCharacter, FaceDirection);
-	DOREPLIFETIME(ABaseCharacter, bCanFlip);
-	DOREPLIFETIME(ABaseCharacter, LeftRight);
-	DOREPLIFETIME(ABaseCharacter, UpDown);
-	DOREPLIFETIME(ABaseCharacter, Direction);
-	DOREPLIFETIME(ABaseCharacter, ZPos);
-	DOREPLIFETIME(ABaseCharacter, YPos);
-	DOREPLIFETIME(ABaseCharacter, FootZPos);
-	DOREPLIFETIME(ABaseCharacter, Location);
-	DOREPLIFETIME(ABaseCharacter, LocationFeet);
-	DOREPLIFETIME(ABaseCharacter, CharState);
-	DOREPLIFETIME(ABaseCharacter, AttackType);
-	DOREPLIFETIME(ABaseCharacter, AbilityType_);
-	DOREPLIFETIME(ABaseCharacter, DirectionType);
-	
+		}
+	}
 }
 
