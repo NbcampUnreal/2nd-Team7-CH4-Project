@@ -18,6 +18,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Game")
 	void ServerTravel(const FString& MapName) const;
 	
+	bool IsGameOver() const;
+	void SetIsGameOver(const bool& NewValue);
+
+	UFUNCTION(BlueprintCallable, Category="Game.Players")
+	void CheckGameOverConditions();
+
+	
 #pragma region Getter & Setter Macro
 	#define MAKE_GETTERSETTER(Type, Name) \
 	UFUNCTION(BlueprintGetter) Type Get##Name() const { return Name; } \
@@ -68,7 +75,6 @@ public:
 	MAKE_BOOL_GETTERSETTER(IsLoopEnabled, bIsLoopEnabled)
 	MAKE_GETTERSETTER(EGameModes, MainGameMode)
 	MAKE_GETTERSETTER(EInGameModes, SubGameMode)
-	MAKE_BOOL_GETTERSETTER(IsGameOver, bIsGameOver)
 	MAKE_GETTERSETTER(int32, NumPlayersAlive)
 	MAKE_GETTERSETTER(int32, WinnerPlayerID)
 
@@ -87,6 +93,7 @@ public:
 #pragma endregion
 	
 private:
+	
 #pragma region --- Game.Color ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Color", meta=(AllowPrivateAccess="true"))
 	FSlateColor P1_Col;

@@ -16,10 +16,15 @@ class UMUSMASH_API AUMUGameState : public AGameStateBase
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(NetMulticast, Unreliable)
-	void MulticastRPCSlowMotionEffect();
 
-	
+	/// --- RPC ---
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastRPCIsGameOver();
+
+	// ---
+	void SlowMotionEffect();
+	void UpdateIsGameOver();
+
 
 private:
 	UPROPERTY(BlueprintReadWrite, Category="Game.Mode", meta=(AllowPrivateAccess="true"))
@@ -56,4 +61,6 @@ private:
 	TArray<int32> DamageDone;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> DamageTaken;
+
+	bool bIsGameOver;
 };

@@ -16,17 +16,18 @@ class UMUSMASH_API AUMUFightGameMode : public AGameModeBase
 
 	
 public:
-	AUMUFightGameMode();
 	
 	// --- Main game flow
     void HandleInitGame();
     void SetPlayerStocks();
+	UFUNCTION(BlueprintCallable)
     void HandleGameOver() const;
+	UFUNCTION(BlueprintCallable)
 	void CheckGameOverConditions();
     
     // --- Helper functions
     void CreatePlayers();
-    bool OnlineLoaded();
+    bool OnlineAllLoaded();
     void MatchStats();
     
     void FinalizeGameStats() const;
@@ -51,6 +52,8 @@ private:
 	double Seconds;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	FString TimerText;
+	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
+	double DeltaSeconds;
 
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
@@ -83,6 +86,5 @@ private:
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	bool bIsGameOver;
-
 	
 };

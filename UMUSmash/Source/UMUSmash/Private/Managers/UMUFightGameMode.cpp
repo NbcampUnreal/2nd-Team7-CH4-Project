@@ -5,12 +5,10 @@
 #include "Managers/UMUGameInstance.h"
 #include "Managers/UMUGameState.h"
 #include "Kismet/GameplayStatics.h"
+#include "UMUSmash/UMUSmash.h"
 
 
-AUMUFightGameMode::AUMUFightGameMode()
-{
-	
-}
+
 
 void AUMUFightGameMode::CreatePlayers()
 {
@@ -40,9 +38,9 @@ void AUMUFightGameMode::CreatePlayers()
 	Minutes = GameInstance->GetMin();
 }
 
-bool AUMUFightGameMode::OnlineLoaded()
+bool AUMUFightGameMode::OnlineAllLoaded()
 {
-	check(GameInstance);
+	checkf(GameInstance, TEXT("Fight Game Mode, OnlineAllLoaded : Game Instance is null"));
 	
 	ensure (GameInstance->GetNumberOfPlayers() == NumberOfPlayers);
 	PlayerLoaded.SetNum(NumberOfPlayers);
@@ -82,7 +80,7 @@ void AUMUFightGameMode::HandleInitGame()
 	check(GameInstance);
 
 	CreatePlayers();
-	OnlineLoaded();
+	OnlineAllLoaded();
 	MatchStats();
 	
 	bUseTimer = (InGameMode == EInGameModes::Time);
@@ -114,27 +112,32 @@ void AUMUFightGameMode::TravelToVictoryScreen() const
 
 void AUMUFightGameMode::HandleGameOver() const
 {
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"));
+	
 	check(GameInstance);
 	
 	auto* UMUGameState = GetWorld()->GetGameState<AUMUGameState>();
 	check(UMUGameState);
 	
 	GameInstance->SetIsGameOver(true);
-	UMUGameState->MulticastRPCSlowMotionEffect();
-
+	UMUGameState->MulticastRPCIsGameOver();
+	FinalizeGameStats();
+	
 	FTimerHandle FinalGameStatsHandle;
-
 	GetWorld()->GetTimerManager().SetTimer(
 		FinalGameStatsHandle,FTimerDelegate::CreateLambda([this]
 		{
-			FinalizeGameStats();
 			TravelToVictoryScreen();
 		}),
-		2.0f,false);
+		3.0f,false, -1);
+
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"));
 }
 
 void AUMUFightGameMode::CheckGameOverConditions()
 {
+	UMU_LOG(LogUMU, Log, TEXT("%s : AliveCount %d, Minutes %d %s"), *FString("InGameMode"), NumPlayersAlive, Minutes, TEXT("Begin"));
+	
 	switch (InGameMode)
 	{
 		case EInGameModes::Stock:
@@ -168,6 +171,8 @@ void AUMUFightGameMode::CheckGameOverConditions()
 				break;
 			}
 	}
+
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"));
 }
 
 
