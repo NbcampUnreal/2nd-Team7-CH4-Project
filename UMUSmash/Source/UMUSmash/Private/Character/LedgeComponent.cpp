@@ -2,33 +2,52 @@
 
 
 #include "Character/LedgeComponent.h"
-
+#include "Character\BaseCharacter.h"
+#include "GameFramework\CharacterMovementComponent.h"
+#include "Components\CapsuleComponent.h"
+#include "Abilities\AbilityComponent.h"
+#include "Abilities\BaseAbility.h"
+#include <Net\UnrealNetwork.h>
 // Sets default values for this component's properties
 ULedgeComponent::ULedgeComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
-
-// Called when the game starts
 void ULedgeComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
+	Parent = Cast<ABaseCharacter>(GetOwner());
 }
 
-
-// Called every frame
-void ULedgeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void ULedgeComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	Super::EndPlay(EndPlayReason);
+	GetWorld()->GetTimerManager().ClearTimer(LedgeGrabTimer);
 }
+
+void ULedgeComponent::LedgeGrab()
+{
+	check(Parent);
+	Parent->HitStates = EHitStateType::Invincible;	
+	UCharacterMovementComponent* CharacterMovement = Parent->GetCharacterMovement();
+	CharacterMovement->StopMovementImmediately();
+	Parent->LedgeLocation.Z -= 60;
+	Parent->GetCapsuleComponent()->SetWorldLocation(Parent->LedgeLocation);
+	CharacterMovement->GravityScale = 0.f;
+	Parent->PlayerStateType = EPlayerStateType::ledge;
+	Parent->AbilityComponent->Ledge.ActivateAbility();
+	GetWorld()->GetTimerManager().SetTimer(LedgeGrabTimer, 
+		[this] {
+			Parent->HitStates = EHitStateType::Normal;
+		}, 1.f, false);
+}
+
+void ULedgeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ULedgeComponent, Parent);
+}
+
+
 

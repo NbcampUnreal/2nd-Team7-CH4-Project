@@ -433,3 +433,11 @@ void UAbilityComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME(UAbilityComponent, Parent);
 }
+
+void FAbility::ActivateAbility()
+{
+	if (Ability)
+	{
+		Ability->bIsActive = true;
+	}
+}

@@ -12,18 +12,24 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UMUSMASH_API ULedgeComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
+	//함수
 public:	
 	// Sets default values for this component's properties
 	ULedgeComponent();
-
+	UFUNCTION(BlueprintCallable, Category = "LedgeComponent")
+	void LedgeGrab();
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+private:
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
+	// 변수
+public:
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	TObjectPtr<ABaseCharacter> Parent = nullptr;	
+protected:
+private:
+	FTimerHandle LedgeGrabTimer;
 };
