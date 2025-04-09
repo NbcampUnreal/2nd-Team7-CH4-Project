@@ -3,14 +3,11 @@
 #include "Abilities\BaseAbility.h"
 #include "Net\UnrealNetwork.h"
 
+
 // Sets default values for this component's properties
 UAbilityComponent::UAbilityComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-	
-	// ...
+
 }
 
 
@@ -19,9 +16,6 @@ void UAbilityComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Parent = Cast<ABaseCharacter>(GetOwner());
-	check(!Parent);
-	// ...
-	
 }
 
 void UAbilityComponent::MainTick()
@@ -33,7 +27,7 @@ void UAbilityComponent::MainTick()
 	}
 }
 
-void UAbilityComponent::BufferCall(EBufferType BufferType)
+void UAbilityComponent::BufferCall(const EBufferType BufferType)
 {
 	switch (BufferType)
 	{
@@ -54,8 +48,14 @@ void UAbilityComponent::BufferCall(EBufferType BufferType)
 	}
 }
 
+void UAbilityComponent::ResetMoveCount()
+{
+	UsedMoveCount = 0;	
+}
+
 void UAbilityComponent::WitchAbility_Implementation()
 {
+	check(Parent);
 	switch (Parent->AbilityType)
 	{
 	case EAbilityType::none:
@@ -101,6 +101,7 @@ void UAbilityComponent::WitchAbility_Implementation()
 
 void UAbilityComponent::BasicAttack_Implementation()
 {
+	check(Parent);
 	switch (Parent->InputDirection)
 	{
 	case EInputDirection::Temp:
@@ -122,6 +123,8 @@ void UAbilityComponent::BasicAttack_Implementation()
 		ActivateAbility(TiltSide.Ability);
 		break;
 	case EInputDirection::None:
+		Parent->AttackType = EAttackType::TiltNeutral;
+		ActivateAbility(TiltNeutral.Ability);
 		break;
 	default:
 		break;
@@ -319,24 +322,28 @@ void UAbilityComponent::Prone_Implementation()
 	}
 }
 
-void UAbilityComponent::SpawnAbility(FAbility Ability)
+void UAbilityComponent::SpawnAbility(FAbility& Ability)
 {
-	if (Ability.AbilityRef)
+	if (Ability.AbilityClass)
 	{
 		FVector SpawnLocation = Parent->GetActorLocation();
 		FRotator SpawnRotation = Parent->GetActorRotation();
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = Parent;
 		SpawnParams.Instigator = Parent->GetInstigator();
-		Ability.Ability = GetWorld()->SpawnActor<ABaseAbility>(Ability.AbilityRef, SpawnLocation, SpawnRotation, SpawnParams);
+		Ability.Ability = GetWorld()->SpawnActor<ABaseAbility>(Ability.AbilityClass, SpawnLocation, SpawnRotation, SpawnParams);
 		Ability.Ability->AttachToActor(Parent, FAttachmentTransformRules::KeepRelativeTransform);
-		check(!Ability.Ability);
+		Parent->SetAbilityParent(Ability.Ability);
+		Abilities.Add(Ability.Ability);
 	}
 }
 void UAbilityComponent::ActivateAbility(TObjectPtr<ABaseAbility> Ability)
 {
 	Ability->bIsActive = true;
 	Parent->ClearBuffer();
+	UsedMoveCount++;
+	UsedMoveCount = FMath::Clamp(UsedMoveCount, 0, DamageScale.Num() - 1);
+	GetWorld()->GetTimerManager().SetTimer(ResetMoveCountTimer, this, &UAbilityComponent::ResetMoveCount, 1.f, false);
 }
 void UAbilityComponent::Respawning_Implementation()
 {
@@ -393,6 +400,7 @@ void UAbilityComponent::AttachAbility()
 
 	//Other
 	SpawnAbility(LedgeAttack);
+	SpawnAbility(Ledge);
 	SpawnAbility(ProneAttack);
 	SpawnAbility(ProneStand);
 	SpawnAbility(SuperAbility);
@@ -400,16 +408,36 @@ void UAbilityComponent::AttachAbility()
 	SpawnAbility(ThrowItem);
 	SpawnAbility(UseItem);
 	SpawnAbility(Respawn);
-
+	SpawnAbility(LevelIntro);
 	//Extra
-	SpawnAbility(ExtraAbility1);
-	SpawnAbility(ExtraAbility2);
-	SpawnAbility(ExtraAbility3);
-	SpawnAbility(ExtraAbility4);
+	//SpawnAbility(ExtraAbility1);
+	//SpawnAbility(ExtraAbility2);
+	//SpawnAbility(ExtraAbility3);
+	//SpawnAbility(ExtraAbility4);
+}
+
+void UAbilityComponent::EndAllNonChargedAbilities(const ABaseAbility* Ability)
+{
+	for (ABaseAbility* ForAbility : Abilities)
+	{
+		if (ForAbility->ChargeLevel == 0.f && Ability != ForAbility)
+		{
+			ForAbility->CallEndAbility();
+		}
+	}
 }
 
 void UAbilityComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(UAbilityComponent, Parent);
+}
+
+void FAbility::ActivateAbility()
+{
+	if (Ability)
+	{
+		Ability->bIsActive = true;
+	}
 }
