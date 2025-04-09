@@ -8,6 +8,7 @@
 #include "BaseCharacter.generated.h"
 
 struct FInputActionValue;
+class ABaseAbility;
 
 UCLASS()
 class UMUSMASH_API ABaseCharacter : public ACharacter
@@ -19,6 +20,8 @@ public:
 	ABaseCharacter();
 	UFUNCTION(BlueprintCallable)
 	void ClearBuffer();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetAbilityParent(ABaseAbility* Ability);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
