@@ -20,31 +20,15 @@ public:
 	// Sets default values for this component's properties
 	UFootStepComp();
 
-private:
-
-	TMap<FName, bool> LocalTriggerMap;
-
-	UFUNCTION()
-	TEnumAsByte<EPhysicalSurface> GetSurfaceType(const FHitResult& Hit) const;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Footstep")
-	float TraceDistance = 20.0f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Footstep")
-	TEnumAsByte<ETraceTypeQuery> TraceChannel;
-
-	bool PerformFootTrace(FHitResult& OutHit, FVector Start, FVector End);
-
 public:
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "FootStep")
 	void TriggerFootStep();
 
 	UFUNCTION(BlueprintCallable, Category = "FootStep")
-	void ProcessDualFeet(float AxisValue);
-
-	UFUNCTION(BlueprintCallable, Category = "FootStep")
-	void ProcessDetectFoot(FName InSocketName, float AxisValue);
+	void ProcessDetectFeet(float AxisValue);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep")
@@ -82,6 +66,54 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
 	UParticleSystem* FallParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* HitParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* LaunchParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* CrouchParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* LedgeParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* DeadParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* ShieldParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* TumbleParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* ShieldTumbleParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* ProneParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* StunParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* DizzyParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* AbilityParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* DodgeParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* FreeFallParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* HeldParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
+	UParticleSystem* HoldParticle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FootStep|Particle")
 	UParticleSystem* DefaultParticle;
