@@ -134,7 +134,7 @@ void AUMUFightGameMode::HandleGameOver()
 		FinalGameStatsHandle,
 		FTimerDelegate::CreateLambda([WeakThisPtr]()
 		{
-			if (WeakThisPtr.IsValid())
+			if (WeakThisPtr.IsValid() && WeakThisPtr->GetWorld())
 			{
 				WeakThisPtr->TravelToVictoryScreen();
 			}

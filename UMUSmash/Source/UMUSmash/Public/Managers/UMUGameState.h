@@ -22,7 +22,7 @@ public:
 	void MulticastRPCIsGameOver();
 
 	// ---
-	void SlowMotionEffect() const;
+	void SlowMotionEffect();
 	void UpdateIsGameOver();
 	void UpdatePlayerLoaded();
 

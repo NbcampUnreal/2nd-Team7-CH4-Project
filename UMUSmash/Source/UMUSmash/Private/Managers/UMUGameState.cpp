@@ -13,15 +13,19 @@ void AUMUGameState::MulticastRPCIsGameOver_Implementation()
 	SlowMotionEffect();
 }
 
-void AUMUGameState::SlowMotionEffect() const
+void AUMUGameState::SlowMotionEffect() 
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.1f);
-
+	
+	TWeakObjectPtr<AUMUGameState> WeakThisPtr(this);
 	FTimerHandle FinalGameStatsHandle;
 	GetWorld()->GetTimerManager().SetTimer(
-		FinalGameStatsHandle,FTimerDelegate::CreateLambda([this]
+		FinalGameStatsHandle,FTimerDelegate::CreateLambda([WeakThisPtr]
 		{
-			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+			if (WeakThisPtr.IsValid() && WeakThisPtr->GetWorld())
+			{
+				UGameplayStatics::SetGlobalTimeDilation(WeakThisPtr->GetWorld(), 1.0f);
+			}
 		}),
 		0.2f,false, -1);
 }
