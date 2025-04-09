@@ -21,7 +21,7 @@ public:
     void HandleInitGame();
     void SetPlayerStocks();
 	UFUNCTION(BlueprintCallable)
-    void HandleGameOver() const;
+    void HandleGameOver();
 	UFUNCTION(BlueprintCallable)
 	void CheckGameOverConditions();
 

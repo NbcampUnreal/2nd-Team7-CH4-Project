@@ -115,7 +115,7 @@ void AUMUFightGameMode::TravelToVictoryScreen() const
 }
 
 
-void AUMUFightGameMode::HandleGameOver() const
+void AUMUFightGameMode::HandleGameOver()
 {
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"));
 	
@@ -127,14 +127,22 @@ void AUMUFightGameMode::HandleGameOver() const
 	GameInstance->SetIsGameOver(true);
 	UMUGameState->MulticastRPCIsGameOver();
 	FinalizeGameStats();
-	
+
+	TWeakObjectPtr<AUMUFightGameMode> WeakThisPtr(this);
 	FTimerHandle FinalGameStatsHandle;
 	GetWorld()->GetTimerManager().SetTimer(
-		FinalGameStatsHandle,FTimerDelegate::CreateLambda([this]
+		FinalGameStatsHandle,
+		FTimerDelegate::CreateLambda([WeakThisPtr]()
 		{
-			TravelToVictoryScreen();
+			if (WeakThisPtr.IsValid())
+			{
+				WeakThisPtr->TravelToVictoryScreen();
+			}
 		}),
-		3.0f,false, -1);
+		3.0f,
+		false,
+		-1
+	);
 
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"));
 }
