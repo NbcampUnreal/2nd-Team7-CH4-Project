@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "UMUItemSpawner.h"
+#include "UMUItemSpawnRow.h"
 #include "UMUItemManager.generated.h"
 
 /**
@@ -26,9 +27,19 @@ public:
 	UFUNCTION()
 	void AddSpawnerArray(AUMUItemSpawner* Spawner);
 
+private:
+	UFUNCTION()
+	void SelectSpawner();
+	
+	UFUNCTION()
+	FUMUItemSpawnRow SelectItem();
 private: 
-	UPROPERTY(VisibleAnywhere)
-	TArray<TSubclassOf<AUMUItemSpawner>> SpawnerArray;
 
+	UPROPERTY(VisibleAnywhere)
+	TArray<FUMUItemSpawnRow> ItemArray;
+	UPROPERTY(VisibleAnywhere)
+	TArray<AUMUItemSpawner*> SpawnerArray;
+
+	
 
 };
