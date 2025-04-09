@@ -37,11 +37,20 @@ protected:
 	//void Attack();
 	//void Smash();
 	//void Shield();
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int PlayerNo = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
+	int JumpNumber = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
+	bool Bounce = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool WallDetection = false;
 #pragma region Component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAbilityComponent> AbilityComponent = nullptr;	
