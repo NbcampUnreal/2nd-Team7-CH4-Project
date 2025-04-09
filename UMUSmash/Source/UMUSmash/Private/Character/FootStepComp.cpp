@@ -3,86 +3,121 @@
 
 #include "Character/FootStepComp.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/SkeletalMeshComponent.h"
 
-// Sets default values for this component's properties
 UFootStepComp::UFootStepComp()
 {
-	PrimaryComponentTick.bCanEverTick = true;
-	
+    PrimaryComponentTick.bCanEverTick = true;
+    TraceDistance = 20.0f;
+    TraceChannel = ETraceTypeQuery::TraceTypeQuery1;
 }
 
-
-void UFootStepComp::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UFootStepComp::ProcessDualFeet(float AxisValue)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    const float AbsAxisValue = FMath::Abs(AxisValue);
 
+    ProcessDetectFoot(FName("foot_lSocket"), AbsAxisValue);
+    ProcessDetectFoot(FName("foot_rSocket"), AbsAxisValue);
 }
 
+void UFootStepComp::ProcessDetectFoot(FName InSocketName, float AxisValue) // 여기서 AxisValue 받고?
+{
+    if (!GetOwner() || !GetWorld()) return;
 
+    const float Threshold = 0.2f;
 
+    bool& bCanTrigger = LocalTriggerMap.FindOrAdd(InSocketName, true);
 
-//void UFootStepComp::ProcessDetectFeet(float AxisValue)
-//{
-//	Volume = FMath::Clamp(FMath::Abs(AxisValue), 0.0f, 1.0f);
-//
-//	static bool bCanTrigger = true;
-//
-//	if (bCanTrigger)
-//	{
-//		FootLocation = GetOwner()->GetActorLocation();
-//
-//		SurfaceType = SurfaceType_Default;
-//
-//
-//		TriggerFootStep();
-//
-//
-//		bCanTrigger = false;
-//	}
-//	else
-//	{
-//
-//	}
-//}
+    if (AxisValue < Threshold)
+    {
+        bCanTrigger = true;
+        return;
+    }
+
+    if (bCanTrigger)
+    {
+        if (USkeletalMeshComponent* MeshComp = GetOwner()->FindComponentByClass<USkeletalMeshComponent>())
+        {
+            FVector Start = MeshComp->GetSocketLocation(InSocketName);
+            FVector End = Start + FVector(0, 0, -TraceDistance);
+
+            FHitResult Hit;
+            if (PerformFootTrace(Hit, Start, End))
+            {
+                FootLocation = Hit.ImpactPoint;
+                SurfaceType = GetSurfaceType(Hit);
+                TriggerFootStep();
+                bCanTrigger = false;
+            }
+        }
+    }
+}
+
+bool UFootStepComp::PerformFootTrace(FHitResult& OutHit, FVector Start, FVector End)
+{
+    if (!GetWorld()) return false;
+
+    FCollisionQueryParams Params;
+    Params.bReturnPhysicalMaterial = true;
+    Params.AddIgnoredActor(GetOwner());
+
+    ECollisionChannel CollisionChannel = UEngineTypes::ConvertToCollisionChannel(TraceChannel);
+    // 코파일럿이 시켰음
+    return GetWorld()->LineTraceSingleByChannel(
+        OutHit,
+        Start,
+        End,
+        CollisionChannel,
+        Params
+    );
+}
+
+TEnumAsByte<EPhysicalSurface> UFootStepComp::GetSurfaceType(const FHitResult& Hit) const
+{
+    return Hit.PhysMaterial.IsValid() ?
+        UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get()) :
+        SurfaceType_Default;
+}
+
 
 void UFootStepComp::TriggerFootStep()
 {
-	if (FootPrintSounds.Num() > 0 && FootPrintSounds[0])
-	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), FootPrintSounds[0], FootLocation, Volume);
-	}
+    if (FootPrintSounds.Num() > 0 && FootPrintSounds[0])
+    {
+        UGameplayStatics::PlaySoundAtLocation(
+            GetWorld(),
+            FootPrintSounds[0],
+            FootLocation,
+            Volume
+        );
+    }
 
-	UParticleSystem* SelectedParticle = nullptr;
+    UParticleSystem* SelectedParticle = DefaultParticle;
 
-	switch (CurrentPlayerState)
-	{
-	case EPlayerStateType::Idle:				SelectedParticle = IdleParticle; break;
-	case EPlayerStateType::walkrun:				SelectedParticle = WalkRunParticle; break;
-	case EPlayerStateType::sprint:				SelectedParticle = SprintParticle; break;
-	case EPlayerStateType::jump:				SelectedParticle = JumpParticle; break;
-	case EPlayerStateType::fall:				SelectedParticle = FallParticle; break;
-	case EPlayerStateType::hit:					SelectedParticle = HitParticle; break;
-	case EPlayerStateType::launch:				SelectedParticle = LaunchParticle; break;
-	case EPlayerStateType::crouch:				SelectedParticle = CrouchParticle; break;
-	case EPlayerStateType::ledge:				SelectedParticle = LedgeParticle; break;
-	case EPlayerStateType::dead:				SelectedParticle = DeadParticle; break;
-	case EPlayerStateType::shiled:				SelectedParticle = ShieldParticle; break;
-	case EPlayerStateType::tumble:				SelectedParticle = TumbleParticle; break;
-	case EPlayerStateType::shildtumble:			SelectedParticle = ShieldTumbleParticle; break;
-	case EPlayerStateType::prone:				SelectedParticle = ProneParticle; break;
-	case EPlayerStateType::stun:				SelectedParticle = StunParticle; break;
-	case EPlayerStateType::dizzy:				SelectedParticle = DizzyParticle; break;
-	case EPlayerStateType::ability:				SelectedParticle = AbilityParticle; break;
-	case EPlayerStateType::Dodge:				SelectedParticle = DodgeParticle; break;
-	case EPlayerStateType::FreeFall:			SelectedParticle = FreeFallParticle; break;
-	case EPlayerStateType::Held:				SelectedParticle = HeldParticle; break;
-	case EPlayerStateType::Hold:				SelectedParticle = HoldParticle; break;
-	default:									SelectedParticle = DefaultParticle; break;
-	}
-	if (SelectedParticle)
-	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedParticle, FootLocation);
-	}
+    if (CurrentPlayerState == EPlayerStateType::Idle)
+    {
+        SelectedParticle = IdleParticle;
+    }
+    else if (CurrentPlayerState == EPlayerStateType::walkrun)
+    {
+        SelectedParticle = WalkRunParticle;
+    }
+    else if (CurrentPlayerState == EPlayerStateType::sprint)
+    {
+        SelectedParticle = SprintParticle;
+    }
+    else if (CurrentPlayerState == EPlayerStateType::jump)
+    {
+        SelectedParticle = JumpParticle;
+    }
+    if (SelectedParticle)
+    {
+        UGameplayStatics::SpawnEmitterAtLocation(
+            GetWorld(),
+            SelectedParticle,
+            FootLocation
+        );
+    }
 }
 
 // UMUTypes enum값
