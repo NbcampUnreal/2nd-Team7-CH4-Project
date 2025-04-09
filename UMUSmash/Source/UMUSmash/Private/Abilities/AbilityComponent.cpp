@@ -55,7 +55,7 @@ void UAbilityComponent::ResetMoveCount()
 
 void UAbilityComponent::WitchAbility_Implementation()
 {
-	check(!Parent);
+	check(Parent);
 	switch (Parent->AbilityType)
 	{
 	case EAbilityType::none:
@@ -101,7 +101,7 @@ void UAbilityComponent::WitchAbility_Implementation()
 
 void UAbilityComponent::BasicAttack_Implementation()
 {
-	check(!Parent);
+	check(Parent);
 	switch (Parent->InputDirection)
 	{
 	case EInputDirection::Temp:
@@ -324,7 +324,6 @@ void UAbilityComponent::Prone_Implementation()
 
 void UAbilityComponent::SpawnAbility(FAbility& Ability)
 {
-	check(!Ability.Ability);
 	if (Ability.AbilityClass)
 	{
 		FVector SpawnLocation = Parent->GetActorLocation();
@@ -401,6 +400,7 @@ void UAbilityComponent::AttachAbility()
 
 	//Other
 	SpawnAbility(LedgeAttack);
+	SpawnAbility(Ledge);
 	SpawnAbility(ProneAttack);
 	SpawnAbility(ProneStand);
 	SpawnAbility(SuperAbility);
