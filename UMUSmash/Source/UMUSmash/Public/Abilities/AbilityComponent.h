@@ -86,6 +86,8 @@ private:
 public:
 
 	// TMap Key: Name, Value: Ability
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+	TMap<FName, FAbility> SpecialAbilityMap;
 	UPROPERTY(BlueprintReadWrite, Replicated)
 	TObjectPtr<ABaseCharacter> Parent = nullptr;
 
