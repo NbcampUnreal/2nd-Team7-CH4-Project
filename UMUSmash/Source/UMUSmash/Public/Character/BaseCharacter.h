@@ -40,6 +40,8 @@ protected:
 
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int PlayerNo = 0;
 #pragma region Component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAbilityComponent> AbilityComponent = nullptr;	
