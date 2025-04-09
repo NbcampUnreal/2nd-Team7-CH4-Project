@@ -24,6 +24,12 @@ public:
     void HandleGameOver() const;
 	UFUNCTION(BlueprintCallable)
 	void CheckGameOverConditions();
+
+	// --- Game rule ---
+	UFUNCTION(BlueprintCallable)
+	void OnPlayerDeath(const int32& PlayerNo);
+	UFUNCTION(BlueprintCallable)
+	void SetWinner() const;
     
     // --- Helper functions
     void CreatePlayers();
@@ -32,7 +38,11 @@ public:
     
     void FinalizeGameStats() const;
     void TravelToVictoryScreen() const;
-    	
+
+
+	// --- Getter & Setter ---
+	bool IsAllLoaded() const { return bAllLoaded; }
+	TArray<bool> GetPlayerLoaded() const { return PlayerLoaded; }
 
 	virtual void BeginPlay() override;
 

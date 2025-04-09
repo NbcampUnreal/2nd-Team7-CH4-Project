@@ -22,8 +22,21 @@ public:
 	void MulticastRPCIsGameOver();
 
 	// ---
-	void SlowMotionEffect();
+	void SlowMotionEffect() const;
 	void UpdateIsGameOver();
+	void UpdatePlayerLoaded();
+
+
+	void InitState();
+
+	// --- Replication ---
+	// UFUNCTION()
+	// void OnRep_IsAllLoaded();
+	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
+	// --- Life cycle ---
+	virtual void BeginPlay() override;
 
 
 private:
@@ -48,9 +61,9 @@ private:
 
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 NumPlayersAlive;
-	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<bool> PlayerLoaded;
-	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	bool bIsAllLoaded;
 
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))

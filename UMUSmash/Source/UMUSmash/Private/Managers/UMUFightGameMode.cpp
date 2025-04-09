@@ -90,10 +90,14 @@ void AUMUFightGameMode::HandleInitGame()
 
 void AUMUFightGameMode::FinalizeGameStats() const
 {
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"))
+	
 	GameInstance->SetElims(Elims);
 	GameInstance->SetFalls(Falls);
 	GameInstance->SetDamageDone(DamageDone);
 	GameInstance->SetDamageTaken(DamageTaken);
+
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 
 void AUMUFightGameMode::TravelToVictoryScreen() const
@@ -109,6 +113,7 @@ void AUMUFightGameMode::TravelToVictoryScreen() const
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*MapName));
 	}
 }
+
 
 void AUMUFightGameMode::HandleGameOver() const
 {
@@ -142,7 +147,7 @@ void AUMUFightGameMode::CheckGameOverConditions()
 	{
 		case EInGameModes::Stock:
 			{
-				if (NumPlayersAlive == 1)
+				if (GameInstance->GetNumPlayersAlive() == 1)
 				{
 					HandleGameOver();
 					break;
@@ -175,6 +180,32 @@ void AUMUFightGameMode::CheckGameOverConditions()
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"));
 }
 
+void AUMUFightGameMode::OnPlayerDeath(const int32& PlayerNo)
+{
+	
+	TArray<bool> AliveArray = GameInstance->GetAliveArray();
+	AliveArray[PlayerNo] = false;
+	
+	GameInstance->GetPlayerPositions().Insert(0, PlayerNo);
+	const int32 NewAlivePlayerCount = GameInstance->GetNumPlayersAlive()-1;
+	GameInstance->SetNumPlayersAlive(NewAlivePlayerCount);
+}
+
+void AUMUFightGameMode::SetWinner() const
+{
+	TArray<bool> AliveArray = GameInstance->GetAliveArray();
+	for (int32 i = 0; i < AliveArray.Num(); i++)
+	{
+		if (AliveArray[i])
+		{
+			GameInstance->SetWinnerPlayerID(i);
+			TArray<int32> PlayerPosition = GameInstance->GetPlayerPositions();
+			PlayerPosition.Insert(0,i);
+			PlayerPosition[0] = i;
+			PlayerPosition.SetNum(PlayerPosition.Num());
+		}
+	}
+}
 
 void AUMUFightGameMode::BeginPlay()
 {

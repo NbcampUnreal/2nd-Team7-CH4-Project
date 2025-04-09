@@ -63,7 +63,7 @@ public:
 	MAKE_GETTERSETTER_REF(TArray<int32>, Falls)
 	MAKE_GETTERSETTER_REF(TArray<int32>, DamageDone)
 	MAKE_GETTERSETTER_REF(TArray<int32>, DamageTaken)
-	MAKE_GETTERSETTER_REF(TArray<int32>, PlayerPositions)
+	MAKE_GETTERSETTER(TArray<int32>, PlayerPositions)
 	MAKE_GETTERSETTER_REF(TArray<int32>, Score)
 	MAKE_GETTERSETTER_REF(TArray<bool>, AliveArray)
 	MAKE_GETTERSETTER_REF(TArray<bool>, CPU)
