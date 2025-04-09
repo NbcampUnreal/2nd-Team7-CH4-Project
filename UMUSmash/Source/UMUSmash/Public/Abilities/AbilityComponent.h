@@ -15,10 +15,14 @@ struct FAbility
 {
 	GENERATED_BODY()
 
+public:
+	void ActivateAbility();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<ABaseAbility> AbilityClass;
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<ABaseAbility> Ability;
+
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
