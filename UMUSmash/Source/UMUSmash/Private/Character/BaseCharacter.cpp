@@ -3,6 +3,7 @@
 #include "Character\UMUPlayerController.h"
 #include "Abilities\AbilityComponent.h"
 #include "Character\LedgeComponent.h"
+#include <Net\UnrealNetwork.h>
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
@@ -25,6 +26,12 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABaseCharacter, JumpNumber);
 }
 
 // Called to bind functionality to input
