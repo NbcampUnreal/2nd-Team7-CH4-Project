@@ -39,6 +39,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item|Property")
 	FName ItemName;
 
+	UPROPERTY(EditAnywhere, Category = "Gravity")
+	float GravityStrength;
+	UPROPERTY(EditAnywhere, Category = "Gravity")
+	float FallingSpeed;
+	UPROPERTY(EditAnywhere, Category = "Gravity")
+	bool UseCustomGravity;
 
 	virtual void OnItemOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
@@ -65,4 +71,8 @@ public:
 
 	FName GetItemName() const;
 
+
+private:
+
+	void Gravity(float DeltaTime);
 };
