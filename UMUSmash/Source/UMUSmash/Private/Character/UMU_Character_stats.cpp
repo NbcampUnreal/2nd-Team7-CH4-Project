@@ -1,6 +1,6 @@
 
 
-
+#include "Kismet/GameplayStatics.h"
 #include "Character/UMU_Character_stats.h"
 
 // Sets default values for this component's properties
@@ -19,6 +19,12 @@ void UUMU_Character_stats::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Parent = Cast<ABaseCharacter>(GetOwner());
+
+	if (!Parent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UMU_Character_Stats: Parent casting fail"));
+	}
 	// ...
 	
 	//take damege는 nomal일때 ==을 받음
@@ -33,3 +39,13 @@ void UUMU_Character_stats::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
+void UUMU_Character_stats::ScreenShake(float RumbleInten, float RumbleDuration)
+{
+	if (!Parent)
+	{
+		return;
+	}
+
+
+
+}
