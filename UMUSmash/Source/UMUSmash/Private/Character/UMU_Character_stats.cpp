@@ -21,6 +21,7 @@ void UUMU_Character_stats::BeginPlay()
 
 	// ...
 	
+	//take damege는 nomal일때 ==을 받음
 }
 
 
