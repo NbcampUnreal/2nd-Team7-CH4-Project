@@ -82,6 +82,7 @@ void AUMUFightGameMode::HandleInitGame()
 	CreatePlayers();
 	OnlineAllLoaded();
 	MatchStats();
+	BindingValueChanged();
 	
 	bUseTimer = (InGameMode == EInGameModes::Time);
 	
@@ -112,6 +113,28 @@ void AUMUFightGameMode::TravelToVictoryScreen() const
 	{
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*MapName));
 	}
+}
+
+void AUMUFightGameMode::BindingValueChanged()
+{
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("Begin"));
+	
+	GameInstance = Cast<UUMUGameInstance> (GetWorld()->GetGameInstance());
+	check(GameInstance);
+
+	GameInstance->OnAliveCountChanged.AddDynamic(this, &AUMUFightGameMode::HandleUpdateAliveCount);
+
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("End"));
+}
+
+void AUMUFightGameMode::HandleUpdateAliveCount(const int32 NewNumPlayersAlive)
+{
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("Begin"));
+	
+	NumPlayersAlive = NewNumPlayersAlive;
+	CheckGameOverConditions();
+
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("End"));
 }
 
 
@@ -190,6 +213,7 @@ void AUMUFightGameMode::CheckGameOverConditions()
 
 void AUMUFightGameMode::OnPlayerDeath(const int32& PlayerNo)
 {
+	check(GameInstance);
 	
 	TArray<bool> AliveArray = GameInstance->GetAliveArray();
 	AliveArray[PlayerNo] = false;
@@ -197,6 +221,7 @@ void AUMUFightGameMode::OnPlayerDeath(const int32& PlayerNo)
 	GameInstance->GetPlayerPositions().Insert(0, PlayerNo);
 	const int32 NewAlivePlayerCount = GameInstance->GetNumPlayersAlive()-1;
 	GameInstance->SetNumPlayersAlive(NewAlivePlayerCount);
+	GameInstance->BroadcastChangedAliveCount();
 }
 
 void AUMUFightGameMode::SetWinner() const

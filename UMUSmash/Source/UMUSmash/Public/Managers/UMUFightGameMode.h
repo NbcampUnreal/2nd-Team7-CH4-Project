@@ -39,6 +39,10 @@ public:
     void FinalizeGameStats() const;
     void TravelToVictoryScreen() const;
 
+	void BindingValueChanged();
+	UFUNCTION()
+	void HandleUpdateAliveCount(const int32 NewNumPlayersAlive);
+
 
 	// --- Getter & Setter ---
 	bool IsAllLoaded() const { return bAllLoaded; }

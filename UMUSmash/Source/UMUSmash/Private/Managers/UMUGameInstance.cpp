@@ -5,7 +5,6 @@
 
 #include "Managers/UMUFightGameMode.h"
 #include "Managers/UMUGameState.h"
-#include "UMUSmash/UMUSmash.h"
 
 void UUMUGameInstance::ServerTravel(const FString& MapName) const
 {
@@ -23,10 +22,16 @@ void UUMUGameInstance::SetIsGameOver(const bool& NewValue)
 	GetWorld()->GetGameState<AUMUGameState>()->UpdateIsGameOver();
 }
 
-void UUMUGameInstance::CheckGameOverConditions()
+void UUMUGameInstance::CheckGameOverConditions() const
 {
 	auto* FighterGameMode = Cast<AUMUFightGameMode>(GetWorld()->GetAuthGameMode());
 	checkf(FighterGameMode, TEXT("Game Instance: Fighter Game Mode is null"));
 
 	FighterGameMode->CheckGameOverConditions();
+}
+
+void UUMUGameInstance::BroadcastChangedAliveCount() const
+{
+	const int32 ChangedValue = GetNumPlayersAlive();
+	OnAliveCountChanged.Broadcast(ChangedValue);
 }
