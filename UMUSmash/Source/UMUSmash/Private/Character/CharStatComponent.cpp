@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Character/BaseCharacter.h"
 #include <Managers\UMUGameInstance.h>
+#include <Net\UnrealNetwork.h>
 
 // Sets default values for this component's properties
 UCharStatComponent::UCharStatComponent()
@@ -44,6 +45,15 @@ void UCharStatComponent::BeginPlay()
 	{
 		Stock = FighterGameInstance->GetStockCount();
 	}
+}
+
+void UCharStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UCharStatComponent, HP);
+	DOREPLIFETIME(UCharStatComponent, MaxHP);
+	DOREPLIFETIME(UCharStatComponent, Percent);
+	DOREPLIFETIME(UCharStatComponent, Stock);
 }
 
 void UCharStatComponent::ScreenShake(float RumbleInten, float RumbleDuration)
