@@ -1,18 +1,18 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "UMUTypes.h"
+#include "Engine/GameInstance.h"
 #include "Kismet/BlueprintPlatformLibrary.h"
 #include "UMUGameInstance.generated.h"
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAliveCountChanged, int32, NewNumPlayersAlive);
 
 UCLASS()
 class UMUSMASH_API UUMUGameInstance : public UPlatformGameInstance
 {
 	GENERATED_BODY()
-
-
 
 public:
 	UFUNCTION(BlueprintCallable, Category="Game")
@@ -21,8 +21,13 @@ public:
 	bool IsGameOver() const;
 	void SetIsGameOver(const bool& NewValue);
 
+
+	// --- Game rule --- 
 	UFUNCTION(BlueprintCallable, Category="Game.Players")
-	void CheckGameOverConditions();
+	void CheckGameOverConditions() const;
+	UFUNCTION(BlueprintCallable)
+	void BroadcastChangedAliveCount() const;
+	
 
 	
 #pragma region Getter & Setter Macro
@@ -91,6 +96,10 @@ public:
 	MAKE_BOOL_GETTERSETTER(IsTeamMode, bIsTeamMode)
 	MAKE_BOOL_GETTERSETTER(CanTeamAttack, bCanTeamAttack)
 #pragma endregion
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FOnAliveCountChanged OnAliveCountChanged;
 	
 private:
 	
@@ -107,7 +116,6 @@ private:
 	UPROPERTY(BlueprintReadWrite, Category="Game.Color", meta=(AllowPrivateAccess="true"))
 	FSlateColor P4_Col;
 #pragma endregion
-
 	
 #pragma region --- Game.Online ---
 	UPROPERTY(BlueprintReadWrite, Category="Game.Online", meta=(AllowPrivateAccess="true"))
@@ -158,7 +166,7 @@ private:
 	TArray<int32> DamageTaken;
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<int32> PlayerPositions;
+	TArray<int32> PlayerPositions = {};
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<int32> Score;
@@ -224,5 +232,27 @@ private:
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Team", meta=(AllowPrivateAccess="true"))
 	bool bCanTeamAttack;
+#pragma endregion
+
+
+#pragma region --- multitest.stream ---
+public:
+		UFUNCTION(BlueprintCallable, Category = "Network")
+		void HostGame(const FString& MapName);
+
+		UFUNCTION(BlueprintCallable, Category = "Network")
+		void JoinGame(const FString& MapName, const FString& HostCode);
+
+		UFUNCTION(BlueprintCallable, Category = "Network")
+		FString GetMyHostCode();
+
+
+		FString PadLeft(const FString& Input, int32 TotalLength, TCHAR PadChar = '0') const;
+
+private:
+		FString LocalIPToHostCode(const FString& IP) const;
+		FString HostCodeToIP(const FString& Code) const;
+
+		FString GetLocalIPAddress() const;
 #pragma endregion
 };

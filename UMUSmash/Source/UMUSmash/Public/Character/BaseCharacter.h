@@ -11,6 +11,7 @@ struct FInputActionValue;
 class ABaseAbility;
 class UAbilityComponent;
 class ULedgeComponent;
+class UCharStatComponent;
 
 UCLASS()
 class UMUSMASH_API ABaseCharacter : public ACharacter
@@ -41,6 +42,12 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	double HitScale = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 AttackDamage = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int PlayerNo = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
@@ -57,6 +64,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<ULedgeComponent> LedgeComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCharStatComponent> CharStatComponent = nullptr;
 #pragma endregion
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

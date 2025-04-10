@@ -2,6 +2,7 @@
 #include "Character\BaseCharacter.h"
 #include "Abilities\BaseAbility.h"
 #include "Net\UnrealNetwork.h"
+#include "Character\CharStatComponent.h"
 
 
 // Sets default values for this component's properties
@@ -154,8 +155,17 @@ void UAbilityComponent::SpecialAttack_Implementation()
 		ActivateAbility(SpecialForward.Ability);
 		break;
 	case EInputDirection::None:
-		Parent->AttackType = EAttackType::SpecialNeutral;
-		ActivateAbility(SpecialNeutral.Ability);
+		if (Parent->CharStatComponent->SuperGage >= 100)
+		{
+			Parent->CharStatComponent->SuperGage = 0;
+			Parent->AttackType = EAttackType::Super;
+			ActivateAbility(SuperAbility.Ability);
+		}
+		else
+		{
+			Parent->AttackType = EAttackType::SpecialNeutral;
+			ActivateAbility(SpecialNeutral.Ability);
+		}
 		break;
 	default:
 		break;

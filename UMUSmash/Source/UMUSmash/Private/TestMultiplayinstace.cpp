@@ -1,51 +1,16 @@
-#include "Managers/UMUGameInstance.h"
-#include "Managers/UMUFightGameMode.h"
-#include "Managers/UMUGameState.h"
-#include "UMUSmash/UMUSmash.h"
+#include "TestMultiplayinstace.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "Sockets.h"
 #include "SocketSubsystem.h"
 
-void UUMUGameInstance::ServerTravel(const FString& MapName) const
-{
-	GetWorld()->ServerTravel(MapName);
-}
-
-bool UUMUGameInstance::IsGameOver() const
-{
-	return bIsGameOver;
-}
-
-void UUMUGameInstance::SetIsGameOver(const bool& NewValue)
-{
-	bIsGameOver = NewValue;
-	GetWorld()->GetGameState<AUMUGameState>()->UpdateIsGameOver();
-}
-
-void UUMUGameInstance::CheckGameOverConditions() const
-{
-	auto* FighterGameMode = Cast<AUMUFightGameMode>(GetWorld()->GetAuthGameMode());
-	checkf(FighterGameMode, TEXT("Game Instance: Fighter Game Mode is null"));
-
-	FighterGameMode->CheckGameOverConditions();
-}
-
-void UUMUGameInstance::BroadcastChangedAliveCount() const
-{
-	const int32 ChangedValue = GetNumPlayersAlive();
-	OnAliveCountChanged.Broadcast(ChangedValue);
-}
-
-//---- testmulti ----
-
-void UUMUGameInstance::HostGame(const FString& MapName)
+void UTestMultiplayinstace::HostGame(const FString& MapName)
 {
     UGameplayStatics::OpenLevel(GetWorld(), FName(*MapName), true, TEXT("?listen"));
 }
 
-void UUMUGameInstance::JoinGame(const FString& MapName, const FString& HostCode)
+void UTestMultiplayinstace::JoinGame(const FString& MapName, const FString& HostCode)
 {
     FString IP = HostCodeToIP(HostCode);
 
@@ -56,7 +21,7 @@ void UUMUGameInstance::JoinGame(const FString& MapName, const FString& HostCode)
     }
 }
 
-FString UUMUGameInstance::LocalIPToHostCode(const FString& IP) const
+FString UTestMultiplayinstace::LocalIPToHostCode(const FString& IP) const
 {
     FString CleanIP = IP.Replace(TEXT("."), TEXT(""));
     int32 IPNum = FCString::Atoi(*CleanIP);
@@ -65,13 +30,13 @@ FString UUMUGameInstance::LocalIPToHostCode(const FString& IP) const
 }
 
 
-FString UUMUGameInstance::GetMyHostCode()
+FString UTestMultiplayinstace::GetMyHostCode()
 {
     FString IP = GetLocalIPAddress();
     return LocalIPToHostCode(IP);
 }
 
-FString UUMUGameInstance::GetLocalIPAddress() const
+FString UTestMultiplayinstace::GetLocalIPAddress() const
 {
     ISocketSubsystem* SocketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
     if (SocketSubsystem)
@@ -83,7 +48,7 @@ FString UUMUGameInstance::GetLocalIPAddress() const
     return TEXT("0.0.0.0");
 }
 
-FString UUMUGameInstance::HostCodeToIP(const FString& Code) const
+FString UTestMultiplayinstace::HostCodeToIP(const FString& Code) const
 {
     int32 EncodedNum = FParse::HexNumber(*Code);
     int32 Decoded = (EncodedNum - 1234) / 37;
@@ -98,8 +63,10 @@ FString UUMUGameInstance::HostCodeToIP(const FString& Code) const
     return IP;
 }
 
-FString UUMUGameInstance::PadLeft(const FString& Input, int32 TotalLength, TCHAR PadChar) const
+FString UTestMultiplayinstace::PadLeft(const FString& Input, int32 TotalLength, TCHAR PadChar) const
 {
     int32 PadCount = FMath::Max(0, TotalLength - Input.Len());
     return FString::ChrN(PadCount, PadChar) + Input;
 }
+
+
