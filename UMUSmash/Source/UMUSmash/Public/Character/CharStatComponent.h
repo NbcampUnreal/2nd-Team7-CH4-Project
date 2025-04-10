@@ -14,31 +14,26 @@ class UMUSMASH_API UCharStatComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UCharStatComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnyWhere)
-	ABaseCharacter* Parent;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadOnly)
-	TSubclassOf<UCameraShakeBase> ShakeClass;
-
-public:
 	UFUNCTION(BlueprintCallable)
 	void ScreenShake(float RumbleInten, float RumbleDuration);
 
 	UFUNCTION(BlueprintCallable)
 	void TakeDamage(float Dam);
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life")
+
+
+public:
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life", Replicated)
 	int32 HP;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life", Replicated)
 	int32 MaxHP;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life", Replicated)
 	int32 Percent;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Life", Replicated)
 	int32 Stock;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	int32 SuperGage;
@@ -54,6 +49,13 @@ public:
 	int32 DamageTaken = 0;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	int32 Falls = 0;
+protected:
+	UPROPERTY(EditAnyWhere)
+	TObjectPtr<ABaseCharacter> Parent;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadOnly)
+	TSubclassOf<UCameraShakeBase> ShakeClass;
+
 };
 
 
