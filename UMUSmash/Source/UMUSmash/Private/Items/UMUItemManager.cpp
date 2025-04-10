@@ -68,7 +68,7 @@ void UUMUItemManager::RoadItemData()
 	{
 		if (Row)
 		{
-			ItemArray.Add(*Row); // 포인터 → 값 복사
+			ItemArray.Add(*Row); 
 		}
 	}
 }
