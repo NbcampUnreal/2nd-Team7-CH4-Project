@@ -11,6 +11,7 @@ struct FInputActionValue;
 class ABaseAbility;
 class UAbilityComponent;
 class ULedgeComponent;
+class UCharStatComponent;
 
 UCLASS()
 class UMUSMASH_API ABaseCharacter : public ACharacter
@@ -57,6 +58,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<ULedgeComponent> LedgeComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UCharStatComponent> CharStatComponent = nullptr;
 #pragma endregion
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
