@@ -50,7 +50,8 @@ bool AUMUFightGameMode::OnlineAllLoaded()
 		PlayerLoaded[i] = true;
 	}
 
-	return !PlayerLoaded.Contains(false);
+	bAllLoaded = !PlayerLoaded.Contains(false);
+	return bAllLoaded;
 }
 
 void AUMUFightGameMode::MatchStats()
@@ -78,9 +79,9 @@ void AUMUFightGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	
-	if (OnlineAllLoaded())
+	if (bAllLoaded)
 	{
-		NewPlayer->SetLifeSpan(0.1f);	
+		NewPlayer->SetLifeSpan(0.1f);
 	}
 }
 
