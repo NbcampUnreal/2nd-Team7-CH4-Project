@@ -218,7 +218,7 @@ void AUMUFightGameMode::OnPlayerDeath(const int32& PlayerNo)
 	TArray<bool> AliveArray = GameInstance->GetAliveArray();
 	AliveArray[PlayerNo] = false;
 	
-	GameInstance->GetPlayerPositions().Insert(0, PlayerNo);
+	GameInstance->GetPlayerPositions().Insert(PlayerNo, 0);
 	const int32 NewAlivePlayerCount = GameInstance->GetNumPlayersAlive()-1;
 	GameInstance->SetNumPlayersAlive(NewAlivePlayerCount);
 	GameInstance->BroadcastChangedAliveCount();

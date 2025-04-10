@@ -42,6 +42,12 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	double HitScale = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 AttackDamage = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int PlayerNo = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
