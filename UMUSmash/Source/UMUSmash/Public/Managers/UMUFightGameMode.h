@@ -16,6 +16,8 @@ class UMUSMASH_API AUMUFightGameMode : public AGameModeBase
 
 	
 public:
+	// --- Block Login ---
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 	
 	// --- Main game flow
     void HandleInitGame();
@@ -49,6 +51,7 @@ public:
 	TArray<bool> GetPlayerLoaded() const { return PlayerLoaded; }
 
 	virtual void BeginPlay() override;
+
 
 
 private:

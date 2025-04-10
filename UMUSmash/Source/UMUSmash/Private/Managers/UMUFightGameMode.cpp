@@ -74,6 +74,16 @@ void AUMUFightGameMode::SetPlayerStocks()
 }
 
 
+void AUMUFightGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+	
+	if (OnlineAllLoaded())
+	{
+		NewPlayer->SetLifeSpan(0.1f);	
+	}
+}
+
 void AUMUFightGameMode::HandleInitGame()
 {
 	GameInstance = Cast<UUMUGameInstance> (GetWorld()->GetGameInstance());
