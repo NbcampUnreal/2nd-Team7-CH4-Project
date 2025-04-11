@@ -12,6 +12,8 @@ class ABaseAbility;
 class UAbilityComponent;
 class ULedgeComponent;
 class UCharStatComponent;
+class UWallBounceComponent;
+class UKnockbackComponent;
 
 UCLASS()
 class UMUSMASH_API ABaseCharacter : public ACharacter
@@ -58,6 +60,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool WallDetection = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector BounceVector = FVector::Zero();
+
+
 #pragma region Component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAbilityComponent> AbilityComponent = nullptr;	
@@ -67,6 +74,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UCharStatComponent> CharStatComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UWallBounceComponent> WallBounceComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UKnockbackComponent> KnockbackComponent = nullptr;
 #pragma endregion
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

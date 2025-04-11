@@ -4,6 +4,8 @@
 #include "Abilities\AbilityComponent.h"
 #include "Character\LedgeComponent.h"
 #include "Character\CharStatComponent.h"
+#include "Character\KnockbackComponent.h"
+#include "Character\WallBounceComponent.h"
 #include <Net\UnrealNetwork.h>
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -13,6 +15,8 @@ ABaseCharacter::ABaseCharacter()
 	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
 	LedgeComponent = CreateDefaultSubobject<ULedgeComponent>(TEXT("LedgeComponent"));
 	CharStatComponent = CreateDefaultSubobject<UCharStatComponent>(TEXT("CharStatComponent"));
+	KnockbackComponent = CreateDefaultSubobject<UKnockbackComponent>(TEXT("KnockbackComponent"));
+	WallBounceComponent = CreateDefaultSubobject<UWallBounceComponent>(TEXT("WallBounceComponent"));
 }
 
 void ABaseCharacter::ClearBuffer()

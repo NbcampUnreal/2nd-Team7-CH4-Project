@@ -8,6 +8,7 @@
 #include "KnockbackComponent.generated.h"
 
 class ABaseCharacter;
+class UCapsuleComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UMUSMASH_API UKnockbackComponent : public UActorComponent
@@ -18,17 +19,26 @@ public:
 	// Sets default values for this component's properties
 	UKnockbackComponent();
 	TObjectPtr<ABaseCharacter> Parent;
+	UFUNCTION(BlueprintCallable)
+	void CharacterKnockback(EFaceDirection Direction, float Angle, float Stun);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-	void CharacterKnockback(EInputDirection Direction, float Angle);
 	float FuncNockbackCalculation();
-
+	void LaunchBounce(FVector LaunchVector);
 	//º¯¼ö
 public:
 protected:
 private:
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UCapsuleComponent> ParentCapsuleComp;
+
+	UPROPERTY(EditAnywhere)
+	float LaunchThreshold = 1000.f;
+
 	bool bIsLaunched = false;
+
+	FTimerHandle KnockbackDelayTimer;
 };
