@@ -1,12 +1,12 @@
 #include "Managers/UMUGameInstance.h"
 #include "Managers/UMUFightGameMode.h"
-#include "Managers/UMUGameState.h"
-#include "UMUSmash/UMUSmash.h"
+#include "Sockets.h"
+#include "SocketSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
-#include "Sockets.h"
-#include "SocketSubsystem.h"
+#include "Managers/UMUGameState.h"
+#include "UMUSmash/UMUSmash.h"
 
 void UUMUGameInstance::ServerTravel(const FString& MapName) const
 {
@@ -32,7 +32,7 @@ void UUMUGameInstance::CheckGameOverConditions()
 	FighterGameMode->CheckGameOverConditions();
 }
 
-//---- testmulti ----
+// network session
 
 void UUMUGameInstance::HostGame(const FString& MapName)
 {
