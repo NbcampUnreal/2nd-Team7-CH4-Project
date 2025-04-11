@@ -8,6 +8,11 @@
 #include "Managers/UMUGameInstance.h"
 #include "Net/UnrealNetwork.h"
 
+AUMUGameState::AUMUGameState()
+{
+	PrimaryActorTick.bCanEverTick = true;	
+}
+
 void AUMUGameState::MulticastRPCIsGameOver_Implementation()
 {
 	SlowMotionEffect();
@@ -44,6 +49,61 @@ void AUMUGameState::UpdatePlayerLoaded()
 	}
 }
 
+void AUMUGameState::StartCountdown()
+{
+	bUseTimer = true;
+	if (HasAuthority())
+	{
+		CountdownEndTime = GameInstance->GetMin() * 60.0f;
+		TWeakObjectPtr<AUMUGameState> WeakThisPtr(this);
+		GetWorld()->GetTimerManager().SetTimer(
+			CountdownTimerHandle, FTimerDelegate::CreateLambda([WeakThisPtr]()
+			{
+				if (WeakThisPtr.IsValid() && WeakThisPtr->GetWorld())
+				{
+					WeakThisPtr->UpdateCountdown();	
+				}
+			}),
+			1.0f,
+			true,
+			-1);
+	}
+}
+
+void AUMUGameState::UpdateCountdown()
+{
+	if (HasAuthority())
+	{
+		const float CurrentTime = GetWorld()->GetTimeSeconds();
+		Seconds = FMath::Max(0.0f, CountdownEndTime - CurrentTime);
+		GameInstance->SetSeconds(Seconds);
+
+		if (Seconds <= 0.0f)
+		{
+			GetWorld()->GetTimerManager().ClearTimer(CountdownTimerHandle);
+			bUseTimer = false;
+		}
+	}
+}
+
+void AUMUGameState::OnRep_UpdateSeconds()
+{
+	LastReplicatedSeconds = Seconds;
+	if (GetWorld())
+	{
+		LastReplicatedTimestamp = GetWorld()->GetTimeSeconds();
+	}
+}
+
+void AUMUGameState::UpdateInterpolatedTime()
+{
+	if (!HasAuthority())
+	{
+		const float CurrentTime = GetWorld()->GetTimeSeconds();
+		InterpolatedTime = LastReplicatedSeconds - (CurrentTime - LastReplicatedTimestamp);
+	}
+}
+
 void AUMUGameState::InitState()
 {
 	auto* CurrentGameInstance = GetGameInstance();
@@ -67,6 +127,8 @@ void AUMUGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 
 	DOREPLIFETIME(AUMUGameState, bIsAllLoaded);
 	DOREPLIFETIME(AUMUGameState, PlayerLoaded);
+	DOREPLIFETIME(AUMUGameState, Seconds);
+	DOREPLIFETIME(AUMUGameState, bUseTimer);
 }
 
 void AUMUGameState::BeginPlay()
@@ -74,4 +136,11 @@ void AUMUGameState::BeginPlay()
 	Super::BeginPlay();
 
 	InitState();
+}
+
+void AUMUGameState::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	UpdateInterpolatedTime();
 }

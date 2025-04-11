@@ -80,6 +80,7 @@ public:
 	// --- Game Loop ---
 	MAKE_GETTERSETTER(int32, StockCount)
 	MAKE_GETTERSETTER(int32, Min)
+	MAKE_GETTERSETTER(int32, Seconds)
 	MAKE_BOOL_GETTERSETTER(IsLoopEnabled, bIsLoopEnabled)
 	MAKE_GETTERSETTER(EGameModes, MainGameMode)
 	MAKE_GETTERSETTER(EInGameModes, SubGameMode)
@@ -190,6 +191,8 @@ private:
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	int32 Min = 0;
+
+	double Seconds = 0;
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Loop", meta=(AllowPrivateAccess="true"))
 	bool bIsLoopEnabled = false;

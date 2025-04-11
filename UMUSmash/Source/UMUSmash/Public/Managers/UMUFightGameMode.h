@@ -18,6 +18,7 @@ class UMUSMASH_API AUMUFightGameMode : public AGameModeBase
 public:
 	// --- Block Login ---
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
 	
 	// --- Main game flow
     void HandleInitGame();
@@ -37,6 +38,7 @@ public:
     void CreatePlayers();
     bool OnlineAllLoaded();
     void MatchStats();
+	void CheckInGameMode();
     
     void FinalizeGameStats() const;
     void TravelToVictoryScreen() const;

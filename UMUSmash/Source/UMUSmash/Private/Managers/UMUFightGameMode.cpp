@@ -60,6 +60,22 @@ void AUMUFightGameMode::MatchStats()
 	NumPlayersAlive = AlivePlayerCount;
 }
 
+void AUMUFightGameMode::CheckInGameMode()
+{
+	check(GameInstance);
+
+	InGameMode = GameInstance->GetSubGameMode();
+	bUseTimer = true;
+	if (InGameMode == EInGameModes::Time)
+	{
+		auto* UMUGameState = GetWorld()->GetGameState<AUMUGameState>();
+		if (UMUGameState)
+		{
+			UMUGameState->StartCountdown();
+		}
+	}
+}
+
 void AUMUFightGameMode::SetPlayerStocks()
 {
 	if (InGameMode == EInGameModes::Stock)
@@ -94,6 +110,7 @@ void AUMUFightGameMode::HandleInitGame()
 	OnlineAllLoaded();
 	MatchStats();
 	BindingValueChanged();
+	CheckInGameMode();
 	
 	bUseTimer = (InGameMode == EInGameModes::Time);
 	
@@ -197,7 +214,7 @@ void AUMUFightGameMode::CheckGameOverConditions()
 			}
 		case EInGameModes::Time:
 			{
-				if (Minutes < 0)
+				if (GameInstance->GetSeconds() <= 0)
 				{
 					bUseTimer = false;
 					HandleGameOver();
