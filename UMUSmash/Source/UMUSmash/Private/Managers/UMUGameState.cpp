@@ -23,7 +23,6 @@ void AUMUGameState::SlowMotionEffect()
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.1f);
 	
 	TWeakObjectPtr<AUMUGameState> WeakThisPtr(this);
-	FTimerHandle FinalGameStatsHandle;
 	GetWorld()->GetTimerManager().SetTimer(
 		FinalGameStatsHandle,FTimerDelegate::CreateLambda([WeakThisPtr]
 		{

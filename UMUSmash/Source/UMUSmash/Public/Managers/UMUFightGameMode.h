@@ -53,10 +53,13 @@ public:
 	TArray<bool> GetPlayerLoaded() const { return PlayerLoaded; }
 
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 
 
 private:
+	FTimerHandle FinalGameStatsHandle;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Mode", meta=(AllowPrivateAccess="true"))
 	EInGameModes InGameMode;
 	

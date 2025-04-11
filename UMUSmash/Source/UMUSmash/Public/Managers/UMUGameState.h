@@ -48,9 +48,12 @@ public:
 	// --- Life cycle ---
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 
 private:
+	FTimerHandle FinalGameStatsHandle;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Mode", meta=(AllowPrivateAccess="true"))
 	EInGameModes InGameMode;
 
@@ -96,3 +99,10 @@ private:
 
 	bool bIsGameOver;
 };
+
+inline void AUMUGameState::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearTimer(FinalGameStatsHandle);
+}

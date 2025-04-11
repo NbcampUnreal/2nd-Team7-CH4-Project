@@ -180,7 +180,6 @@ void AUMUFightGameMode::HandleGameOver()
 	FinalizeGameStats();
 
 	TWeakObjectPtr<AUMUFightGameMode> WeakThisPtr(this);
-	FTimerHandle FinalGameStatsHandle;
 	GetWorld()->GetTimerManager().SetTimer(
 		FinalGameStatsHandle,
 		FTimerDelegate::CreateLambda([WeakThisPtr]()
@@ -273,4 +272,11 @@ void AUMUFightGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	HandleInitGame();
+}
+
+void AUMUFightGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearTimer(FinalGameStatsHandle);
 }
