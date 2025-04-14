@@ -30,6 +30,11 @@ private:
 	void LaunchBounce(FVector LaunchVector);
 	//º¯¼ö
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int BaseKnock = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	double DamRatios = 1;
 protected:
 private:
 	UPROPERTY(VisibleAnywhere)

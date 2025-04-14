@@ -70,6 +70,7 @@ float UKnockbackComponent::FuncNockbackCalculation()
 {
 	int32 Percent = Parent->CharStatComponent->Percent;
 	float Weight = (200 / (Parent->CharStatComponent->Weight + 100)) * 1.4f;
+	UE_LOG(LogTemp, Log, TEXT("Weight: %f"), Weight);
 	float DamageScale = Parent->AbilityComponent->DamageScale[Parent->AbilityComponent->UsedMoveCount];
 	float Knockback = ((Parent->AttackDamage * Percent) / 20);
 	Knockback += (Percent / 10);
@@ -77,7 +78,8 @@ float UKnockbackComponent::FuncNockbackCalculation()
 	Knockback *= Weight;
 	Knockback += 18;
 	Knockback *= (Percent / 7) * Parent->HitScale;
-	Knockback += 1000;
+	Knockback += BaseKnock;
+	Knockback *= DamRatios;
 
 	return Knockback;
 }
