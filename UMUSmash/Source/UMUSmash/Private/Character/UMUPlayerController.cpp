@@ -1,6 +1,5 @@
 #include "Character/UMUPlayerController.h"
 #include "EnhancedInputSubsystems.h"
-
 AUMUPlayerController::AUMUPlayerController()
 {
 
@@ -8,8 +7,6 @@ AUMUPlayerController::AUMUPlayerController()
 
 void AUMUPlayerController::BeginPlay()
 {
-	Super::BeginPlay();
-	
 	UE_LOG(LogTemp, Warning, TEXT("In BeginPlay"));
 	if (ULocalPlayer* LocalPlayer = GetLocalPlayer())
 	{

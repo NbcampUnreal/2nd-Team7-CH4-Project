@@ -16,8 +16,7 @@ class UMUSMASH_API AUMUPlayerController : public APlayerController
 	
 public:
 	AUMUPlayerController();
-	
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -44,6 +43,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> DodgeAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<bool> CPUArray = {};
 private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputMappingContext> MappingContext;
