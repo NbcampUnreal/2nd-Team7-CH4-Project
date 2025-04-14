@@ -135,12 +135,12 @@ void ABaseCharacter::FaceCheck()
 	FaceCheck_Server();
 }
 
-void ABaseCharacter::FaceCheck_Multicast()
+void ABaseCharacter::FaceCheck_Multicast_Implementation()
 {
 	RotateDirection(CanFilp);
 }
 
-void ABaseCharacter::FaceCheck_Server()
+void ABaseCharacter::FaceCheck_Server_Implementation()
 {
 	RotateDirection(CanFilp);
 }
@@ -206,6 +206,7 @@ void ABaseCharacter::Jumping()
 			LaunchCharacter(LaunchVector, false, false);
 		}
 	}
+	//GetMovementComponent()->Movement
 }
 
 void ABaseCharacter::EndJump()

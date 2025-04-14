@@ -43,6 +43,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> DodgeAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<bool> CPUArray = {};
 private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputMappingContext> MappingContext;
