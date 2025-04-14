@@ -7,6 +7,7 @@ AUMUPlayerController::AUMUPlayerController()
 
 void AUMUPlayerController::BeginPlay()
 {
+	UE_LOG(LogTemp, Warning, TEXT("In BeginPlay"));
 	if (ULocalPlayer* LocalPlayer = GetLocalPlayer())
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
