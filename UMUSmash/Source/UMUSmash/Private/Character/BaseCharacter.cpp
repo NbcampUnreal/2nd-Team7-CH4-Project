@@ -37,6 +37,10 @@ void ABaseCharacter::BeginPlay()
 	
 }
 
+void ABaseCharacter::EquipItem()
+{
+}
+
 void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -62,15 +66,17 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		if (AUMUPlayerController* PlayerController = Cast<AUMUPlayerController>(GetController()))
 		{
-			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Started, this, &ABaseCharacter::StartJump);
-			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Canceled, this, &ABaseCharacter::EndJump);
+			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartJump);
+			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndJump);
 			EnhancedInput->BindAction(PlayerController->VerticalInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::VerticalInputFunc);
 			EnhancedInput->BindAction(PlayerController->HorizontalInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::HorizontalInputFunc);
-	/*		EnhancedInput->BindAction(PlayerController->CrouchAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Jump);
-			EnhancedInput->BindAction(PlayerController->AttackAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Jump);
-			EnhancedInput->BindAction(PlayerController->SmashAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Jump);
-			EnhancedInput->BindAction(PlayerController->ShieldAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Jump);
-			EnhancedInput->BindAction(PlayerController->DodgeAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Jump);*/
+			EnhancedInput->BindAction(PlayerController->CrouchAction, ETriggerEvent::Triggered, this, &ABaseCharacter::EquipItem);
+			EnhancedInput->BindAction(PlayerController->AttackAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartAttack);
+			EnhancedInput->BindAction(PlayerController->AttackAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndAttack);
+			EnhancedInput->BindAction(PlayerController->SmashAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartSmash);
+			EnhancedInput->BindAction(PlayerController->SmashAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndSmash);
+			EnhancedInput->BindAction(PlayerController->ShieldAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartShield);
+			EnhancedInput->BindAction(PlayerController->ShieldAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndShield);
 		}
 	}
 }
@@ -175,43 +181,3 @@ void ABaseCharacter::DropFromPlatforms()
 		0.15f,
 		false);
 }
-
-void ABaseCharacter::StartJump()
-{
-	JumpButton = true;
-	GetWorldTimerManager().SetTimer(JumpTimer, this, &ABaseCharacter::Jumping, JumpBuffer, false);
-}
-
-void ABaseCharacter::Jumping()
-{
-	if (JumpNumber > JumpMaxCount || !CanPlayerJump) return;
-	
-	FaceCheck();
-
-	const bool bIgnoreHorizontalInput = FMath::IsNearlyZero(HorizontalInputValue, 0.3f);
-	if (bIgnoreHorizontalInput)
-	{
-		GetMovementComponent()->StopMovementImmediately();
-	}
-	else
-	{
-		if (PlayerStateType != EPlayerStateType::sprint)
-		{
-			GetMovementComponent()->StopMovementImmediately();
-			FVector LaunchVector = FVector::ZeroVector;
-			if (HorizontalInputValue < 0)
-				LaunchVector.Y = 500;
-			else 
-				LaunchVector.Y = -500;
-			LaunchCharacter(LaunchVector, false, false);
-		}
-	}
-	//GetMovementComponent()->Movement
-}
-
-void ABaseCharacter::EndJump()
-{
-	JumpButton = false;
-	StopJumping();
-}
-
