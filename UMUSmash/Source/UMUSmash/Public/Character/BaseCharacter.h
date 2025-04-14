@@ -61,23 +61,36 @@ public:
 	UFUNCTION()
 	void DropFromPlatforms();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 	void StartJump();
 
-	UFUNCTION()
-	void Jumping();
-
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 	void EndJump();
 
 protected:
 	// Called when the game starts or when spawned
 	UFUNCTION()
 	virtual void BeginPlay() override;
-	//void Move(const FInputActionValue& value);
-	//void Attack();
-	//void Smash();
-	//void Shield();
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartAttack();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndAttack();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartSmash();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndSmash();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartShield();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EndShield();
+
+	UFUNCTION()
+	void EquipItem();
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	UFUNCTION()
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);

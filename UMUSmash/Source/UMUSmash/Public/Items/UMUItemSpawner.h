@@ -36,10 +36,10 @@ public:
 public:	
 	// Called every frame
 	UFUNCTION(BlueprintCallable)
-	void SpawnItem(UClass* SpawnItem);
+	void SpawnItem(TSubclassOf<AActor> SpawnItem);
 
-	UFUNCTION(BlueprintCallable)
-	void CreateItem(UClass* Item);
+	UFUNCTION()
+	void CreateItem(TSubclassOf<AActor> Item);
 
 	virtual void Tick(float DeltaTime) override;
 

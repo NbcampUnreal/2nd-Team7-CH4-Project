@@ -1,8 +1,9 @@
+
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "UMUTypes.h"
-#include "Engine/GameInstance.h"
 #include "Kismet/BlueprintPlatformLibrary.h"
 #include "UMUGameInstance.generated.h"
 
@@ -237,26 +238,5 @@ private:
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Team", meta=(AllowPrivateAccess="true"))
 	bool bCanTeamAttack = false;
-#pragma endregion
-
-#pragma region --- network.ip ---
-
-	UFUNCTION(BlueprintCallable, Category = "Network")
-	void HostGame(const FString& MapName);
-
-	UFUNCTION(BlueprintCallable, Category = "Network")
-	void JoinGame(const FString& MapName, const FString& HostCode);
-
-	UFUNCTION(BlueprintCallable, Category = "Network")
-	FString GetMyHostCode();
-
-
-	FString PadLeft(const FString& Input, int32 TotalLength, TCHAR PadChar = '0') const;
-
-	FString LocalIPToHostCode(const FString& IP) const;
-	FString HostCodeToIP(const FString& Code) const;
-
-	FString GetLocalIPAddress() const;
-
 #pragma endregion
 };
