@@ -50,6 +50,8 @@ public:
 	// --- Getter & Setter ---
 	bool IsAllLoaded() const { return bAllLoaded; }
 	TArray<bool> GetPlayerLoaded() const { return PlayerLoaded; }
+	TObjectPtr<UUMUGameInstance> GetUMUGameInstance() const { return GameInstance; }
+	
 
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
