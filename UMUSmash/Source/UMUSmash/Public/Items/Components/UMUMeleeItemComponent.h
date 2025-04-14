@@ -22,8 +22,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndAttack();
 
-	UStaticMeshComponent* StaticMesh;
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

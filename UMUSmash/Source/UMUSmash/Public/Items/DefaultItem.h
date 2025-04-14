@@ -20,8 +20,6 @@ public:
 	// Sets default values for this actor's properties
 	ADefaultItem();
 
-	UPROPERTY(VisibleAnywhere)
-	bool ItemActivation;
 protected:
 
 
@@ -35,6 +33,18 @@ protected:
 	UBoxComponent* Collision;
 	
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item|Property")
+	FName ItemType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item|Property")
+	FName ItemName;
+
+	UPROPERTY(EditAnywhere, Category = "Gravity")
+	float GravityStrength;
+	UPROPERTY(EditAnywhere, Category = "Gravity")
+	float FallingSpeed;
+	UPROPERTY(EditAnywhere, Category = "Gravity")
+	bool UseCustomGravity;
 
 	virtual void OnItemOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
@@ -55,10 +65,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime);
 
+	
+	FName GetItemType() const;
+
+
+	FName GetItemName() const;
 
 
 private:
 
-
-	
+	void Gravity(float DeltaTime);
 };
