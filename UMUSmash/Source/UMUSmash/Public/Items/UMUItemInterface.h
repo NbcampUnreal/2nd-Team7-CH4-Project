@@ -14,7 +14,7 @@ class UUMUItemInterface : public UInterface
 };
 
 /**
- * 
+ *
  */
 class UMUSMASH_API IUMUItemInterface
 {

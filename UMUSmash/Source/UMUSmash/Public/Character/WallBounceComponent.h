@@ -8,6 +8,7 @@
 #include "WallBounceComponent.generated.h"
 
 class ABaseCharacter;
+class UCharacterMovementComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UMUSMASH_API UWallBounceComponent : public UActorComponent
@@ -23,16 +24,17 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 private:
-
+	void WallBouceCalc();
 public:	
 
 	TObjectPtr<ABaseCharacter> Parent = nullptr;
 protected:
 
 private:
-
-
+	FTimerHandle DelayTimer;
+	FTimerHandle WallBounceDelayTimer;
+	TObjectPtr<UCharacterMovementComponent> CharacterMovement;
 		
 };

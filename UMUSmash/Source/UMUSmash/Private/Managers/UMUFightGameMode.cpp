@@ -50,13 +50,30 @@ bool AUMUFightGameMode::OnlineAllLoaded()
 		PlayerLoaded[i] = true;
 	}
 
-	return !PlayerLoaded.Contains(false);
+	bAllLoaded = !PlayerLoaded.Contains(false);
+	return bAllLoaded;
 }
 
 void AUMUFightGameMode::MatchStats()
 {
 	const int32 AlivePlayerCount = NumberOfPlayers;
 	NumPlayersAlive = AlivePlayerCount;
+}
+
+void AUMUFightGameMode::CheckInGameMode()
+{
+	check(GameInstance);
+
+	InGameMode = GameInstance->GetSubGameMode();
+	bUseTimer = true;
+	// if (InGameMode == EInGameModes::Time)
+	{
+		auto* UMUGameState = GetWorld()->GetGameState<AUMUGameState>();
+		if (UMUGameState)
+		{
+			UMUGameState->StartCountdown();
+		}
+	}
 }
 
 void AUMUFightGameMode::SetPlayerStocks()
@@ -74,14 +91,25 @@ void AUMUFightGameMode::SetPlayerStocks()
 }
 
 
+void AUMUFightGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+	
+	if (bAllLoaded)
+	{
+		NewPlayer->SetLifeSpan(0.1f);
+	}
+}
+
 void AUMUFightGameMode::HandleInitGame()
 {
 	GameInstance = Cast<UUMUGameInstance> (GetWorld()->GetGameInstance());
 	check(GameInstance);
-
+	
 	CreatePlayers();
 	OnlineAllLoaded();
 	MatchStats();
+	BindingValueChanged();
 	
 	bUseTimer = (InGameMode == EInGameModes::Time);
 	
@@ -96,7 +124,7 @@ void AUMUFightGameMode::FinalizeGameStats() const
 	GameInstance->SetFalls(Falls);
 	GameInstance->SetDamageDone(DamageDone);
 	GameInstance->SetDamageTaken(DamageTaken);
-
+	
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 
@@ -114,6 +142,28 @@ void AUMUFightGameMode::TravelToVictoryScreen() const
 	}
 }
 
+void AUMUFightGameMode::BindingValueChanged()
+{
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("Begin"));
+	
+	GameInstance = Cast<UUMUGameInstance> (GetWorld()->GetGameInstance());
+	check(GameInstance);
+
+	GameInstance->OnAliveCountChanged.AddDynamic(this, &AUMUFightGameMode::HandleUpdateAliveCount);
+
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("End"));
+}
+
+void AUMUFightGameMode::HandleUpdateAliveCount(const int32 NewNumPlayersAlive)
+{
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("Begin"));
+	
+	NumPlayersAlive = NewNumPlayersAlive;
+	CheckGameOverConditions();
+
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("End"));
+}
+
 
 void AUMUFightGameMode::HandleGameOver()
 {
@@ -129,7 +179,6 @@ void AUMUFightGameMode::HandleGameOver()
 	FinalizeGameStats();
 
 	TWeakObjectPtr<AUMUFightGameMode> WeakThisPtr(this);
-	FTimerHandle FinalGameStatsHandle;
 	GetWorld()->GetTimerManager().SetTimer(
 		FinalGameStatsHandle,
 		FTimerDelegate::CreateLambda([WeakThisPtr]()
@@ -163,7 +212,7 @@ void AUMUFightGameMode::CheckGameOverConditions()
 			}
 		case EInGameModes::Time:
 			{
-				if (Minutes < 0)
+				if (GameInstance->GetSeconds() <= 0)
 				{
 					bUseTimer = false;
 					HandleGameOver();
@@ -190,13 +239,15 @@ void AUMUFightGameMode::CheckGameOverConditions()
 
 void AUMUFightGameMode::OnPlayerDeath(const int32& PlayerNo)
 {
+	check(GameInstance);
 	
 	TArray<bool> AliveArray = GameInstance->GetAliveArray();
 	AliveArray[PlayerNo] = false;
 	
-	GameInstance->GetPlayerPositions().Insert(0, PlayerNo);
+	GameInstance->GetPlayerPositions().Insert(PlayerNo, 0);
 	const int32 NewAlivePlayerCount = GameInstance->GetNumPlayersAlive()-1;
 	GameInstance->SetNumPlayersAlive(NewAlivePlayerCount);
+	GameInstance->BroadcastChangedAliveCount();
 }
 
 void AUMUFightGameMode::SetWinner() const
@@ -220,4 +271,11 @@ void AUMUFightGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	HandleInitGame();
+}
+
+void AUMUFightGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearTimer(FinalGameStatsHandle);
 }

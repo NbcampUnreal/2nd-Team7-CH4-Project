@@ -16,30 +16,46 @@ class UMUSMASH_API AUMUGameState : public AGameStateBase
 	GENERATED_BODY()
 
 public:
+	AUMUGameState();
 
 	/// --- RPC ---
 	UFUNCTION(NetMulticast, Unreliable)
 	void MulticastRPCIsGameOver();
 
-	// ---
+	// --- Rule ---
 	void SlowMotionEffect();
 	void UpdateIsGameOver();
 	void UpdatePlayerLoaded();
-
+	
+	void StartCountdown();
+	UFUNCTION()
+	void UpdateCountdown();
+	UFUNCTION()
+	void OnRep_UpdateSeconds();
+	void UpdateInterpolatedTime();
+	UFUNCTION()
+	void RequestCheckInGameMode() const;
+	
 
 	void InitState();
 
-	// --- Replication ---
-	// UFUNCTION()
-	// void OnRep_IsAllLoaded();
+
+	// --- getter & setter ---
+	double GetInterpolatedTime() const { return InterpolatedTime; }
+	EInGameModes GetInGameMode() const { return InGameMode; }
+	
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	// --- Life cycle ---
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 
 private:
+	FTimerHandle FinalGameStatsHandle;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Mode", meta=(AllowPrivateAccess="true"))
 	EInGameModes InGameMode;
 
@@ -48,17 +64,25 @@ private:
 	UPROPERTY(BlueprintReadWrite, Category="Game.DefaultClass", meta=(AllowPrivateAccess="true"))
 	TObjectPtr<AUMUFightGameMode> GameMode;
 
-	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	bool bUseTimer;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	int32 Minutes;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	double DeltaSeconds;
-	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(ReplicatedUsing = OnRep_UpdateSeconds, BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	double Seconds;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	FString TimerText;
 
+	
+	FTimerHandle CountdownTimerHandle;
+	float CountdownEndTime;
+	float LastReplicatedSeconds;
+	float LastReplicatedTimestamp;
+	float InterpolatedTime;
+
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 NumPlayersAlive;
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
@@ -77,3 +101,10 @@ private:
 
 	bool bIsGameOver;
 };
+
+inline void AUMUGameState::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	GetWorld()->GetTimerManager().ClearTimer(FinalGameStatsHandle);
+}

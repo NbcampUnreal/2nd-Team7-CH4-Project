@@ -12,11 +12,11 @@ UCLASS()
 class UMUSMASH_API AUMUItemSpawner : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 
-	
+
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Niagara")
 	UNiagaraComponent* NiagaraComponent;
@@ -29,17 +29,17 @@ public:
 
 
 	AUMUItemSpawner();
-	
 
 
 
-public:	
+
+public:
 	// Called every frame
 	UFUNCTION(BlueprintCallable)
-	void SpawnItem(TSubclassOf<AActor> SpawnItem);
+	void SpawnItem(UClass* SpawnItem);
 
-	UFUNCTION()
-	void CreateItem(TSubclassOf<AActor> Item);
+	UFUNCTION(BlueprintCallable)
+	void CreateItem(UClass* Item);
 
 	virtual void Tick(float DeltaTime) override;
 
