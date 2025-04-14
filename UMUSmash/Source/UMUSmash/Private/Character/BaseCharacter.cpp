@@ -44,8 +44,7 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, Bounce);
 	DOREPLIFETIME(ABaseCharacter, HorizontalInputValue);
 	DOREPLIFETIME(ABaseCharacter, VerticalInputValue);
-	DOREPLIFETIME(ABaseCharacter, JumpBuffer);
-	DOREPLIFETIME(ABaseCharacter, LedgeCooldown);
+	DOREPLIFETIME(ABaseCharacter, JumpBuffer)
 }
 
 void ABaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -207,57 +206,12 @@ void ABaseCharacter::Jumping()
 			LaunchCharacter(LaunchVector, false, false);
 		}
 	}
-	GetCharacterMovement()->bOrientRotationToMovement = false;
-	PlayerStateType = EPlayerStateType::jump;
-	GetCharacterMovement()->GravityScale = CharStatComponent->DefaultGravityScale;
-	if (GetCharacterMovement()->IsFalling())
-	{
-		GetCharacterMovement()->StopMovementImmediately();
-	}
-	Jump();
-	JumpNumber++;
-	CheckDriection();
-	LedgeCooldown = true;
-	FTimerHandle LedgeCooldownTimer;
-	GetWorldTimerManager().SetTimer(LedgeCooldownTimer,
-		[this]
-		{
-			LedgeCooldown = false;
-		},
-		0.2f,
-		false);
+	//GetMovementComponent()->Movement
 }
 
 void ABaseCharacter::EndJump()
 {
 	JumpButton = false;
 	StopJumping();
-}
-
-void ABaseCharacter::CheckDriection()
-{
-	switch (Faceing)
-	{
-	case EFaceDirection::Left:
-		if (HorizontalInputValue > 0)
-		{
-			InputDirection = EInputDirection::Back;
-		}
-		else
-		{
-			InputDirection = EInputDirection::Forward;
-		}
-		break;
-	case EFaceDirection::Right:
-		if (HorizontalInputValue < 0)
-		{
-			InputDirection = EInputDirection::Back;
-		}
-		else
-		{
-			InputDirection = EInputDirection::Forward;
-		}
-		break;
-	}
 }
 

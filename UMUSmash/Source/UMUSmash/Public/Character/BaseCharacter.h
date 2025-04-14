@@ -70,9 +70,6 @@ public:
 	UFUNCTION()
 	void EndJump();
 
-	UFUNCTION()
-	void CheckDriection();
-
 protected:
 	// Called when the game starts or when spawned
 	UFUNCTION()
@@ -117,9 +114,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool JumpButton = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
-	bool LedgeCooldown = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool CanPlayerJump = false;
