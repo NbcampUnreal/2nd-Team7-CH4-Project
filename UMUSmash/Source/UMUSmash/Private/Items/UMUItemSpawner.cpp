@@ -39,26 +39,20 @@ void AUMUItemSpawner::BeginPlay()
 	
 }
 
-void AUMUItemSpawner::SpawnItem(UClass* SpawnActor)
+void AUMUItemSpawner::SpawnItem(TSubclassOf<AActor> SpawnActor)
 {
 	if (NiagaraEffect)
 	{
 		NiagaraComponent->Activate();
 	}
 
-	//FTimerDelegate TimerDelegate;
-	//TimerDelegate.BindUFunction(this, FName("CreateItem"), SpawnActor.Get());
-
-	UE_LOG(LogTemp, Warning, TEXT("SpawnActor: %s"), *GetNameSafe(SpawnActor));
-	GetWorldTimerManager().SetTimer(TimerHandle,
-		[this, SpawnActor]()
-		{
-			CreateItem(SpawnActor);
-		}, 1.3f, false);
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindUFunction(this, FName("CreateItem"), SpawnActor);
+	GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, 1.3f, false);
 		
 }
 
-void AUMUItemSpawner::CreateItem(UClass* Item)
+void AUMUItemSpawner::CreateItem(TSubclassOf<AActor> Item)
 {
 	FVector Location = this->GetActorLocation();
 	FRotator RandomRot = UKismetMathLibrary::RandomRotator(true);
