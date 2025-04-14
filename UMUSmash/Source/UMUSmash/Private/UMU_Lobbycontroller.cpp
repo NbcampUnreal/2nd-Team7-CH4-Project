@@ -1,13 +1,13 @@
-#include "UMU_Lobbycontroller.h"
-#include "Kismet/GameplayStatics.h"
-
-
-UMUGameInstance* AUMU_Lobbycontroller::GetMyGameInstance()
-{
-    return Cast<UMUGameInstance>(GetGameInstance());
-}
-
-UMUFightGameMode* AUMU_Lobbycontroller::GetMyGameMode()
-{
-    return Cast<UMUFightGameMode>(UGameplayStatics::GetGameMode(this));
-}
+//#include "UMU_LobbyController.h"
+//#include "Kismet/GameplayStatics.h"
+//
+//
+//UMUGameInstance* AUMU_LobbyController::GetMyGameInstance()
+//{
+//    return Cast<UMUGameInstance>(GetGameInstance());
+//}
+//
+//UMUFightGameMode* AUMU_LobbyController::GetMyGameMode()
+//{
+//    return Cast<UMUFightGameMode>(UGameplayStatics::GetGameMode(this));
+//}
