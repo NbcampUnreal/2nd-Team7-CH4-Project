@@ -33,6 +33,8 @@ public:
 	UFUNCTION()
 	void OnRep_UpdateSeconds();
 	void UpdateInterpolatedTime();
+	UFUNCTION()
+	void RequestCheckInGameMode() const;
 	
 
 	void InitState();

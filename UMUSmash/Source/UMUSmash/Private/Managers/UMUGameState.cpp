@@ -7,6 +7,7 @@
 #include "Managers/UMUFightGameMode.h"
 #include "Managers/UMUGameInstance.h"
 #include "Net/UnrealNetwork.h"
+#include "UMUSmash/UMUSmash.h"
 
 AUMUGameState::AUMUGameState()
 {
@@ -50,10 +51,14 @@ void AUMUGameState::UpdatePlayerLoaded()
 
 void AUMUGameState::StartCountdown()
 {
+	check (GameInstance);
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("Begin"));
+	
 	bUseTimer = true;
 	if (HasAuthority())
 	{
 		CountdownEndTime = GameInstance->GetMin() * 60.0f;
+		UMU_LOG(LogUMU,Log, TEXT("Instance Min:%s"), *FString::FromInt(GameInstance->GetMin()));
 		TWeakObjectPtr<AUMUGameState> WeakThisPtr(this);
 		GetWorld()->GetTimerManager().SetTimer(
 			CountdownTimerHandle, FTimerDelegate::CreateLambda([WeakThisPtr]()
@@ -67,22 +72,26 @@ void AUMUGameState::StartCountdown()
 			true,
 			-1);
 	}
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("End"));
 }
 
 void AUMUGameState::UpdateCountdown()
 {
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("Begin"));
 	if (HasAuthority())
 	{
 		const float CurrentTime = GetWorld()->GetTimeSeconds();
 		Seconds = FMath::Max(0.0f, CountdownEndTime - CurrentTime);
+		
 		GameInstance->SetSeconds(Seconds);
-
+		UMU_LOG(LogUMU,Log, TEXT("Instance Seconds:%s"), *FString::FromInt(Seconds));
 		if (Seconds <= 0.0f)
 		{
 			GetWorld()->GetTimerManager().ClearTimer(CountdownTimerHandle);
 			bUseTimer = false;
 		}
 	}
+	UMU_LOG(LogUMU,Log, TEXT("%s"), TEXT("End"));
 }
 
 void AUMUGameState::OnRep_UpdateSeconds()
@@ -101,6 +110,19 @@ void AUMUGameState::UpdateInterpolatedTime()
 		const float CurrentTime = GetWorld()->GetTimeSeconds();
 		InterpolatedTime = LastReplicatedSeconds - (CurrentTime - LastReplicatedTimestamp);
 	}
+	else
+	{
+		InterpolatedTime = Seconds;
+	}
+}
+
+void AUMUGameState::RequestCheckInGameMode() const
+{
+	auto* CurrentGameMode = Cast<AUMUFightGameMode>(GetWorld()->GetAuthGameMode());
+	if (CurrentGameMode)
+	{
+		CurrentGameMode->CheckInGameMode();
+	}
 }
 
 void AUMUGameState::InitState()
@@ -118,6 +140,7 @@ void AUMUGameState::InitState()
 	check(GameMode)
 	
 	UpdatePlayerLoaded();
+	RequestCheckInGameMode();
 }
 
 void AUMUGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -47,14 +47,12 @@ public:
 	UFUNCTION()
 	void HandleUpdateAliveCount(const int32 NewNumPlayersAlive);
 
-
 	// --- Getter & Setter ---
 	bool IsAllLoaded() const { return bAllLoaded; }
 	TArray<bool> GetPlayerLoaded() const { return PlayerLoaded; }
 
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
 
 
 private:
@@ -74,7 +72,7 @@ private:
 	double Seconds;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	FString TimerText;
-	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))	
 	double DeltaSeconds;
 
 	

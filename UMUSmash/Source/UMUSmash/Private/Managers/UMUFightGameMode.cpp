@@ -66,7 +66,7 @@ void AUMUFightGameMode::CheckInGameMode()
 
 	InGameMode = GameInstance->GetSubGameMode();
 	bUseTimer = true;
-	if (InGameMode == EInGameModes::Time)
+	// if (InGameMode == EInGameModes::Time)
 	{
 		auto* UMUGameState = GetWorld()->GetGameState<AUMUGameState>();
 		if (UMUGameState)
@@ -105,12 +105,11 @@ void AUMUFightGameMode::HandleInitGame()
 {
 	GameInstance = Cast<UUMUGameInstance> (GetWorld()->GetGameInstance());
 	check(GameInstance);
-
+	
 	CreatePlayers();
 	OnlineAllLoaded();
 	MatchStats();
 	BindingValueChanged();
-	CheckInGameMode();
 	
 	bUseTimer = (InGameMode == EInGameModes::Time);
 	
@@ -125,7 +124,7 @@ void AUMUFightGameMode::FinalizeGameStats() const
 	GameInstance->SetFalls(Falls);
 	GameInstance->SetDamageDone(DamageDone);
 	GameInstance->SetDamageTaken(DamageTaken);
-
+	
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 

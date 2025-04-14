@@ -14,12 +14,12 @@ class UMUSMASH_API UTimerWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void UpdateCountdownWidget();
 	
 
 protected:
 	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 
 public:
