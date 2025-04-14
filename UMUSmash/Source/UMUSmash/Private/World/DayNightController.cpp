@@ -28,7 +28,7 @@ void ADayNightController::Tick(float DeltaTime)
         CurrentTime = 0.0f;
     }
 
-    float NewPitch = FMath::Lerp(StartPitch, EndPitch, CurrentTime); // È¸Àü(Pitch)
+    float NewPitch = FMath::Lerp(StartPitch, EndPitch, CurrentTime);
     DirectionalLightActor->SetActorRotation(FRotator(NewPitch, 0, 0));
 
     float NewIntensity = FMath::Lerp(DayIntensity, NightIntensity, CurrentTime);
