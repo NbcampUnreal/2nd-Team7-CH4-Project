@@ -35,18 +35,13 @@ ADefaultItem::ADefaultItem()
 void ADefaultItem::OnItemOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	
-	if (OtherActor && OtherActor->ActorHasTag("Player"))
+	if (OtherComp && OtherComp->ComponentHasTag("Player"))
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Overlap!")));
 		ActivateItem(OtherActor);
 	}
 
-	if (OtherActor && OtherActor->ActorHasTag("Floor"))
-	{
-		this->UseCustomGravity = false;
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Floor Overlap!")));
-		
-	}
+	
 }
 
 void ADefaultItem::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -62,26 +57,9 @@ void ADefaultItem::ActivateItem(AActor* Activator)
 {
 }
 
-FName ADefaultItem::GetItemType() const
-{
-	return ItemType;
-}
 
-FName ADefaultItem::GetItemName() const
-{
-	return ItemName;
-}
 
-void ADefaultItem::Gravity(float DeltaTime)
-{
-	FVector Velocity = FVector::ZeroVector;
 
-	Velocity.Z += GravityStrength * FallingSpeed * DeltaTime;
-
-	// 위치 업데이트
-	FVector NewLocation = GetActorLocation() + Velocity * DeltaTime;
-	SetActorLocation(NewLocation);
-}
 
 // Called when the game starts or when spawned
 void ADefaultItem::BeginPlay()
@@ -94,10 +72,7 @@ void ADefaultItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/*if (UseCustomGravity)
-	{
-		Gravity(DeltaTime);
-	}*/
+
 }
 
 void ADefaultItem::DestroyItem()
