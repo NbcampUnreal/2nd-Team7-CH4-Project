@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,22 +14,21 @@ class UMUSMASH_API UTimerWidget : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateCountdownWidget();
-	
 
 protected:
 	virtual void NativeConstruct() override;
 
+	/** 깜빡이는 효과를 위한 함수 */
+	void ToggleBlink();
 
-public:
-	
-
-	
 protected:
-	UPROPERTY(meta=(BindWidget="Widget"))
+	/** 위젯에서 바인딩된 카운트다운 텍스트 */
+	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> CountdownText;
 
-	int32 Minutes = 0;
-	double Seconds = 0;
-	FText NewCount;
-	
+	/** 깜빡임 효과를 위한 타이머 핸들 */
+	FTimerHandle BlinkTimerHandle;
+
+	/** 텍스트가 현재 보이는지 여부 */
+	bool bIsBlinkVisible = true;
 };

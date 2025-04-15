@@ -66,7 +66,7 @@ void AUMUFightGameMode::CheckInGameMode()
 
 	InGameMode = GameInstance->GetSubGameMode();
 	bUseTimer = true;
-	// if (InGameMode == EInGameModes::Time)
+	if (InGameMode == EInGameModes::Time)
 	{
 		auto* UMUGameState = GetWorld()->GetGameState<AUMUGameState>();
 		if (UMUGameState)
