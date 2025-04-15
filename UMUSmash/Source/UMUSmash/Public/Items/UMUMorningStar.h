@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Items/DefaultItem.h"
+#include "Items/Components/UMUMeleeItemComponent.h"
 #include "UMUMorningStar.generated.h"
 
 /**
@@ -25,6 +26,8 @@ public:
 
 	virtual void ActivateItem(AActor* Activator) override;
 
-	
+private:
+	UPROPERTY()
+	UUMUMeleeItemComponent* WeaponComponent;
 
 };

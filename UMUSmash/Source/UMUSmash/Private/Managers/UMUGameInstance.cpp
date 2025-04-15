@@ -1,4 +1,8 @@
+
+
+
 #include "Managers/UMUGameInstance.h"
+
 #include "Managers/UMUFightGameMode.h"
 #include "Sockets.h"
 #include "SocketSubsystem.h"
@@ -24,12 +28,18 @@ void UUMUGameInstance::SetIsGameOver(const bool& NewValue)
 	GetWorld()->GetGameState<AUMUGameState>()->UpdateIsGameOver();
 }
 
-void UUMUGameInstance::CheckGameOverConditions()
+void UUMUGameInstance::CheckGameOverConditions() const
 {
 	auto* FighterGameMode = Cast<AUMUFightGameMode>(GetWorld()->GetAuthGameMode());
 	checkf(FighterGameMode, TEXT("Game Instance: Fighter Game Mode is null"));
 
 	FighterGameMode->CheckGameOverConditions();
+}
+
+void UUMUGameInstance::BroadcastChangedAliveCount() const
+{
+	const int32 ChangedValue = GetNumPlayersAlive();
+	OnAliveCountChanged.Broadcast(ChangedValue);
 }
 
 // network session

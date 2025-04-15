@@ -16,6 +16,9 @@ class UMUSMASH_API AUMUFightGameMode : public AGameModeBase
 
 	
 public:
+	// --- Block Login ---
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
 	
 	// --- Main game flow
     void HandleInitGame();
@@ -35,19 +38,28 @@ public:
     void CreatePlayers();
     bool OnlineAllLoaded();
     void MatchStats();
+	void CheckInGameMode();
     
     void FinalizeGameStats() const;
     void TravelToVictoryScreen() const;
 
+	void BindingValueChanged();
+	UFUNCTION()
+	void HandleUpdateAliveCount(const int32 NewNumPlayersAlive);
 
 	// --- Getter & Setter ---
 	bool IsAllLoaded() const { return bAllLoaded; }
 	TArray<bool> GetPlayerLoaded() const { return PlayerLoaded; }
+	TObjectPtr<UUMUGameInstance> GetUMUGameInstance() const { return GameInstance; }
+	
 
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 
 private:
+	FTimerHandle FinalGameStatsHandle;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Mode", meta=(AllowPrivateAccess="true"))
 	EInGameModes InGameMode;
 	
@@ -62,7 +74,7 @@ private:
 	double Seconds;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
 	FString TimerText;
-	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(BlueprintReadWrite, Category="Game.Timer", meta=(AllowPrivateAccess="true"))	
 	double DeltaSeconds;
 
 	

@@ -16,20 +16,35 @@ class UMUSMASH_API AUMUPlayerController : public APlayerController
 	
 public:
 	AUMUPlayerController();
-	void BeginPlay() override;
-	UPROPERTY()
+	
+	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> JumpAction;
-	UPROPERTY()
-	TObjectPtr<UInputAction> MoveAction;
-	UPROPERTY()
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> VerticalInputAction;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> HorizontalInputAction;
+
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> CrouchAction;
-	UPROPERTY()
+
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> AttackAction;
-	UPROPERTY()
+
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> SmashAction;
-	UPROPERTY()
+
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> ShieldAction;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputAction> DodgeAction;
+
 private:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputMappingContext> MappingContext;
 };
