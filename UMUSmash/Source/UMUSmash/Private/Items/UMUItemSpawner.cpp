@@ -8,7 +8,7 @@
 // Sets default values
 AUMUItemSpawner::AUMUItemSpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
@@ -36,23 +36,29 @@ void AUMUItemSpawner::BeginPlay()
 	check(ItemManager);
 
 	ItemManager->AddSpawnerArray(this);
-	
+
 }
 
-void AUMUItemSpawner::SpawnItem(TSubclassOf<AActor> SpawnActor)
+void AUMUItemSpawner::SpawnItem(UClass* SpawnActor)
 {
 	if (NiagaraEffect)
 	{
 		NiagaraComponent->Activate();
 	}
 
-	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindUFunction(this, FName("CreateItem"), SpawnActor);
-	GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, 1.3f, false);
-		
+	//FTimerDelegate TimerDelegate;
+	//TimerDelegate.BindUFunction(this, FName("CreateItem"), SpawnActor.Get());
+
+	UE_LOG(LogTemp, Warning, TEXT("SpawnActor: %s"), *GetNameSafe(SpawnActor));
+	GetWorldTimerManager().SetTimer(TimerHandle,
+		[this, SpawnActor]()
+		{
+			CreateItem(SpawnActor);
+		}, 1.3f, false);
+
 }
 
-void AUMUItemSpawner::CreateItem(TSubclassOf<AActor> Item)
+void AUMUItemSpawner::CreateItem(UClass* Item)
 {
 	FVector Location = this->GetActorLocation();
 	FRotator RandomRot = UKismetMathLibrary::RandomRotator(true);
