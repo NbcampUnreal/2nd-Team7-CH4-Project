@@ -66,7 +66,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		if (AUMUPlayerController* PlayerController = Cast<AUMUPlayerController>(GetController()))
 		{
-			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartJump);
+			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Started, this, &ABaseCharacter::StartJump);
 			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndJump);
 			EnhancedInput->BindAction(PlayerController->VerticalInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::VerticalInputFunc);
 			EnhancedInput->BindAction(PlayerController->HorizontalInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::HorizontalInputFunc);
