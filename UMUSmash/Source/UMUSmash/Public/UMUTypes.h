@@ -250,3 +250,14 @@ enum class EAttackTable : uint8
 	Attack29,
 	Attack30
 };
+
+UENUM(BlueprintType)
+enum class EMenuWidgetState : uint8
+{
+	PressStart		= 0,
+	MainMenu		= 1,
+	CharacterSelect	= 2,
+	MapSelect		= 3,
+	NetworkLobby	= 4,
+	Settings		= 5
+};
