@@ -97,15 +97,20 @@ enum class EButtonType : uint8
 UENUM(BlueprintType)
 enum class ECharacter : uint8
 {
-	Fighter				= 0			UMETA(DisplayName = "Fighter0"),
-	None				= 1			UMETA(DisplayName = "None1"),
-	SwordMan			= 2			UMETA(DisplayName = "SwordMan2"),
-	Gunner				= 3			UMETA(DisplayName = "Gunner3"),
-	Hats				= 4			UMETA(DisplayName = "Hats4"),
-	Mage				= 5			UMETA(DisplayName = "Mage5"),
-	Unknown				= 6			UMETA(DisplayName = "Unknown6"),
-	Bob					= 7			UMETA(DisplayName = "Bob7"),
-	Random				= 8			UMETA(DisplayName = "Random8")
+	None				= 0			UMETA(DisplayName = "None"),
+	Unity_Dog			= 1			UMETA(DisplayName = "Unity_Dog"),
+	Unity_TinyHeroBoy	= 2			UMETA(DisplayName = "Unity_TinyHeroBoy"),
+	Unity_TinyHeroGirl	= 3			UMETA(DisplayName = "Unity_TinyHeroGirl"),
+	Unity_Hero			= 4			UMETA(DisplayName = "Unity_Hero"),
+	Unreal_Rampage		= 5			UMETA(DisplayName = "Unreal_Rampage"),
+	Unreal_Crunch		= 6			UMETA(DisplayName = "Unreal_Crunch"),
+	Unreal_Gideon		= 7			UMETA(DisplayName = "Unreal_Gideon"),
+	Unreal_Kallari		= 8			UMETA(DisplayName = "Unreal_Kallari"),
+	Mixamo_XBot			= 9			UMETA(DisplayName = "Mixamo_XBot"),
+	Mixamo_YBot			= 10		UMETA(DisplayName = "Mixamo_YBot"),
+	Mixamo_Swat			= 11		UMETA(DisplayName = "Mixamo_Swat"),
+	Mixamo_Michelle		= 12		UMETA(DisplayName = "Mixamo_Michelle"),
+	Random				= 13		UMETA(DisplayName = "Random")
 };
 
 UENUM(BlueprintType)
