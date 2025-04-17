@@ -11,16 +11,6 @@ void AUMUPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("In BeginPlay"));
-
-	if (ULocalPlayer* LocalPlayer = GetLocalPlayer())
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer))
-		{
-			Subsystem->AddMappingContext(MappingContext, 0);
-		}
-	}
 	if (!BGMComponent)
 	{
 		BGMComponent = NewObject<UAudioComponent>(this);
@@ -32,6 +22,8 @@ void AUMUPlayerController::BeginPlay()
 			BGMComponent->RegisterComponentWithWorld(GetWorld());
 		}
 	}
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
 }
 
 void AUMUPlayerController::PlayBGM(USoundBase* NewBGM)

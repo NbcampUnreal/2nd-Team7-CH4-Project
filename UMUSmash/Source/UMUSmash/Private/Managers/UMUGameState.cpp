@@ -157,7 +157,7 @@ void AUMUGameState::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InitState();
+	// InitState();
 }
 
 void AUMUGameState::Tick(float DeltaTime)

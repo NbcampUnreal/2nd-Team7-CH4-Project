@@ -31,7 +31,7 @@ void AUMUFightGameMode::CreatePlayers()
 			auto* PlayerController = UGameplayStatics::CreatePlayer(GetWorld(), i, true);
 			// 콘솔용 Play Dynamic Force Feedback 미구현, 구현 시 PlayerController 사용
 			
-			Stocks[i] = GameInstance->GetStockCount();
+			Stocks.Add(GameInstance->GetStockCount());
 		}
 	}
 	
@@ -95,10 +95,10 @@ void AUMUFightGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	
-	if (bAllLoaded)
-	{
-		NewPlayer->SetLifeSpan(0.1f);
-	}
+	// if (bAllLoaded)
+	// {
+	// 	NewPlayer->SetLifeSpan(0.1f);
+	// }
 }
 
 void AUMUFightGameMode::HandleInitGame()
@@ -106,7 +106,7 @@ void AUMUFightGameMode::HandleInitGame()
 	GameInstance = Cast<UUMUGameInstance> (GetWorld()->GetGameInstance());
 	check(GameInstance);
 	
-	CreatePlayers();
+	//CreatePlayers();
 	OnlineAllLoaded();
 	MatchStats();
 	BindingValueChanged();
