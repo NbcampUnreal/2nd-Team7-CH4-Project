@@ -23,7 +23,7 @@ protected:
 
 
 protected:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ECharacter PanelSelectedCharacter;
 	
 	UPROPERTY(BlueprintReadOnly)

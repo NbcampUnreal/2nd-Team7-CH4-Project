@@ -27,10 +27,10 @@ protected:
 
 
 	
-protected:
+public:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* CharacterSelectButton;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ECharacter Character;
 };
