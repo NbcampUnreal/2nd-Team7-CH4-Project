@@ -23,7 +23,7 @@ void UKnockbackComponent::BeginPlay()
 	
 }
 
-void UKnockbackComponent::CharacterKnockback(EFaceDirection Direction, float Angle, float Stun)
+void UKnockbackComponent::CharacterKnockback(EFaceDirection Direction, float Angle, float Stun,float BaseKockback)
 {
 	Parent->JumpNumber = 1;
 	UCharacterMovementComponent* Movement = Parent->GetCharacterMovement();	
@@ -31,7 +31,7 @@ void UKnockbackComponent::CharacterKnockback(EFaceDirection Direction, float Ang
 	FVector CapsuleLocation = ParentCapsuleComp->GetComponentLocation();
 	CapsuleLocation.Z += 20;
 	ParentCapsuleComp->SetWorldLocation(CapsuleLocation, false, nullptr, ETeleportType::TeleportPhysics);
-	float Knockback = FuncNockbackCalculation();
+	float Knockback = FuncNockbackCalculation()+ BaseKockback;
 	if (Knockback > LaunchThreshold)
 	{
 		Parent->PlayerStateType = EPlayerStateType::launch;

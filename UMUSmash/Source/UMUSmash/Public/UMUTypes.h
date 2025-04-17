@@ -84,7 +84,10 @@ enum class EBufferType : uint8
 	Special				= 1 		UMETA(DisplayName = "Special1"),
 	Jump				= 2 		UMETA(DisplayName = "Jump2"),
 	Shield				= 3 		UMETA(DisplayName = "Sheild3"),
-	None				= 4 		UMETA(DisplayName = "None4")
+	None				= 4 		UMETA(DisplayName = "None4"),
+	ItemUse				= 5 		UMETA(DisplayName = "ItemUse5"),
+	ItemThrow			= 6 		UMETA(DisplayName = "ItemThrow6")
+
 };
 
 UENUM(BlueprintType)
@@ -199,6 +202,7 @@ enum class EAttackType : uint8
 	DodgeBack          	= 30		UMETA(DisplayName = "DodgeBack30"),
 	DodgeForward       	= 31		UMETA(DisplayName = "DodgeForward31"),
 	Super              	= 32		UMETA(DisplayName = "Super32"),
+	Item              	= 33		UMETA(DisplayName = "Item33")
 };	
 
 
@@ -217,7 +221,9 @@ enum class EAbilityType : uint8
 	Ledge				= 9 		UMETA(DisplayName = "Ledge9"),
 	Throw				= 10 		UMETA(DisplayName = "Throw10"),
 	Prone				= 11 		UMETA(DisplayName = "Prone11"),
-	grab				= 12 		UMETA(DisplayName = "grab12")
+	grab				= 12 		UMETA(DisplayName = "grab12"),
+	UseItem				= 13 		UMETA(DisplayName = "Item13"),
+	ThrowItem				= 14 		UMETA(DisplayName = "ItemThrow14")
 };			
 
 
@@ -253,5 +259,17 @@ enum class EAttackTable : uint8
 	Attack27,
 	Attack28,
 	Attack29,
-	Attack30
+	Attack30,
+	Attack31
+
+};
+
+
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	None,
+	MorningStar,
+	Hammer
+
 };

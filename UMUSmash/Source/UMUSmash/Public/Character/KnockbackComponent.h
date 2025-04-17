@@ -20,7 +20,7 @@ public:
 	UKnockbackComponent();
 	TObjectPtr<ABaseCharacter> Parent;
 	UFUNCTION(BlueprintCallable)
-	void CharacterKnockback(EFaceDirection Direction, float Angle, float Stun);
+	void CharacterKnockback(EFaceDirection Direction, float Angle, float Stun,float BaseKockback);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

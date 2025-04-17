@@ -11,7 +11,7 @@ AUMUMorningStar::AUMUMorningStar()
 	{
 		StaticMesh->SetStaticMesh(StaticMeshAsset.Object);
 	}
-
+	ItemType = EItemType::MorningStar;
 
 }
 
@@ -32,42 +32,6 @@ void AUMUMorningStar::ActivateItem(AActor* Activator)
 {
 	Super::ActivateItem(Activator);
 
-	ABaseCharacter* TargetCharacter = Cast<ABaseCharacter>(Activator);
-	if (TargetCharacter)
-	{
-		if (!TargetCharacter->FindComponentByClass<UUMUMeleeItemComponent>())
-		{
 
-			USkeletalMeshComponent* CharacterSkelMesh = TargetCharacter->GetMesh();
-
-			if (CharacterSkelMesh)
-			{
-				UStaticMeshComponent* StaticMeshComp = NewObject<UStaticMeshComponent>(TargetCharacter);
-
-				if (StaticMeshComp)
-				{
-					StaticMeshComp->SetStaticMesh(StaticMesh->GetStaticMesh());
-					StaticMeshComp->RegisterComponent();
-					TargetCharacter->AddOwnedComponent(StaticMeshComp);
-
-					StaticMeshComp->AttachToComponent(
-						CharacterSkelMesh,
-						FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-						TEXT("hand_rSocket"));
-
-				}
-			}
-
-			WeaponComponent = NewObject<UUMUMeleeItemComponent>(TargetCharacter);
-			if (WeaponComponent)
-			{
-
-				WeaponComponent->RegisterComponent();
-				TargetCharacter->AddOwnedComponent(WeaponComponent);
-			}
-		}
-	}
-
-
-	DestroyItem();
+	DeActivation();
 }
