@@ -23,6 +23,12 @@ void UKnockbackComponent::BeginPlay()
 	
 }
 
+void UKnockbackComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	GetWorld()->GetTimerManager().ClearTimer(KnockbackDelayTimer);
+}
+
 void UKnockbackComponent::CharacterKnockback(EFaceDirection Direction, float Angle, float Stun,float BaseKockback)
 {
 	Parent->JumpNumber = 1;
