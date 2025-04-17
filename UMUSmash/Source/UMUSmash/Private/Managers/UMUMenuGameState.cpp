@@ -129,6 +129,7 @@ void AUMUMenuGameState::SaveGameData() const
 		CurrentGameInstance->SetSubGameMode(InGameMode);
 		CurrentGameInstance->SetNumberOfPlayers(NumberOfPlayers);
 		CurrentGameInstance->SetPlayerCharacters(PlayerCharacters);
+		CurrentGameInstance->SetIsOnline(bIsOnlineMode);
 
 		UMU_LOG(LogUMU, Log, TEXT("InstanceData, StockCount:%d Minutes:%d NumberOfPlayers:%d"), StockCount, Minutes, NumberOfPlayers)
 	}
