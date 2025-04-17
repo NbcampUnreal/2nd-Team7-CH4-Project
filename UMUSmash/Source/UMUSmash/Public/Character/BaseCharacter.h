@@ -191,7 +191,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector LedgeLocation = FVector::ZeroVector;	
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
 	EPlayerStateType PlayerStateType = EPlayerStateType::Idle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

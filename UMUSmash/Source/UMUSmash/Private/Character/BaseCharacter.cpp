@@ -48,7 +48,8 @@ void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ABaseCharacter, Bounce);
 	DOREPLIFETIME(ABaseCharacter, HorizontalInputValue);
 	DOREPLIFETIME(ABaseCharacter, VerticalInputValue);
-	DOREPLIFETIME(ABaseCharacter, JumpBuffer)
+	DOREPLIFETIME(ABaseCharacter, JumpBuffer);
+	DOREPLIFETIME(ABaseCharacter, PlayerStateType);
 }
 
 void ABaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
