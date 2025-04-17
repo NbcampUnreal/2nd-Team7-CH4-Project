@@ -38,13 +38,13 @@ public:
     float StartPitch = 10.0f;
 
     UPROPERTY(EditAnywhere, Category = "DayNight")
-    float EndPitch = -90.0f;
+    float EndPitch = -60.0f;
 
     UPROPERTY(EditAnywhere, Category = "DayNight")
     float DayIntensity = 10.0f;
 
     UPROPERTY(EditAnywhere, Category = "DayNight")
-    float NightIntensity = 0.0f;
+    float NightIntensity = 0.2f;
 
     UPROPERTY(EditAnywhere, Category = "DayNight")
     FLinearColor DayLightColor = FLinearColor(1.0f, 0.95f, 0.85f);
