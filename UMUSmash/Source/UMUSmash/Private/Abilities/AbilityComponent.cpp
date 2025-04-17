@@ -44,6 +44,12 @@ void UAbilityComponent::BufferCall(const EBufferType BufferType)
 		break;
 	case EBufferType::None:
 		break;
+	case EBufferType::ItemUse:
+		ItemUsed();
+		break;
+	case EBufferType::ItemThrow:
+		ItemThrowed();
+		break;
 	default:
 		break;
 	}
@@ -95,6 +101,12 @@ void UAbilityComponent::WitchAbility_Implementation()
 	case EAbilityType::grab:
 		Grab.Ability->bIsActive = true;
 		break;
+	case EAbilityType::UseItem:
+		ItemUsed();
+		break;
+	case EAbilityType::ThrowItem:
+		ItemThrowed();
+		break;
 	default:
 		break;
 	}
@@ -103,6 +115,7 @@ void UAbilityComponent::WitchAbility_Implementation()
 void UAbilityComponent::BasicAttack_Implementation()
 {
 	check(Parent);
+
 	switch (Parent->InputDirection)
 	{
 	case EInputDirection::Temp:
@@ -362,6 +375,19 @@ void UAbilityComponent::Respawning_Implementation()
 		Respawn.Ability->bIsActive = true;
 	}
 }
+
+void UAbilityComponent::ItemUsed_Implementation()
+{
+	ActivateAbility(UseItemAbility.Ability);
+
+}
+
+void UAbilityComponent::ItemThrowed_Implementation()
+{
+	ActivateAbility(ThrowItemAbility.Ability);
+
+}
+
 void UAbilityComponent::AttachAbility()
 {
 	//Basic
@@ -415,10 +441,16 @@ void UAbilityComponent::AttachAbility()
 	SpawnAbility(ProneStand);
 	SpawnAbility(SuperAbility);
 	SpawnAbility(DashAttack);
-	SpawnAbility(ThrowItem);
-	SpawnAbility(UseItem);
+	SpawnAbility(ThrowItemAbility);
+	SpawnAbility(UseItemAbility);
 	SpawnAbility(Respawn);
 	SpawnAbility(LevelIntro);
+
+
+	/*SpawnAbility(UseItem);
+	SpawnAbility(ThrowItem);*/
+
+
 	//Extra
 	//SpawnAbility(ExtraAbility1);
 	//SpawnAbility(ExtraAbility2);

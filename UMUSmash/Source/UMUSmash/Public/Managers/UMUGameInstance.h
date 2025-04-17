@@ -140,7 +140,7 @@ private:
 	TSubclassOf<ACharacter> Fighters = {};
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<ECharacter> PlayerCharacters = {ECharacter::Fighter, ECharacter::Fighter, ECharacter::None, ECharacter::None};
+	TArray<ECharacter> PlayerCharacters = {ECharacter::Random, ECharacter::Random, ECharacter::Random, ECharacter::Random};
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	int32 PlayerNumber = 1;

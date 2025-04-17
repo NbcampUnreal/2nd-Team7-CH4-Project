@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "UMUItemInterface.h"
+#include "UMUTypes.h"
 #include "DefaultItem.generated.h"
 
 
@@ -20,6 +21,9 @@ public:
 	// Sets default values for this actor's properties
 	ADefaultItem();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void DestroyItem();
+
 protected:
 
 
@@ -34,45 +38,40 @@ protected:
 	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item|Property")
-	FName ItemType;
+	EItemType ItemType;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item|Property")
-	FName ItemName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Property")
+	float LifeTime;
 
-	UPROPERTY(EditAnywhere, Category = "Gravity")
-	float GravityStrength;
-	UPROPERTY(EditAnywhere, Category = "Gravity")
-	float FallingSpeed;
-	UPROPERTY(EditAnywhere, Category = "Gravity")
-	bool UseCustomGravity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item|Property")
+	bool Activate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+	FVector DesiredScale;
+
+	
 
 	virtual void OnItemOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
-	virtual void OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
-
+	virtual void OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
 	virtual void ActivateItem(AActor* Activator) override;
-
+	
 
 	// Called when the game starts or when spawned
+	UFUNCTION()
+	void DeActivation();
 
-	virtual void DestroyItem();
-
-	virtual void BeginPlay();
-
-
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime);
 
-	
-	FName GetItemType() const;
+	virtual void BeginPlay();
 
+	virtual void OnConstruction(const FTransform& Transform) override;
 
-	FName GetItemName() const;
 
 
 private:
-
-	void Gravity(float DeltaTime);
+	UPROPERTY()
+	bool FloorHit = false;
 };

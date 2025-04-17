@@ -59,22 +59,38 @@ private:
 	void ResetMoveCount();
 	UFUNCTION(NetMulticast, Reliable)
 	void WitchAbility();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void BasicAttack();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void SpecialAttack();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void AirAttack();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void SmashAttack();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void Dodge();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void Taunt();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void Throw();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void Prone();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ItemUsed();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ItemThrowed();
+
+
 	UFUNCTION(BlueprintCallable)
 	void AttachAbility();
 	UFUNCTION(BlueprintCallable)
@@ -171,9 +187,9 @@ public:
 	FAbility Grab;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	FAbility UseItem;
+	FAbility UseItemAbility;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	FAbility ThrowItem;
+	FAbility ThrowItemAbility;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extra")
 	FAbility ExtraAbility1;

@@ -20,6 +20,8 @@ ABaseCharacter::ABaseCharacter()
 	KnockbackComponent = CreateDefaultSubobject<UKnockbackComponent>(TEXT("KnockbackComponent"));
 	WallBounceComponent = CreateDefaultSubobject<UWallBounceComponent>(TEXT("WallBounceComponent"));
 	FootStepComponent = CreateDefaultSubobject<UFootStepComp>(TEXT("FootStepComponent"));
+
+	
 }
 
 void ABaseCharacter::ClearBuffer()
@@ -37,9 +39,7 @@ void ABaseCharacter::BeginPlay()
 	
 }
 
-void ABaseCharacter::EquipItem()
-{
-}
+
 
 void ABaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -66,17 +66,21 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		if (AUMUPlayerController* PlayerController = Cast<AUMUPlayerController>(GetController()))
 		{
-			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartJump);
+			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Started, this, &ABaseCharacter::StartJump);
 			EnhancedInput->BindAction(PlayerController->JumpAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndJump);
 			EnhancedInput->BindAction(PlayerController->VerticalInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::VerticalInputFunc);
 			EnhancedInput->BindAction(PlayerController->HorizontalInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::HorizontalInputFunc);
-			EnhancedInput->BindAction(PlayerController->CrouchAction, ETriggerEvent::Triggered, this, &ABaseCharacter::EquipItem);
 			EnhancedInput->BindAction(PlayerController->AttackAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartAttack);
 			EnhancedInput->BindAction(PlayerController->AttackAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndAttack);
 			EnhancedInput->BindAction(PlayerController->SmashAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartSmash);
 			EnhancedInput->BindAction(PlayerController->SmashAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndSmash);
 			EnhancedInput->BindAction(PlayerController->ShieldAction, ETriggerEvent::Triggered, this, &ABaseCharacter::StartShield);
 			EnhancedInput->BindAction(PlayerController->ShieldAction, ETriggerEvent::Completed, this, &ABaseCharacter::EndShield);
+			EnhancedInput->BindAction(PlayerController->ItemPickUpAction, ETriggerEvent::Triggered, this, &ABaseCharacter::ItemPickUp);
+			EnhancedInput->BindAction(PlayerController->ItemPickUpAction, ETriggerEvent::Completed, this, &ABaseCharacter::ItemPickEnd);
+			EnhancedInput->BindAction(PlayerController->ItemThrowAction, ETriggerEvent::Triggered, this, &ABaseCharacter::ItemThrow);
+			EnhancedInput->BindAction(PlayerController->ItemUseAction, ETriggerEvent::Triggered, this, &ABaseCharacter::ItemUse);
+			EnhancedInput->BindAction(PlayerController->ItemUseAction, ETriggerEvent::Completed, this, &ABaseCharacter::ItemUseEnd);
 		}
 	}
 }
@@ -105,6 +109,7 @@ void ABaseCharacter::VerticalInputFunc(const FInputActionValue& value)
 		if (GetMovementComponent()->IsFalling())
 		{
 			FastFall();
+			
 		}
 		else
 		{
