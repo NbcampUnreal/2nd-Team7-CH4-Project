@@ -3,15 +3,17 @@
 
 #include "Managers/UMUMenuGameState.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Managers/UMUGameInstance.h"
 #include "Net/UnrealNetwork.h"
 #include "Player/UMUMenuController.h"
 #include "UMUSmash/UMUSmash.h"
-#include "Widget/HUDLobby.h"
-#include "Widget/HUDMenu.h"
 
 
 void AUMUMenuGameState::CheckAllPlayerReady()
 {
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"))
+	
 	if (ReadyArray.Num() <= 1)
 	{
 		return;
@@ -21,29 +23,20 @@ void AUMUMenuGameState::CheckAllPlayerReady()
 	{
 		return;
 	}
+	
+	SaveGameData();	
+	// RandomMapTravel();
 
-	auto* CurrentPlayerController = GetWorld()->GetFirstPlayerController();
-	if (CurrentPlayerController)
-	{
-		auto* MenuController = Cast<AUMUMenuController>(CurrentPlayerController);
-		if (MenuController)
-		{
-			if (GetNetMode() == NM_Standalone)
-			{
-				MenuController->GetHUDMenuInstance()->UpdateUIToProgress(EMenuWidgetState::MapSelect);
-			}
-			else
-			{
-				MenuController->GetHUDLobbyInstance()->UpdateUIToProgress(EMenuWidgetState::MapSelect);
-			}
-		}
-	}
+	bAllPlayersReady = true;
+
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 
 void AUMUMenuGameState::SetNumberOfPlayers(const int& NewValue)
 {
 	NumberOfPlayers = NewValue;
 
+	FitToSizeArray();
 	CheckCPUArray();
 	UMU_LOG(LogUMU, Log, TEXT("NumberOfPlayers:%d"), NumberOfPlayers)
 }
@@ -56,6 +49,7 @@ void AUMUMenuGameState::SetCPUCount(const int32& NewValue)
 	CPUCount = NewCount;
 	OnRep_CPUCount();
 
+	FitToSizeArray();
 	CheckCPUArray();
 
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
@@ -92,10 +86,6 @@ void AUMUMenuGameState::SetPlayerReadyArray(const int32& PlayerID, const bool& b
 {
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"))
 	
-	if (ReadyArray.Num() < PlayerID+1)
-	{
-		ReadyArray.SetNum(PlayerID+1);
-	}
 	ReadyArray[PlayerID] = bIsReady;
 	
 	CheckAllPlayerReady();
@@ -106,12 +96,6 @@ void AUMUMenuGameState::SetPlayerReadyArray(const int32& PlayerID, const bool& b
 void AUMUMenuGameState::CheckCPUArray()
 {
 	const int32 TotalPlayerCount = NumberOfPlayers + CPUCount;
-
-	if (CPUCheckArray.Num() < TotalPlayerCount)
-	{
-		CPUCheckArray.SetNum(TotalPlayerCount);
-	}
-
 	for (int32 i = 0; i < TotalPlayerCount; i++ )
 	{
 		if (i <= NumberOfPlayers)
@@ -122,6 +106,82 @@ void AUMUMenuGameState::CheckCPUArray()
 		CPUCheckArray[i] = true;
 	}
 }
+
+EMaps AUMUMenuGameState::RandomMapSelect() const 
+{
+
+	TArray<EMaps> MapArray = {EMaps::AnotherLevel, EMaps::ConcludingGround, EMaps::ConflictZone, EMaps::IceZone, EMaps::TheWalkWay}; 
+
+	const int32 RandomMapIndex = FMath::RandRange(0,4);
+	
+	return MapArray[RandomMapIndex];
+}
+
+void AUMUMenuGameState::SaveGameData() const
+{
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"))
+	
+	auto* CurrentGameInstance = Cast<UUMUGameInstance>(GetGameInstance());
+	if (CurrentGameInstance)
+	{
+		CurrentGameInstance->SetCPU(CPUCheckArray);
+		CurrentGameInstance->SetStockCount(StockCount);
+		CurrentGameInstance->SetMin(Minutes);
+		CurrentGameInstance->SetSubGameMode(InGameMode);
+		CurrentGameInstance->SetNumberOfPlayers(NumberOfPlayers);
+		CurrentGameInstance->SetPlayerCharacters(PlayerCharacters);
+
+		UMU_LOG(LogUMU, Log, TEXT("InstanceData, StockCount:%d Minutes:%d NumberOfPlayers:%d"), StockCount, Minutes, NumberOfPlayers)
+	}
+
+	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
+}
+
+void AUMUMenuGameState::FitToSizeArray()
+{
+	const int32 TotalPlayerCount = NumberOfPlayers + CPUCount;
+	
+	if (ReadyArray.Num() < TotalPlayerCount)
+	{
+		ReadyArray.SetNum(TotalPlayerCount);
+	}
+
+	if (CPUCheckArray.Num() < TotalPlayerCount)
+	{
+		CPUCheckArray.SetNum(TotalPlayerCount);
+	}
+}
+
+// void AUMUMenuGameState::RandomMapTravel() const
+// {
+// 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"))
+// 	
+// 	EMaps RandomMap = RandomMapSelect();
+// 	FString NextMapToString;
+// 	const UEnum* EnumPtr = StaticEnum<EMaps>();
+// 	if (EnumPtr)
+// 	{
+// 		NextMapToString = EnumPtr->GetNameStringByIndex(static_cast<uint8>(RandomMap));
+// 	}
+// 	else
+// 	{
+// 		UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("EnumPtr is null"))
+// 	}
+// 	
+// 	UMU_LOG(LogUMU, Log, TEXT("NextMapName:%s"), *NextMapToString)
+// 			
+// 	if (GetNetMode() == NM_Standalone)
+// 	{
+// 		const FName NextMapToName = FName(*NextMapToString);
+// 		UGameplayStatics::OpenLevel(GetWorld(), NextMapToName);
+// 	}
+// 	else
+// 	{
+// 		GetWorld()->ServerTravel(NextMapToString, true);
+// 	}
+// 	
+// 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
+// }
 
 void AUMUMenuGameState::ChangeRule(const EInGameModes& NewInGameMode)
 {
@@ -209,6 +269,15 @@ void AUMUMenuGameState::BeginPlay()
 	if (HasAuthority())
 	{
 		SetNumberOfPlayers(0);
+	}
+
+	if (GetNetMode() != NM_Standalone)
+	{
+		bIsOnlineMode = true;
+	}
+	else
+	{
+		bIsOnlineMode = false;
 	}
 }
 

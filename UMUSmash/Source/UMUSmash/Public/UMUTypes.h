@@ -136,12 +136,12 @@ enum class EInGameModes : uint8
 UENUM(BlueprintType)
 enum class EMaps : uint8
 {
-	ConcludingGround	= 0			UMETA(DisplayName = "ConcludingGround0"),
-	ConflictZone		= 1			UMETA(DisplayName = "ConflictZone1"),
-	Random				= 8			UMETA(DisplayName = "Random8"),
-	AnotherLevel		= 9			UMETA(DisplayName = "AnotherLevel9"),
-	TheWalkWay			= 10		UMETA(DisplayName = "TheWalkWay10"),
-	IceZone				= 11		UMETA(DisplayName = "IceZone11"),
+	ConcludingGround	= 0			UMETA(DisplayName = "ConcludingGround"),
+	ConflictZone		= 1			UMETA(DisplayName = "ConflictZone"),
+	Random				= 8			UMETA(DisplayName = "Random"),
+	AnotherLevel		= 9			UMETA(DisplayName = "AnotherLevel"),
+	TheWalkWay			= 10		UMETA(DisplayName = "TheWalkWay"),
+	IceZone				= 11		UMETA(DisplayName = "IceZone"),
 
 };
 

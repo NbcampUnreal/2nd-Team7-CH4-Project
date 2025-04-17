@@ -18,6 +18,7 @@ public:
 	// Game Rule
 	void CheckAllPlayerReady();
 	void CheckCPUArray();
+	// void RandomMapTravel() const;
 	
 	// Getter & Setter
 	void SetIsOnlineMode(const bool& NewValue) { bIsOnlineMode = NewValue; };
@@ -46,22 +47,30 @@ protected:
 	UFUNCTION()
 	void OnRep_Minutes();
 
+	UFUNCTION(BlueprintCallable)
+	EMaps RandomMapSelect() const;
+	UFUNCTION(BlueprintCallable)
+	void SaveGameData() const;
+	void FitToSizeArray();
+
 	virtual void BeginPlay() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 protected:
-	UPROPERTY(ReplicatedUsing = OnRep_NumberOfPlayers)
-	TArray<bool> ReadyArray;
+	TArray<bool> ReadyArray = {};
 	int32 PlayerNumber = 0;
 
 	UPROPERTY(ReplicatedUsing = OnRep_CPUCount)
 	int32 CPUCount = 0;
 	
-	UPROPERTY(ReplicatedUsing = OnRep_IsOnlineMode)
-	bool bIsOnlineMode;
+	UPROPERTY(ReplicatedUsing = OnRep_IsOnlineMode, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bIsOnlineMode = false;
 
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bAllPlayersReady = false;
 	
 	// Send To GameInstance
+	UPROPERTY(ReplicatedUsing = OnRep_NumberOfPlayers)
 	int32 NumberOfPlayers = 0;
 	
 	TArray<ECharacter> PlayerCharacters = {};
