@@ -79,21 +79,21 @@ private:
 
 	
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	int32 NumberOfPlayers;
+	int32 NumberOfPlayers = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	int32 NumPlayersAlive;
+	int32 NumPlayersAlive = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<int32> Stocks;
+	TArray<int32> Stocks = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<int32> Elims;
+	TArray<int32> Elims = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<int32> SelfElim;
+	TArray<int32> SelfElim = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<int32> Falls;
+	TArray<int32> Falls = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<int32> DamageDone;
+	TArray<int32> DamageDone = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
-	TArray<int32> DamageTaken;
+	TArray<int32> DamageTaken = {};
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
 	TArray<bool> PlayerLoaded;
 	UPROPERTY(BlueprintReadWrite, Category="Game.Players", meta=(AllowPrivateAccess="true"))
