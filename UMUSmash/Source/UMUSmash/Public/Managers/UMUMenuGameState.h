@@ -15,6 +15,9 @@ class UMUSMASH_API AUMUMenuGameState : public AGameStateBase
 	GENERATED_BODY()
 
 public:
+	// Game Rule
+	void CheckAllPlayerReady();
+	void CheckCPUArray();
 	
 	// Getter & Setter
 	void SetIsOnlineMode(const bool& NewValue) { bIsOnlineMode = NewValue; };
@@ -48,22 +51,25 @@ protected:
 	
 protected:
 	UPROPERTY(ReplicatedUsing = OnRep_NumberOfPlayers)
-	int32 NumberOfPlayers;
 	TArray<bool> ReadyArray;
-	TArray<ECharacter> PlayerCharacters;
 	int32 PlayerNumber = 0;
-	
-	
-	TArray<bool> CPUArray = {};
 
-	UPROPERTY(ReplicatedUsing = OnRep_InGameMode)
-	EInGameModes InGameMode = EInGameModes::Stock;
-
-	UPROPERTY(ReplicatedUsing = OnRep_IsOnlineMode)
-	bool bIsOnlineMode;
-	
 	UPROPERTY(ReplicatedUsing = OnRep_CPUCount)
 	int32 CPUCount = 0;
+	
+	UPROPERTY(ReplicatedUsing = OnRep_IsOnlineMode)
+	bool bIsOnlineMode;
+
+	
+	// Send To GameInstance
+	int32 NumberOfPlayers = 0;
+	
+	TArray<ECharacter> PlayerCharacters = {};
+	
+	TArray<bool> CPUCheckArray = {};
+	
+	UPROPERTY(ReplicatedUsing = OnRep_InGameMode)
+	EInGameModes InGameMode = EInGameModes::Stock;
 
 	UPROPERTY(ReplicatedUsing = OnRep_StockCount)
 	int32 StockCount = 3;

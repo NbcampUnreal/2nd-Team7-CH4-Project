@@ -6,12 +6,45 @@
 #include "Net/UnrealNetwork.h"
 #include "Player/UMUMenuController.h"
 #include "UMUSmash/UMUSmash.h"
+#include "Widget/HUDLobby.h"
+#include "Widget/HUDMenu.h"
 
+
+void AUMUMenuGameState::CheckAllPlayerReady()
+{
+	if (ReadyArray.Num() <= 1)
+	{
+		return;
+	}
+
+	if (ReadyArray.Contains(false))
+	{
+		return;
+	}
+
+	auto* CurrentPlayerController = GetWorld()->GetFirstPlayerController();
+	if (CurrentPlayerController)
+	{
+		auto* MenuController = Cast<AUMUMenuController>(CurrentPlayerController);
+		if (MenuController)
+		{
+			if (GetNetMode() == NM_Standalone)
+			{
+				MenuController->GetHUDMenuInstance()->UpdateUIToProgress(EMenuWidgetState::MapSelect);
+			}
+			else
+			{
+				MenuController->GetHUDLobbyInstance()->UpdateUIToProgress(EMenuWidgetState::MapSelect);
+			}
+		}
+	}
+}
 
 void AUMUMenuGameState::SetNumberOfPlayers(const int& NewValue)
 {
 	NumberOfPlayers = NewValue;
-	
+
+	CheckCPUArray();
 	UMU_LOG(LogUMU, Log, TEXT("NumberOfPlayers:%d"), NumberOfPlayers)
 }
 
@@ -22,6 +55,8 @@ void AUMUMenuGameState::SetCPUCount(const int32& NewValue)
 	const int32 NewCount = FMath::Clamp(NewValue, 0, 4 - NumberOfPlayers);
 	CPUCount = NewCount;
 	OnRep_CPUCount();
+
+	CheckCPUArray();
 
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
@@ -62,8 +97,30 @@ void AUMUMenuGameState::SetPlayerReadyArray(const int32& PlayerID, const bool& b
 		ReadyArray.SetNum(PlayerID+1);
 	}
 	ReadyArray[PlayerID] = bIsReady;
+	
+	CheckAllPlayerReady();
 
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
+}
+
+void AUMUMenuGameState::CheckCPUArray()
+{
+	const int32 TotalPlayerCount = NumberOfPlayers + CPUCount;
+
+	if (CPUCheckArray.Num() < TotalPlayerCount)
+	{
+		CPUCheckArray.SetNum(TotalPlayerCount);
+	}
+
+	for (int32 i = 0; i < TotalPlayerCount; i++ )
+	{
+		if (i <= NumberOfPlayers)
+		{
+			CPUCheckArray[i] = false;
+			continue;
+		}
+		CPUCheckArray[i] = true;
+	}
 }
 
 void AUMUMenuGameState::ChangeRule(const EInGameModes& NewInGameMode)

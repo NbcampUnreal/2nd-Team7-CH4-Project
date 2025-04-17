@@ -29,6 +29,7 @@ public:
 	
 	// Getter & Setter
 	TObjectPtr<UHUDMenu> GetHUDMenuInstance() const { return HUDMenuInstance; }
+	TObjectPtr<UHUDLobby> GetHUDLobbyInstance() const { return HUDLobbyInstance; }
 	void SetPlayerID(const int& NewPlayerID) { PlayerID = NewPlayerID; }
 	int32 GetPlayerID() const { return PlayerID; }
 	bool GetIsReady() const { return bIsReady; }
