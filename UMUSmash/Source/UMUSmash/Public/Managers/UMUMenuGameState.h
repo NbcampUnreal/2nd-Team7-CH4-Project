@@ -48,7 +48,7 @@ protected:
 	void OnRep_Minutes();
 
 	UFUNCTION(BlueprintCallable)
-	EMaps RandomMapSelect() const;
+	FString RandomMapSelect() const;
 	UFUNCTION(BlueprintCallable)
 	void SaveGameData() const;
 	void FitToSizeArray();

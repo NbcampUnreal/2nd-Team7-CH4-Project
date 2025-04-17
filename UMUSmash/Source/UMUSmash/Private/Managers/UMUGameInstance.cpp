@@ -4,7 +4,7 @@
 
 void UUMUGameInstance::ServerTravel(const FString& MapName) const
 {
-	GetWorld()->ServerTravel(MapName);
+	GetWorld()->ServerTravel(MapName, false);
 }
 
 bool UUMUGameInstance::IsGameOver() const

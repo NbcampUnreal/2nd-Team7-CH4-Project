@@ -107,10 +107,9 @@ void AUMUMenuGameState::CheckCPUArray()
 	}
 }
 
-EMaps AUMUMenuGameState::RandomMapSelect() const 
+FString AUMUMenuGameState::RandomMapSelect() const 
 {
-
-	TArray<EMaps> MapArray = {EMaps::AnotherLevel, EMaps::ConcludingGround, EMaps::ConflictZone, EMaps::IceZone, EMaps::TheWalkWay}; 
+	TArray<FString> MapArray = {TEXT("Concluding_Ground"), TEXT("ConflictZone"), TEXT("IceZone"), TEXT("BattlePlace"), TEXT("TheWalkWay")}; 
 
 	const int32 RandomMapIndex = FMath::RandRange(0,4);
 	

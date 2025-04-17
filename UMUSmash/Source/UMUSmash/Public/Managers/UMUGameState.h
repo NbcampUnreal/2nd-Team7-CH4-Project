@@ -37,6 +37,7 @@ public:
 	void RequestCheckInGameMode() const;
 	
 
+	UFUNCTION(BlueprintCallable)
 	void InitState();
 
 
