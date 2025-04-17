@@ -2,6 +2,7 @@
 
 
 #include "Items\DefaultItem.h"
+#include "Character/BaseCharacter.h"
 #include"Components/BoxComponent.h"
 
 // Sets default values
@@ -10,26 +11,20 @@ ADefaultItem::ADefaultItem()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	
-	/*Scene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
-	SetRootComponent(Scene);*/
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	SetRootComponent(StaticMesh);
-	//SKeletalMesh->SetupAttachment(Scene);
 
 	Collision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
 	Collision->SetupAttachment(StaticMesh);
-	/*Collision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));*/
-	
+	DesiredScale = FVector(1.0f, 1.0f, 1.0f);
 
-	/*SKeletalMesh->SetSimulatePhysics(false);
-	SKeletalMesh->SetEnableGravity(false);
-	UseCustomGravity = true;
-	GravityStrength = -980.0f;
-	FallingSpeed = 30.0f;*/
 
 	Collision->OnComponentBeginOverlap.AddDynamic(this, &ADefaultItem::OnItemOverlap);
 	Collision->OnComponentEndOverlap.AddDynamic(this, &ADefaultItem::OnItemEndOverlap);
+
+	LifeTime = 10.0f;
+	Activate = true;
+	ItemType = EItemType::None;
 }
 
 void ADefaultItem::OnItemOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -42,7 +37,10 @@ void ADefaultItem::OnItemOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	}
 
 	
+	
 }
+
+
 
 void ADefaultItem::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
@@ -55,6 +53,42 @@ void ADefaultItem::OnItemEndOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 void ADefaultItem::ActivateItem(AActor* Activator)
 {
+
+	ABaseCharacter* TargetCharacter = Cast<ABaseCharacter>(Activator);
+	if (TargetCharacter)
+	{
+		if (!TargetCharacter->HasItem)
+		{
+			TargetCharacter->HasItem = true;
+
+
+			UStaticMeshComponent* StaticMeshComp = nullptr;
+
+			TArray<UStaticMeshComponent*> MeshComponents;
+			TargetCharacter->GetComponents<UStaticMeshComponent>(MeshComponents);
+
+			for (UStaticMeshComponent* Comp : MeshComponents)
+			{
+				if (Comp && Comp->GetName() == TEXT("ItemMesh"))
+				{
+					StaticMeshComp = Comp;
+					break;
+				}
+			}
+
+			if (StaticMeshComp)
+			{
+				StaticMeshComp->SetStaticMesh(StaticMesh->GetStaticMesh());
+				StaticMeshComp->SetRelativeScale3D(DesiredScale);
+				TargetCharacter->EquipItemType = ItemType;
+			}
+
+
+		}
+	}
+
+
+	DestroyItem();
 }
 
 
@@ -68,16 +102,35 @@ void ADefaultItem::BeginPlay()
 	
 }
 
+void ADefaultItem::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	if (StaticMesh)
+	{
+		StaticMesh->SetRelativeScale3D(DesiredScale);
+	}
+}
+
 void ADefaultItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
+	if (Activate)
+	{
+		LifeTime -= DeltaTime;
+	}
+	
+	if (LifeTime < 0.0f)
+	{
+		DeActivation();
+	}
 }
 
-void ADefaultItem::DestroyItem()
+void ADefaultItem::DeActivation()
 {
-	Destroy();
+	Activate = false;
+	DestroyItem();
 }
 
 // Called every frame

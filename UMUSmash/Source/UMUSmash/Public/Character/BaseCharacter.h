@@ -67,6 +67,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void EndJump();
 
+
+
 protected:
 	// Called when the game starts or when spawned
 	UFUNCTION()
@@ -89,8 +91,23 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void EndShield();
 
-	UFUNCTION()
-	void EquipItem();
+	UFUNCTION(BlueprintImplementableEvent)
+	void ItemPickUp();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ItemPickEnd();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ItemThrow();
+
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ItemUse();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ItemUseEnd();
+
+	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	UFUNCTION()
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
@@ -143,6 +160,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector BounceVector = FVector::Zero();
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool HasItem=false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool PickUpItem = false;
+
 
 #pragma region Component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -162,6 +185,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UFootStepComp> FootStepComponent = nullptr;
+
 #pragma endregion
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -184,6 +208,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EHitStateType HitStates = EHitStateType::Normal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EItemType EquipItemType = EItemType::None;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
