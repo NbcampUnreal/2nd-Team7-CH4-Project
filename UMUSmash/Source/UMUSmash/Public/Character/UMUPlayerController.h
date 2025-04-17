@@ -1,7 +1,7 @@
-
-
 #pragma once
 
+#include "Components/AudioComponent.h"
+#include "Sound/SoundBase.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "UMUPlayerController.generated.h"
@@ -18,8 +18,20 @@ public:
 	AUMUPlayerController();
 	
 	virtual void BeginPlay() override;
+	//BGM component
+	UFUNCTION(BlueprintCallable)
+	void PlayBGM(USoundBase* NewBGM);
 
-public:
+	UFUNCTION(BlueprintCallable)
+	void StopBGM();
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UInputMappingContext> MappingContext;
+
+	UPROPERTY()
+	UAudioComponent* BGMComponent;
+
+
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> JumpAction;
 
@@ -53,7 +65,4 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> ItemThrowAction;
 
-private:
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UInputMappingContext> MappingContext;
 };
