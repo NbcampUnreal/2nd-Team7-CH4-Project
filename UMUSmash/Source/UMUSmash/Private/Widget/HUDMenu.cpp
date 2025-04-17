@@ -22,23 +22,16 @@ void UHUDMenu::NativeConstruct()
 	check(NetworkLobby)
 	check(SettingsWidget)
 
-	InitWidget();
-	
-	if (GetWorld())
-	{
-		MenuGameModeInstance = Cast<AUMUMenuGameMode>(GetWorld()->GetAuthGameMode());
-	}
-
-	check(MenuGameModeInstance)
 }
 
 void UHUDMenu::InitWidget() const
 {
 	AllWidgetDisable();
-	
+
 	// 초기에 쓸 위젯
 	PressStart->SetIsEnabled(true);
 	PressStart->SetVisibility(ESlateVisibility::Visible);
+	
 }
 
 void UHUDMenu::UpdateUIToProgress(const EMenuWidgetState& NextWidgetState) const
@@ -89,7 +82,6 @@ void UHUDMenu::UpdateUIToProgress(const EMenuWidgetState& NextWidgetState) const
 			break;
 		}
 	}
-	MenuGameModeInstance->SetWidgetState(NextWidgetState);
 }
 
 

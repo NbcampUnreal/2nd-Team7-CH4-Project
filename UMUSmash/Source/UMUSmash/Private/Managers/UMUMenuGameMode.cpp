@@ -1,11 +1,32 @@
 
 #include "Managers/UMUMenuGameMode.h"
 #include "Managers/UMUGameInstance.h"
+#include "Managers/UMUMenuGameState.h"
 #include "Player/UMUMenuController.h"
 
 AUMUMenuGameMode::AUMUMenuGameMode()
 {
 	
+}
+
+void AUMUMenuGameMode::SetIsOnlineMode() const
+{
+	if (GetWorld())
+	{
+		auto* CurrentGameMode = GetWorld()->GetGameState<AUMUMenuGameState>();
+		if (CurrentGameMode)
+		{
+			CurrentGameMode->SetIsOnlineMode(false);
+		}
+	}
+}
+
+
+void AUMUMenuGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetIsOnlineMode();
 }
 
 void AUMUMenuGameMode::ServerTravelToNextMap()
