@@ -26,9 +26,8 @@ public:
 	void RequestServerSetCPUCount(const int32& NewCount) const;
 	void RequestServerSetRuleCount(const int32& NewCount) const;
 	void RequestServerChangeRule(const EInGameModes& NewInGameMode);
-	
-	
-
+	UFUNCTION(BlueprintCallable)
+	virtual void NativeConstruct() override;
 protected:
 	UFUNCTION()
 	void OnBackButtonClicked();
@@ -42,8 +41,6 @@ protected:
 	void OnAddCPUCountClicked();
 	UFUNCTION()
 	void OnChangeRuleClicked();
-	
-	virtual void NativeConstruct() override;
 
 	void BindClickEvent();
 

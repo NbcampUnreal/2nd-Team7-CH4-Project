@@ -120,24 +120,8 @@ void UHUD_Options::OnApplyClicked()
 
 void UHUD_Options::OnBackClicked()
 {
-    // 현재 위젯 제거
-    RemoveFromParent();
-
-    // MainMenu 위젯 클래스를 불러와 생성
-    if (UWorld* World = GetWorld())
-    {
-        APlayerController* PC = UGameplayStatics::GetPlayerController(World, 0);
-        if (PC && HUD_MainMenuClass)
-        {
-            UUserWidget* MainMenu = CreateWidget<UUserWidget>(PC, HUD_MainMenuClass);
-            if (MainMenu)
-            {
-                MainMenu->AddToViewport();
-                PC->SetInputMode(FInputModeUIOnly());
-                PC->bShowMouseCursor = true;
-            }
-        }
-    }
+    const FName MenuMapName = TEXT("menus");
+    UGameplayStatics::OpenLevel(GetWorld(), MenuMapName);
 }
 
 void UHUD_Options::UpdateOptionUI()

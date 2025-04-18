@@ -1,8 +1,4 @@
-
-
-
 #include "Player/UMUMenuController.h"
-
 #include "Managers/UMUMenuGameState.h"
 #include "Widget/HUDMenu.h"
 #include "Widget/HUDLobby.h"
@@ -173,7 +169,19 @@ void AUMUMenuController::BeginPlay()
 	{
 		AddNumberOfPlayers();	
 	}
-	
+	if (!BGMComponent)
+	{
+		BGMComponent = NewObject<UAudioComponent>(this);
+		if (BGMComponent)
+		{
+			BGMComponent->bAutoActivate = false;
+			BGMComponent->bIsUISound = false;
+			BGMComponent->bAllowSpatialization = false;
+			BGMComponent->RegisterComponentWithWorld(GetWorld());
+		}
+	}
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 
@@ -257,4 +265,30 @@ void AUMUMenuController::GetLifetimeReplicatedProps(TArray<class FLifetimeProper
 
 	DOREPLIFETIME(AUMUMenuController, PlayerID);
 	DOREPLIFETIME(AUMUMenuController, bIsReady);
+}
+
+AUMUMenuController::AUMUMenuController()
+{
+	BGMComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("BGMComponent"));
+}
+
+void AUMUMenuController::PlayBGM(USoundBase* NewBGM)
+{
+	if (BGMComponent && NewBGM)
+	{
+		if (BGMComponent->IsPlaying())
+		{
+			BGMComponent->Stop();
+		}
+		BGMComponent->SetSound(NewBGM);
+		BGMComponent->Play();
+	}
+}
+
+void AUMUMenuController::StopBGM()
+{
+	if (BGMComponent && BGMComponent->IsPlaying())
+	{
+		BGMComponent->Stop();
+	}
 }

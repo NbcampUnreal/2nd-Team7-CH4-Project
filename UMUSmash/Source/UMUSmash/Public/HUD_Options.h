@@ -49,11 +49,13 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
     USoundClass* MasterSoundClass;
+
     UPROPERTY(meta = (BindWidget))
     UButton* BackButton;
 
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable)
     void OnBackClicked();
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
     TSubclassOf<UUserWidget> HUD_MainMenuClass;
 

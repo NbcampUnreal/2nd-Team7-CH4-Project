@@ -1,7 +1,7 @@
-
-
 #pragma once
 
+#include "Components/AudioComponent.h"
+#include "Sound/SoundBase.h"
 #include "CoreMinimal.h"
 #include "UMUTypes.h"
 #include "GameFramework/PlayerController.h"
@@ -14,6 +14,17 @@ UCLASS()
 class UMUSMASH_API AUMUMenuController : public APlayerController
 {
 	GENERATED_BODY()
+
+	AUMUMenuController();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayBGM(USoundBase* NewBGM);
+
+	UFUNCTION(BlueprintCallable)
+	void StopBGM();
+
+	UPROPERTY()
+	UAudioComponent* BGMComponent;
 
 public:
 	void BlockClientInput();

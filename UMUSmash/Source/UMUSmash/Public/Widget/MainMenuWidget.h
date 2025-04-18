@@ -23,7 +23,7 @@ protected:
 	void OnSinglePlayButtonClicked();
 	UFUNCTION()
 	void OnMultiPlayButtonClicked();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnSettingsButtonClicked();
 	UFUNCTION()
 	void OnEndButtonClicked();

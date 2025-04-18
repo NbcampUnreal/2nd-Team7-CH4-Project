@@ -31,7 +31,6 @@ public:
 	UPROPERTY()
 	UAudioComponent* BGMComponent;
 
-
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> JumpAction;
 

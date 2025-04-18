@@ -19,6 +19,7 @@ void UCharacterSelectWidget::RequestUpdateUIWidget(const EMenuWidgetState Widget
 	}
 }
 
+
 void UCharacterSelectWidget::UpdateRuleCount(const int32& NewCount)
 {
 	if (CurrentInGameMode == EInGameModes::Stock)
