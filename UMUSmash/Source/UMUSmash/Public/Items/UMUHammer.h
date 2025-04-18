@@ -28,9 +28,5 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 
-private:
-	UPROPERTY()
-	UUMUMeleeItemComponent* WeaponComponent;
-
 
 };
