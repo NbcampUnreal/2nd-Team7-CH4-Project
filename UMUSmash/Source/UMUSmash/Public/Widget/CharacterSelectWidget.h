@@ -27,7 +27,8 @@ public:
 	void RequestServerSetRuleCount(const int32& NewCount) const;
 	void RequestServerChangeRule(const EInGameModes& NewInGameMode);
 	
-	
+	UFUNCTION(BlueprintImplementableEvent)
+	void CPUReady();
 
 protected:
 	UFUNCTION()

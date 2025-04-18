@@ -31,8 +31,10 @@ public:
 	void SetPlayerReadyArray(const int32& PlayerID, const bool& bIsReady);
 
 	void ChangeRule(const EInGameModes& NewInGameMode);
-	
+
+	UFUNCTION(BlueprintCallable)
 	void DoCPUReady();
+	UFUNCTION(BlueprintCallable)
 	void SelectCPUCharacter();
 	
 protected:
@@ -59,6 +61,8 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 protected:
+	int32 TotalPlayerCount = 1;
+	
 	TArray<bool> ReadyArray = {};
 	int32 PlayerNumber = 0;
 

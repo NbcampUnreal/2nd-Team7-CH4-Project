@@ -34,11 +34,9 @@ void AUMUMenuGameState::CheckAllPlayerReady()
 void AUMUMenuGameState::SetNumberOfPlayers(const int& NewValue)
 {
 	NumberOfPlayers = NewValue;
-
+	TotalPlayerCount = NumberOfPlayers + CPUCount;
 	FitToSizeArray();
 	CheckCPUArray();
-	SelectCPUCharacter();
-	DoCPUReady();
 	
 	UMU_LOG(LogUMU, Log, TEXT("NumberOfPlayers:%d"), NumberOfPlayers)
 }
@@ -49,13 +47,13 @@ void AUMUMenuGameState::SetCPUCount(const int32& NewValue)
 	
 	const int32 NewCount = FMath::Clamp(NewValue, 0, 4 - NumberOfPlayers);
 	CPUCount = NewCount;
+	TotalPlayerCount = NumberOfPlayers + CPUCount;
 	OnRep_CPUCount();
-
+	
 	FitToSizeArray();
 	CheckCPUArray();
-	SelectCPUCharacter();
-	DoCPUReady();
 
+	UMU_LOG(LogUMU, Log, TEXT("TotalPlayerCount:%d NumberOfPlayerCount:%d CPUCount:%d"), TotalPlayerCount, NumberOfPlayers, CPUCount)
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 
@@ -99,7 +97,7 @@ void AUMUMenuGameState::SetPlayerReadyArray(const int32& PlayerID, const bool& b
 
 void AUMUMenuGameState::CheckCPUArray()
 {
-	const int32 TotalPlayerCount = NumberOfPlayers + CPUCount;
+	TotalPlayerCount = NumberOfPlayers + CPUCount;
 	for (int32 i = 0; i < TotalPlayerCount; i++ )
 	{
 		if (i <= NumberOfPlayers)
@@ -113,81 +111,81 @@ void AUMUMenuGameState::CheckCPUArray()
 
 void AUMUMenuGameState::DoCPUReady()
 {
-	for (int32 i = 0; i < NumberOfPlayers - 1; i++)
+	for (int32 i = 0; i < TotalPlayerCount - 1; i++)
 	{
-		ReadyArray[(NumberOfPlayers-1)-i] = false;
+		ReadyArray[(TotalPlayerCount-1)-i] = false;
 	}
 
 	for (int32 i = 0; i < CPUCount; i++)
 	{
-		ReadyArray[(NumberOfPlayers-1)-i] = true;
+		ReadyArray[(TotalPlayerCount-1)-i] = true;
 	}
 }
 
 void AUMUMenuGameState::SelectCPUCharacter()
 {
-	const int32 RandomCharacterIndex = FMath::RandRange(1,12);
+	const uint8 RandomCharacterIndex = FMath::RandRange(1,12);
 	ECharacter RandomCharacter;
 
 #pragma region RandomCharacter
 	switch (RandomCharacterIndex)
 	{
-	case ECharacter::Unity_Dog:
+	case 1:
 		{
 			RandomCharacter = ECharacter::Unity_Dog;
 			break;
 		}
-	case ECharacter::Unity_TinyHeroBoy:
+	case 2:
 		{
 			RandomCharacter = ECharacter::Unity_TinyHeroBoy;
 			break;
 		}
-	case ECharacter::Unity_TinyHeroGirl:
+	case 3:
 		{
 			RandomCharacter = ECharacter::Unity_TinyHeroGirl;
 			break;
 		}
-	case ECharacter::Unity_Hero:
+	case 4:
 		{
 			RandomCharacter = ECharacter::Unity_Hero;
 			break;
 		}
-	case ECharacter::Unreal_Rampage:
+	case 5:
 		{
 			RandomCharacter = ECharacter::Unreal_Rampage;
 			break;
 		}
-	case ECharacter::Unreal_Crunch:
+	case 6:
 		{
 			RandomCharacter = ECharacter::Unreal_Crunch;
 			break;
 		}
-	case ECharacter::Unreal_Gideon:
+	case 7:
 		{
 			RandomCharacter = ECharacter::Unreal_Gideon;
 			break;
 		}
-	case ECharacter::Unreal_Kallari:
+	case 8:
 		{
 			RandomCharacter = ECharacter::Unreal_Kallari;
 			break;
 		}
-	case ECharacter::Mixamo_XBot:
+	case 9:
 		{
 			RandomCharacter = ECharacter::Mixamo_XBot;
 			break;
 		}
-	case ECharacter::Mixamo_YBot:
+	case 10:
 		{
 			RandomCharacter = ECharacter::Mixamo_YBot;
 			break;
 		}
-	case ECharacter::Mixamo_Swat:
+	case 11:
 		{
 			RandomCharacter = ECharacter::Mixamo_Swat;
 			break;
 		}
-	case ECharacter::Mixamo_Michelle:
+	case 12:
 		{
 			RandomCharacter = ECharacter::Mixamo_Michelle;
 			break;
@@ -201,7 +199,7 @@ void AUMUMenuGameState::SelectCPUCharacter()
 #pragma endregion
 	if (CPUCount != 0)
 	{
-		PlayerCharacters[NumberOfPlayers-CPUCount] = RandomCharacter;	
+		PlayerCharacters[TotalPlayerCount-CPUCount] = RandomCharacter;	
 	}
 }
 
@@ -237,7 +235,12 @@ void AUMUMenuGameState::SaveGameData() const
 
 void AUMUMenuGameState::FitToSizeArray()
 {
-	const int32 TotalPlayerCount = NumberOfPlayers + CPUCount;
+	TotalPlayerCount = NumberOfPlayers + CPUCount;
+
+	if (PlayerCharacters.Num() < TotalPlayerCount)
+	{
+		PlayerCharacters.SetNum(TotalPlayerCount);
+	}
 	
 	if (ReadyArray.Num() < TotalPlayerCount)
 	{

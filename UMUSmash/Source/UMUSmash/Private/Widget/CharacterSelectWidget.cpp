@@ -85,7 +85,6 @@ void UCharacterSelectWidget::RequestServerChangeRule(const EInGameModes& NewInGa
 }
 
 
-
 void UCharacterSelectWidget::OnBackButtonClicked()
 {
 	if (GetWorld())
@@ -143,6 +142,7 @@ void UCharacterSelectWidget::OnSubtractCPUCountClicked()
 	}
 
 	RequestServerSetCPUCount(CPUCountToInt - 1);
+	CPUReady();
 }
 
 void UCharacterSelectWidget::OnAddCPUCountClicked()
@@ -155,6 +155,7 @@ void UCharacterSelectWidget::OnAddCPUCountClicked()
 	}
 
 	RequestServerSetCPUCount(CPUCountToInt + 1);
+	CPUReady();
 }
 
 void UCharacterSelectWidget::OnChangeRuleClicked()
