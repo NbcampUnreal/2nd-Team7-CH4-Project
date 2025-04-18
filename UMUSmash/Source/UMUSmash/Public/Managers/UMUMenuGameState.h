@@ -61,12 +61,10 @@ protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 protected:
-	int32 TotalPlayerCount = 1;
-	
 	TArray<bool> ReadyArray = {};
 	int32 PlayerNumber = 0;
 
-	UPROPERTY(ReplicatedUsing = OnRep_CPUCount)
+	UPROPERTY(ReplicatedUsing = OnRep_CPUCount, BlueprintReadOnly)
 	int32 CPUCount = 0;
 	
 	UPROPERTY(ReplicatedUsing = OnRep_IsOnlineMode, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
@@ -76,11 +74,12 @@ protected:
 	bool bAllPlayersReady = false;
 	
 	// Send To GameInstance
-	UPROPERTY(ReplicatedUsing = OnRep_NumberOfPlayers)
+	UPROPERTY(ReplicatedUsing = OnRep_NumberOfPlayers, BlueprintReadOnly)
 	int32 NumberOfPlayers = 0;
 	
 	TArray<ECharacter> PlayerCharacters = {};
-	
+
+	UPROPERTY(BlueprintReadOnly)
 	TArray<bool> CPUCheckArray = {};
 	
 	UPROPERTY(ReplicatedUsing = OnRep_InGameMode)

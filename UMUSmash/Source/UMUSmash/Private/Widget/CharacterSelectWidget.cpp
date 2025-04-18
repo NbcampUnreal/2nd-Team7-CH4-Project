@@ -143,6 +143,7 @@ void UCharacterSelectWidget::OnSubtractCPUCountClicked()
 
 	RequestServerSetCPUCount(CPUCountToInt - 1);
 	CPUReady();
+	RemovePlayerController();
 }
 
 void UCharacterSelectWidget::OnAddCPUCountClicked()
@@ -156,6 +157,7 @@ void UCharacterSelectWidget::OnAddCPUCountClicked()
 
 	RequestServerSetCPUCount(CPUCountToInt + 1);
 	CPUReady();
+	CreatePlayerController();
 }
 
 void UCharacterSelectWidget::OnChangeRuleClicked()

@@ -29,6 +29,10 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void CPUReady();
+	UFUNCTION(BlueprintImplementableEvent)
+	void CreatePlayerController();
+	UFUNCTION(BlueprintImplementableEvent)
+	void RemovePlayerController();
 
 protected:
 	UFUNCTION()

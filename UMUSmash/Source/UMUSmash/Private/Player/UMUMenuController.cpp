@@ -171,7 +171,7 @@ void AUMUMenuController::BeginPlay()
 
 	if (HasAuthority())
 	{
-		AddNumberOfPlayers();	
+		AddNumberOfPlayers();
 	}
 	
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))

@@ -34,7 +34,6 @@ void AUMUMenuGameState::CheckAllPlayerReady()
 void AUMUMenuGameState::SetNumberOfPlayers(const int& NewValue)
 {
 	NumberOfPlayers = NewValue;
-	TotalPlayerCount = NumberOfPlayers + CPUCount;
 	FitToSizeArray();
 	CheckCPUArray();
 	
@@ -45,15 +44,14 @@ void AUMUMenuGameState::SetCPUCount(const int32& NewValue)
 {
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("Begin"))
 	
-	const int32 NewCount = FMath::Clamp(NewValue, 0, 4 - NumberOfPlayers);
-	CPUCount = NewCount;
-	TotalPlayerCount = NumberOfPlayers + CPUCount;
+	// const int32 NewCount = FMath::Clamp(NewValue, 0, 4 - NumberOfPlayers);
+	CPUCount = NewValue;
 	OnRep_CPUCount();
 	
 	FitToSizeArray();
 	CheckCPUArray();
 
-	UMU_LOG(LogUMU, Log, TEXT("TotalPlayerCount:%d NumberOfPlayerCount:%d CPUCount:%d"), TotalPlayerCount, NumberOfPlayers, CPUCount)
+	UMU_LOG(LogUMU, Log, TEXT("NumberOfPlayer:%d CPUCount:%d"), NumberOfPlayers, CPUCount)
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 
@@ -97,10 +95,9 @@ void AUMUMenuGameState::SetPlayerReadyArray(const int32& PlayerID, const bool& b
 
 void AUMUMenuGameState::CheckCPUArray()
 {
-	TotalPlayerCount = NumberOfPlayers + CPUCount;
-	for (int32 i = 0; i < TotalPlayerCount; i++ )
+	for (int32 i = 0; i < NumberOfPlayers; i++ )
 	{
-		if (i <= NumberOfPlayers)
+		if (i < NumberOfPlayers - CPUCount)
 		{
 			CPUCheckArray[i] = false;
 			continue;
@@ -111,14 +108,14 @@ void AUMUMenuGameState::CheckCPUArray()
 
 void AUMUMenuGameState::DoCPUReady()
 {
-	for (int32 i = 0; i < TotalPlayerCount - 1; i++)
+	for (int32 i = 0; i < NumberOfPlayers - 1; i++)
 	{
-		ReadyArray[(TotalPlayerCount-1)-i] = false;
+		ReadyArray[(NumberOfPlayers-1)-i] = false;
 	}
 
 	for (int32 i = 0; i < CPUCount; i++)
 	{
-		ReadyArray[(TotalPlayerCount-1)-i] = true;
+		ReadyArray[(NumberOfPlayers-1)-i] = true;
 	}
 }
 
@@ -200,7 +197,7 @@ ECharacter AUMUMenuGameState::SelectCPUCharacter()
 
 	for (int32 i = 0; i < CPUCount; i++)
 	{
-		PlayerCharacters[TotalPlayerCount-1-i] = RandomCharacter;
+		PlayerCharacters[NumberOfPlayers-1-i] = RandomCharacter;
 	}
 
 	return RandomCharacter;
@@ -238,21 +235,20 @@ void AUMUMenuGameState::SaveGameData() const
 
 void AUMUMenuGameState::FitToSizeArray()
 {
-	TotalPlayerCount = NumberOfPlayers + CPUCount;
 
-	if (PlayerCharacters.Num() < TotalPlayerCount)
+	if (PlayerCharacters.Num() < NumberOfPlayers)
 	{
-		PlayerCharacters.SetNum(TotalPlayerCount);
+		PlayerCharacters.SetNum(NumberOfPlayers);
 	}
 	
-	if (ReadyArray.Num() < TotalPlayerCount)
+	if (ReadyArray.Num() < NumberOfPlayers)
 	{
-		ReadyArray.SetNum(TotalPlayerCount);
+		ReadyArray.SetNum(NumberOfPlayers);
 	}
 
-	if (CPUCheckArray.Num() < TotalPlayerCount)
+	if (CPUCheckArray.Num() < NumberOfPlayers)
 	{
-		CPUCheckArray.SetNum(TotalPlayerCount);
+		CPUCheckArray.SetNum(NumberOfPlayers);
 	}
 }
 
@@ -319,7 +315,15 @@ void AUMUMenuGameState::OnRep_CPUCount() const
 		auto* MenuController = Cast<AUMUMenuController>(LocalController);
 		if (MenuController)
 		{
-			const int32 CPUMaxCount = 4 - NumberOfPlayers;
+			int32 PlayerCount = 0;
+			for (int32 i = 0; i < CPUCheckArray.Num(); i ++)
+			{
+				if (CPUCheckArray[i] == false)
+				{
+					PlayerCount++;
+				}
+			}
+			const int32 CPUMaxCount = 4 - PlayerCount; 
 			MenuController->UpdateCPUCount(CPUCount);
 			MenuController->UpdateCPUMaxCount(CPUMaxCount);
 		}
