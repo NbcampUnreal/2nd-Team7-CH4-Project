@@ -31,7 +31,9 @@ public:
 	void SetPlayerReadyArray(const int32& PlayerID, const bool& bIsReady);
 
 	void ChangeRule(const EInGameModes& NewInGameMode);
-
+	
+	void DoCPUReady();
+	void SelectCPUCharacter();
 	
 protected:
 	UFUNCTION()

@@ -3,7 +3,6 @@
 
 #include "Managers/UMUMenuGameState.h"
 
-#include "Kismet/GameplayStatics.h"
 #include "Managers/UMUGameInstance.h"
 #include "Net/UnrealNetwork.h"
 #include "Player/UMUMenuController.h"
@@ -38,6 +37,9 @@ void AUMUMenuGameState::SetNumberOfPlayers(const int& NewValue)
 
 	FitToSizeArray();
 	CheckCPUArray();
+	SelectCPUCharacter();
+	DoCPUReady();
+	
 	UMU_LOG(LogUMU, Log, TEXT("NumberOfPlayers:%d"), NumberOfPlayers)
 }
 
@@ -51,6 +53,8 @@ void AUMUMenuGameState::SetCPUCount(const int32& NewValue)
 
 	FitToSizeArray();
 	CheckCPUArray();
+	SelectCPUCharacter();
+	DoCPUReady();
 
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
@@ -104,6 +108,100 @@ void AUMUMenuGameState::CheckCPUArray()
 			continue;
 		}
 		CPUCheckArray[i] = true;
+	}
+}
+
+void AUMUMenuGameState::DoCPUReady()
+{
+	for (int32 i = 0; i < NumberOfPlayers - 1; i++)
+	{
+		ReadyArray[(NumberOfPlayers-1)-i] = false;
+	}
+
+	for (int32 i = 0; i < CPUCount; i++)
+	{
+		ReadyArray[(NumberOfPlayers-1)-i] = true;
+	}
+}
+
+void AUMUMenuGameState::SelectCPUCharacter()
+{
+	const int32 RandomCharacterIndex = FMath::RandRange(1,12);
+	ECharacter RandomCharacter;
+
+#pragma region RandomCharacter
+	switch (RandomCharacterIndex)
+	{
+	case ECharacter::Unity_Dog:
+		{
+			RandomCharacter = ECharacter::Unity_Dog;
+			break;
+		}
+	case ECharacter::Unity_TinyHeroBoy:
+		{
+			RandomCharacter = ECharacter::Unity_TinyHeroBoy;
+			break;
+		}
+	case ECharacter::Unity_TinyHeroGirl:
+		{
+			RandomCharacter = ECharacter::Unity_TinyHeroGirl;
+			break;
+		}
+	case ECharacter::Unity_Hero:
+		{
+			RandomCharacter = ECharacter::Unity_Hero;
+			break;
+		}
+	case ECharacter::Unreal_Rampage:
+		{
+			RandomCharacter = ECharacter::Unreal_Rampage;
+			break;
+		}
+	case ECharacter::Unreal_Crunch:
+		{
+			RandomCharacter = ECharacter::Unreal_Crunch;
+			break;
+		}
+	case ECharacter::Unreal_Gideon:
+		{
+			RandomCharacter = ECharacter::Unreal_Gideon;
+			break;
+		}
+	case ECharacter::Unreal_Kallari:
+		{
+			RandomCharacter = ECharacter::Unreal_Kallari;
+			break;
+		}
+	case ECharacter::Mixamo_XBot:
+		{
+			RandomCharacter = ECharacter::Mixamo_XBot;
+			break;
+		}
+	case ECharacter::Mixamo_YBot:
+		{
+			RandomCharacter = ECharacter::Mixamo_YBot;
+			break;
+		}
+	case ECharacter::Mixamo_Swat:
+		{
+			RandomCharacter = ECharacter::Mixamo_Swat;
+			break;
+		}
+	case ECharacter::Mixamo_Michelle:
+		{
+			RandomCharacter = ECharacter::Mixamo_Michelle;
+			break;
+		}
+	default:
+		{
+			RandomCharacter = ECharacter::Unity_Dog;
+			break;
+		}
+	}
+#pragma endregion
+	if (CPUCount != 0)
+	{
+		PlayerCharacters[NumberOfPlayers-CPUCount] = RandomCharacter;	
 	}
 }
 
