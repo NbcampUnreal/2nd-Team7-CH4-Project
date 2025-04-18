@@ -91,7 +91,7 @@ private:
 	void ItemThrowed();
 
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Reliable, Server)
 	void AttachAbility();
 	UFUNCTION(BlueprintCallable)
 	void SpawnAbility(FAbility& Ability);

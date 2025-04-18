@@ -3,6 +3,7 @@
 #include "Abilities\BaseAbility.h"
 #include "Net\UnrealNetwork.h"
 #include "Character\CharStatComponent.h"
+#include "Online/CoreOnline.h"
 
 
 // Sets default values for this component's properties
@@ -389,8 +390,9 @@ void UAbilityComponent::ItemThrowed_Implementation()
 
 }
 
-void UAbilityComponent::AttachAbility()
+void UAbilityComponent::AttachAbility_Implementation()
 {
+	if(GetOwner()->HasAuthority())
 	//Basic
 	SpawnAbility(TiltNeutral);
 	SpawnAbility(TiltUp);
