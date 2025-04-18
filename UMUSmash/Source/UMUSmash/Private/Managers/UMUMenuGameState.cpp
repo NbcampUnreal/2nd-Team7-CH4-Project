@@ -91,7 +91,7 @@ void AUMUMenuGameState::SetPlayerReadyArray(const int32& PlayerID, const bool& b
 	ReadyArray[PlayerID] = bIsReady;
 	
 	CheckAllPlayerReady();
-
+	
 	UMU_LOG(LogUMU, Log, TEXT("%s"), TEXT("End"))
 }
 
@@ -122,7 +122,7 @@ void AUMUMenuGameState::DoCPUReady()
 	}
 }
 
-void AUMUMenuGameState::SelectCPUCharacter()
+ECharacter AUMUMenuGameState::SelectCPUCharacter()
 {
 	const uint8 RandomCharacterIndex = FMath::RandRange(1,12);
 	ECharacter RandomCharacter;
@@ -197,10 +197,13 @@ void AUMUMenuGameState::SelectCPUCharacter()
 		}
 	}
 #pragma endregion
-	if (CPUCount != 0)
+
+	for (int32 i = 0; i < CPUCount; i++)
 	{
-		PlayerCharacters[TotalPlayerCount-CPUCount] = RandomCharacter;	
+		PlayerCharacters[TotalPlayerCount-1-i] = RandomCharacter;
 	}
+
+	return RandomCharacter;
 }
 
 FString AUMUMenuGameState::RandomMapSelect() const 

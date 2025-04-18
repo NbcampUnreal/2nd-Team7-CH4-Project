@@ -35,7 +35,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DoCPUReady();
 	UFUNCTION(BlueprintCallable)
-	void SelectCPUCharacter();
+	ECharacter SelectCPUCharacter();
 	
 protected:
 	UFUNCTION()
