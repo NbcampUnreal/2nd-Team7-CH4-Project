@@ -3,6 +3,7 @@
 #include "Abilities\BaseAbility.h"
 #include "Net\UnrealNetwork.h"
 #include "Character\CharStatComponent.h"
+#include "Online/CoreOnline.h"
 
 
 // Sets default values for this component's properties
@@ -360,8 +361,9 @@ void UAbilityComponent::SpawnAbility(FAbility& Ability)
 		Abilities.Add(Ability.Ability);
 	}
 }
-void UAbilityComponent::ActivateAbility(TObjectPtr<ABaseAbility> Ability)
+void UAbilityComponent::ActivateAbility_Implementation(ABaseAbility* Ability)
 {
+	if (Ability == nullptr) return;
 	Ability->bIsActive = true;
 	Parent->ClearBuffer();
 	UsedMoveCount++;
@@ -388,38 +390,40 @@ void UAbilityComponent::ItemThrowed_Implementation()
 
 }
 
-void UAbilityComponent::AttachAbility()
+void UAbilityComponent::AttachAbility_Implementation()
 {
+	if(GetOwner()->HasAuthority())
 	//Basic
 	SpawnAbility(TiltNeutral);
 	SpawnAbility(TiltUp);
 	SpawnAbility(TiltSide);
 	SpawnAbility(TiltDown);
-
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 	//Special
 	SpawnAbility(SpecialDown);
 	SpawnAbility(SpecialForward);
 	SpawnAbility(SpecialUp);
 	SpawnAbility(SpecialNeutral);
 
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 	//Air
 	SpawnAbility(AirUp);
 	SpawnAbility(AirDown);
 	SpawnAbility(AirForward);
 	SpawnAbility(AirBack);
 	SpawnAbility(AirNeutral);
-
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 	//Smash
 	SpawnAbility(SmashUp);
 	SpawnAbility(SmashForward);
 	SpawnAbility(SmashDown);
-	
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 	//Taunt
 	SpawnAbility(TauntUp);
 	SpawnAbility(TauntDown);
 	SpawnAbility(TauntLeft);
 	SpawnAbility(TauntRight);
-
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 	///Grab & Throw
 	SpawnAbility(Grab);
 	SpawnAbility(ThrowUp);
@@ -427,13 +431,13 @@ void UAbilityComponent::AttachAbility()
 	SpawnAbility(ThrowForward);
 	SpawnAbility(ThrowBack);
 	SpawnAbility(Pummel);
-
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 	//Dodge
 	SpawnAbility(DodgeAir);
 	SpawnAbility(DodgeSpot);
 	SpawnAbility(DodgeBack);
 	SpawnAbility(DodgeForward);
-
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 	//Other
 	SpawnAbility(LedgeAttack);
 	SpawnAbility(Ledge);
@@ -445,7 +449,7 @@ void UAbilityComponent::AttachAbility()
 	SpawnAbility(UseItemAbility);
 	SpawnAbility(Respawn);
 	SpawnAbility(LevelIntro);
-
+	UE_LOG(LogTemp, Warning, TEXT("Spawn Ability"))
 
 	/*SpawnAbility(UseItem);
 	SpawnAbility(ThrowItem);*/
@@ -474,6 +478,52 @@ void UAbilityComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UAbilityComponent, Parent);
+	DOREPLIFETIME(UAbilityComponent, Ledge);
+	DOREPLIFETIME(UAbilityComponent, LedgeAttack);
+
+	DOREPLIFETIME(UAbilityComponent, SmashUp);
+	DOREPLIFETIME(UAbilityComponent, SmashDown);
+	DOREPLIFETIME(UAbilityComponent, SmashForward);
+	DOREPLIFETIME(UAbilityComponent, SuperAbility);
+
+	DOREPLIFETIME(UAbilityComponent, TiltNeutral);
+	DOREPLIFETIME(UAbilityComponent, TiltUp);
+	DOREPLIFETIME(UAbilityComponent, TiltDown);
+	DOREPLIFETIME(UAbilityComponent, TiltSide);
+
+	DOREPLIFETIME(UAbilityComponent, AirUp);
+	DOREPLIFETIME(UAbilityComponent, AirDown);
+	DOREPLIFETIME(UAbilityComponent, AirForward);
+	DOREPLIFETIME(UAbilityComponent, AirBack);
+
+	DOREPLIFETIME(UAbilityComponent, TauntUp);
+	DOREPLIFETIME(UAbilityComponent, TauntDown);
+	DOREPLIFETIME(UAbilityComponent, TauntLeft);
+	DOREPLIFETIME(UAbilityComponent, TauntRight);
+
+		///Grab & Throw
+		DOREPLIFETIME(UAbilityComponent, Grab);
+	DOREPLIFETIME(UAbilityComponent, ThrowUp);
+	DOREPLIFETIME(UAbilityComponent, ThrowDown);
+	DOREPLIFETIME(UAbilityComponent, ThrowForward);
+	DOREPLIFETIME(UAbilityComponent, ThrowBack);
+	DOREPLIFETIME(UAbilityComponent, Pummel);
+
+		//Dodge
+		DOREPLIFETIME(UAbilityComponent, DodgeAir);
+	DOREPLIFETIME(UAbilityComponent, DodgeSpot);
+	DOREPLIFETIME(UAbilityComponent, DodgeBack);
+	DOREPLIFETIME(UAbilityComponent, DodgeForward);
+
+	DOREPLIFETIME(UAbilityComponent, SpecialDown);
+	DOREPLIFETIME(UAbilityComponent, SpecialForward);
+	DOREPLIFETIME(UAbilityComponent, SpecialUp);
+	DOREPLIFETIME(UAbilityComponent, SpecialNeutral);
+	DOREPLIFETIME(UAbilityComponent, TauntUp);
+	DOREPLIFETIME(UAbilityComponent, TauntDown);
+	DOREPLIFETIME(UAbilityComponent, TauntLeft);
+	DOREPLIFETIME(UAbilityComponent, TauntRight);
+
 }
 
 void FAbility::ActivateAbility()

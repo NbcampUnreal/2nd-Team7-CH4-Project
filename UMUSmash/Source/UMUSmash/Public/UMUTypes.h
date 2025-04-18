@@ -273,3 +273,14 @@ enum class EItemType : uint8
 	Hammer
 
 };
+
+UENUM(BlueprintType)
+enum class EMenuWidgetState : uint8
+{
+	PressStart		= 0,
+	MainMenu		= 1,
+	CharacterSelect	= 2,
+	MapSelect		= 3,
+	NetworkLobby	= 4,
+	Settings		= 5
+};

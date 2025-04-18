@@ -9,8 +9,7 @@ AUMUPlayerController::AUMUPlayerController()
 void AUMUPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	UE_LOG(LogTemp, Warning, TEXT("In BeginPlay"));
+
 	if (ULocalPlayer* LocalPlayer = GetLocalPlayer())
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
@@ -19,4 +18,6 @@ void AUMUPlayerController::BeginPlay()
 			Subsystem->AddMappingContext(MappingContext, 0);
 		}
 	}
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
 }
